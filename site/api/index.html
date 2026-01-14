@@ -1,0 +1,1591 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../advanced_usage/">
+      
+      
+        <link rel="next" href="../development/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>REST API - Paperless-ngx</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rest-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Paperless-ngx" class="md-header__button md-logo" aria-label="Paperless-ngx" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Paperless-ngx
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              REST API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/paperless-ngx/paperless-ngx" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    paperless-ngx/paperless-ngx
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../setup/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Setup
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../usage/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Basic Usage
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../configuration/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  配置
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../administration/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  管理
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../advanced_usage/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  高级主题
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  REST API
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../development/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  开发
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../faq/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQs
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  故障排除
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Paperless-ngx" class="md-nav__button md-logo" aria-label="Paperless-ngx" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    Paperless-ngx
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/paperless-ngx/paperless-ngx" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    paperless-ngx/paperless-ngx
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Basic Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../administration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    管理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced_usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    高级主题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST API
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        授权
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        搜索文档
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="搜索文档">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        按自定义字段筛选
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apisearchautocomplete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /api/search/autocomplete/
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-uploads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        上传文档
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        权限
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="权限">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        检索完整权限
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        批量编辑
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="批量编辑">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        文档
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对象
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API 版本控制
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="API 版本控制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API 版本弃用策略
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API 变更日志
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="API 变更日志">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        版本 1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        版本 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        版本 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        版本 4
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        版本 5
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        版本 6
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        版本 7
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        版本 8
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        版本 9
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    故障排除
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="rest-api">REST API</h1>
+<p>Paperless-ngx 现在附带了一个完整文档化的 REST API 和一个可浏览的 Web 界面以供探索。API 的可浏览界面位于 <code>/api/schema/view/</code>。</p>
+<p>本文档进一步提供了一些端点和功能的说明。</p>
+<h2 id="_1">授权</h2>
+<p>REST API 提供四种不同的身份验证方式。</p>
+<ol>
+<li>
+<p>基本身份验证</p>
+<p>通过提供以下形式的 HTTP 头进行授权：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Authorization: Basic &lt;credentials&gt;
+</code></pre></div>
+<p>其中 <code>credentials</code> 是 <code>&lt;username&gt;:&lt;password&gt;</code> 的 base64 编码字符串。</p>
+</li>
+<li>
+<p>会话身份验证</p>
+<p>当您在浏览器中登录 Paperless 时，您也会自动登录到 API，无需提供任何授权头。</p>
+</li>
+<li>
+<p>令牌身份验证</p>
+<p>您可以通过在 Web 界面用户下拉菜单中打开“我的个人资料”链接并点击圆形箭头按钮来创建（或重新创建）API 令牌。</p>
+<p>Paperless 还提供了一个端点来获取身份验证令牌。</p>
+<p>将用户名和密码作为表单或 JSON 字符串 POST 到 <code>/api/token/</code>，如果登录数据正确，Paperless 将响应一个令牌。此令牌可用于通过以下 HTTP 头对其他请求进行身份验证：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Authorization: Token &lt;token&gt;
+</code></pre></div>
+<p>令牌也可以在 Django 管理界面中管理。</p>
+</li>
+<li>
+<p>远程用户身份验证</p>
+<p>如果启用（请参阅<a href="../configuration/#PAPERLESS_ENABLE_HTTP_REMOTE_USER_API">配置</a>），您可以使用远程用户身份验证来验证 API。</p>
+</li>
+</ol>
+<h2 id="_2">搜索文档</h2>
+<p>全文搜索在 <code>/api/documents/</code> 端点上可用。两个特定的查询参数会导致 API 返回全文搜索结果：</p>
+<ul>
+<li><code>/api/documents/?query=your%20search%20query</code>：使用全文查询搜索文档。有关语法详情，请参阅<a href="../usage/#basic-usage_searching">基本用法 - 搜索</a>。</li>
+<li><code>/api/documents/?more_like_id=1234</code>：搜索与 ID 为 1234 的文档相似的文档。</li>
+</ul>
+<p>分页的工作方式与此端点的普通请求完全相同。</p>
+<p>此外，每个返回的文档都有一个额外的 <code>__search_hit__</code> 属性，其中包含有关搜索结果的各种信息：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>{
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    "count": 31,
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    "next": "http://localhost:8000/api/documents/?page=2&amp;query=test",
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    "previous": null,
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    "results": [
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        ...
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>        {
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>            "id": 123,
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>            "title": "title",
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>            "content": "content",
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>            ...
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>            "__search_hit__": {
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>                "score": 0.343,
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>                "highlights": "text &lt;span class="match"&gt;Test&lt;/span&gt; text",
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>                "rank": 23
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>            }
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>        },
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>        ...
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    ]
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>}
+</code></pre></div>
+<ul>
+<li><code>score</code> 表示此文档相对于其他搜索结果与查询的匹配程度。</li>
+<li><code>highlights</code> 是文档内容的摘录，并使用 <code>&lt;span&gt;</code> 标签高亮显示搜索词，如上所示。</li>
+<li><code>rank</code> 是搜索结果的索引。第一个结果的排名为 0。</li>
+</ul>
+<h3 id="_3">按自定义字段筛选</h3>
+<p>您可以通过指定 <code>custom_field_query</code> 查询参数来按自定义字段值筛选文档。以下是一些常见用例的示例：</p>
+<ol>
+<li>
+<p>自定义字段 "due"（日期）在 2024 年 8 月 1 日至 2024 年 9 月 1 日（含）之间的文档：</p>
+<p><code>?custom_field_query=["due", "range", ["2024-08-01", "2024-09-01"]]</code></p>
+</li>
+<li>
+<p>自定义字段 "customer"（文本）等于 "bob"（区分大小写）的文档：</p>
+<p><code>?custom_field_query=["customer", "exact", "bob"]</code></p>
+</li>
+<li>
+<p>自定义字段 "answered"（布尔值）设置为 <code>true</code> 的文档：</p>
+<p><code>?custom_field_query=["answered", "exact", true]</code></p>
+</li>
+<li>
+<p>自定义字段 "favorite animal"（选择）设置为 "cat" 或 "dog" 的文档：</p>
+<p><code>?custom_field_query=["favorite animal", "in", ["cat", "dog"]]</code></p>
+</li>
+<li>
+<p>自定义字段 "address"（文本）为空的文档：</p>
+<p><code>?custom_field_query=["OR", [["address", "isnull", true], ["address", "exact", ""]]]</code></p>
+</li>
+<li>
+<p>没有名为 "foo" 的字段的文档：</p>
+<p><code>?custom_field_query=["foo", "exists", false]</code></p>
+</li>
+<li>
+<p>具有指向文档 3 和 7 的文档链接 "references" 的文档：</p>
+<p><code>?custom_field_query=["references", "contains", [3, 7]]</code></p>
+</li>
+</ol>
+<p>所有字段类型都支持基本操作，包括 <code>exact</code>、<code>in</code>、<code>isnull</code> 和 <code>exists</code>。字符串、URL 和货币字段支持不区分大小写的子字符串匹配操作，包括 <code>icontains</code>、<code>istartswith</code> 和 <code>iendswith</code>。整数、浮点数和日期字段支持算术比较，包括 <code>gt</code> (&gt;)、<code>gte</code> (&gt;=)、<code>lt</code> (&lt;)、<code>lte</code> (&lt;=) 和 <code>range</code>。最后，文档链接字段支持 <code>contains</code> 操作符，其行为类似于“是超集”检查。</p>
+<h3 id="apisearchautocomplete"><code>/api/search/autocomplete/</code></h3>
+<p>获取部分搜索词的自动补全建议。</p>
+<p>查询参数：</p>
+<ul>
+<li><code>term</code>：不完整的词。</li>
+<li><code>limit</code>：结果数量。默认为 10。</li>
+</ul>
+<p>端点返回的结果按词在文档索引中的重要性排序。第一个结果是索引中具有最高 <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">Tf/Idf</a> 分数的词。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">[</span><span class="s2">"term1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"term3"</span><span class="p">,</span><span class="w"> </span><span class="s2">"term6"</span><span class="p">,</span><span class="w"> </span><span class="s2">"term4"</span><span class="p">]</span>
+</code></pre></div>
+<h2 id="file-uploads">上传文档</h2>
+<p>API 提供了一个用于文件上传的特殊端点：</p>
+<p><code>/api/documents/post_document/</code></p>
+<p>向此端点 POST 一个多部分表单，其中表单字段 <code>document</code> 包含要上传到 Paperless 的文档。文件名会被清理，然后用于将文档存储在临时目录中，消费者将被指示从那里消费该文档。</p>
+<p>该端点支持以下可选表单字段：</p>
+<ul>
+<li><code>title</code>：指定消费者应用于文档的标题。</li>
+<li><code>created</code>：指定文档创建的日期时间（例如 "2016-04-19" 或 "2016-04-19 06:15:00+02:00"）。</li>
+<li><code>correspondent</code>：指定消费者应用于文档的通信人 ID。</li>
+<li><code>document_type</code>：类似于通信人。</li>
+<li><code>storage_path</code>：类似于通信人。</li>
+<li><code>tags</code>：类似于通信人。多次指定此字段可为文档添加多个标签。</li>
+<li><code>archive_serial_number</code>：要设置的可选档案序列号。</li>
+<li><code>custom_fields</code>：要分配给文档的自定义字段 ID 数组（值为空）或字段 ID -&gt; 值的映射对象。</li>
+</ul>
+<p>如果文档消费过程成功启动，端点将立即返回 HTTP 200，数据为消费任务的 UUID。由于消费过程发生在不同的进程中，因此无法立即获得有关消费过程本身的额外状态信息。但是，使用返回的 UUID 查询任务端点，例如 <code>/api/tasks/?task_id={uuid}</code>，将提供有关消费状态的信息，包括消费成功时创建的文档 ID。</p>
+<h2 id="_4">权限</h2>
+<p>所有对象（文档、标签等）都允许使用可选的 <code>owner</code> 和/或 <code>set_permissions</code> 参数设置对象级权限，其格式如下：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>"owner": ...,
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>"set_permissions": {
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    "view": {
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>        "users": [...],
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        "groups": [...],
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    },
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    "change": {
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        "users": [...],
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>        "groups": [...],
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    },
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>}
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>数组应包含用户或组的 ID 号。</p>
+</div>
+<p>如果提供了这些参数，对象的权限将被覆盖，前提是经过身份验证的用户有权这样做（用户必须是对象所有者或超级用户）。</p>
+<h3 id="_5">检索完整权限</h3>
+<p>默认情况下，API 将返回对象级权限的截断版本，返回 <code>user_can_change</code> 指示当前用户是否可以编辑对象（因为他们要么是对象所有者，要么被授予了权限）。您可以将参数 <code>full_perms=true</code> 传递给 API 调用，以查看对象的完整权限，其格式与上面的 <code>set_permissions</code> 参数类似。</p>
+<h2 id="_6">批量编辑</h2>
+<p>API 支持各种异步执行的批量编辑操作。</p>
+<h3 id="_7">文档</h3>
+<p>对于文档的批量操作，请使用端点 <code>/api/documents/bulk_edit/</code>，它接受以下格式的 JSON 负载：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">"documents"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">LIST_OF_DOCUMENT_IDS</span><span class="p">],</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">"method"</span><span class="p">:</span><span class="w"> </span><span class="err">METHOD</span><span class="p">,</span><span class="w"> </span><span class="c1">// 见下文</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="err">args</span><span class="w"> </span><span class="c1">// 见下文</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">}</span>
+</code></pre></div>
+<p>支持以下方法：</p>
+<ul>
+<li><code>set_correspondent</code><ul>
+<li>需要 <code>parameters</code>：<code>{ "correspondent": CORRESPONDENT_ID }</code></li>
+</ul>
+</li>
+<li><code>set_document_type</code><ul>
+<li>需要 <code>parameters</code>：<code>{ "document_type": DOCUMENT_TYPE_ID }</code></li>
+</ul>
+</li>
+<li><code>set_storage_path</code><ul>
+<li>需要 <code>parameters</code>：<code>{ "storage_path": STORAGE_PATH_ID }</code></li>
+</ul>
+</li>
+<li><code>add_tag</code><ul>
+<li>需要 <code>parameters</code>：<code>{ "tag": TAG_ID }</code></li>
+</ul>
+</li>
+<li><code>remove_tag</code><ul>
+<li>需要 <code>parameters</code>：<code>{ "tag": TAG_ID }</code></li>
+</ul>
+</li>
+<li><code>modify_tags</code><ul>
+<li>需要 <code>parameters</code>：<code>{ "add_tags": [LIST_OF_TAG_IDS] }</code> 和 <code>{ "remove_tags": [LIST_OF_TAG_IDS] }</code></li>
+</ul>
+</li>
+<li><code>delete</code><ul>
+<li>不需要 <code>parameters</code></li>
+</ul>
+</li>
+<li><code>reprocess</code><ul>
+<li>不需要 <code>parameters</code></li>
+</ul>
+</li>
+<li><code>set_permissions</code><ul>
+<li>需要 <code>parameters</code>：<ul>
+<li><code>"set_permissions": PERMISSIONS_OBJ</code>（参见上面的<a href="#permissions">格式</a>）和/或</li>
+<li><code>"owner": OWNER_ID or null</code></li>
+<li><code>"merge": true or false</code>（默认为 false）</li>
+</ul>
+</li>
+<li><code>merge</code> 标志决定提供的权限是覆盖所有现有权限（包括删除它们）还是与现有权限合并。</li>
+</ul>
+</li>
+<li><code>edit_pdf</code><ul>
+<li>需要 <code>parameters</code>：<ul>
+<li><code>"doc_ids": [DOCUMENT_ID]</code> 要编辑的单个文档 ID 列表。</li>
+<li><code>"operations": [OPERATION, ...]</code> 要在文档上执行的操作列表。每个操作都是一个字典，包含以下键：<ul>
+<li><code>"page": PAGE_NUMBER</code> 要编辑的页码（从 1 开始）。</li>
+<li><code>"rotate": DEGREES</code> 可选旋转角度（90、180、270）。</li>
+<li><code>"doc": OUTPUT_DOCUMENT_INDEX</code> 拆分操作的输出文档的可选索引。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>可选 <code>parameters</code>：<ul>
+<li><code>"delete_original": true</code> 在编辑后删除原始文档。</li>
+<li><code>"update_document": true</code> 用编辑后的 PDF 更新现有文档。</li>
+<li><code>"include_metadata": true</code> 将元数据从原始文档复制到编辑后的文档。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>remove_password</code><ul>
+<li>需要 <code>parameters</code>：<ul>
+<li><code>"password": "PASSWORD_STRING"</code> 要从 PDF 文档中移除的密码。</li>
+</ul>
+</li>
+<li>可选 <code>parameters</code>：<ul>
+<li><code>"update_document": true</code> 用无密码的 PDF 替换现有文档。</li>
+<li><code>"delete_original": true</code> 在编辑后删除原始文档。</li>
+<li><code>"include_metadata": true</code> 将元数据从原始文档复制到新的无密码文档。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>merge</code><ul>
+<li>不需要额外的 <code>parameters</code>。</li>
+<li>合并文档的顺序由 ID 列表决定。</li>
+<li>可选 <code>parameters</code>：<ul>
+<li><code>"metadata_document_id": DOC_ID</code> 将此文档的元数据（标签、通信人等）应用于合并后的文档。</li>
+<li><code>"delete_originals": true</code> 删除原始文档。这要求调用用户是所有被合并文档的所有者。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>split</code><ul>
+<li>需要 <code>parameters</code>：<ul>
+<li><code>"pages": [..]</code> 该列表应是一个页面和/或范围的列表，用逗号分隔，例如 <code>"[1,2-3,4,5-7]"</code></li>
+</ul>
+</li>
+<li>可选 <code>parameters</code>：<ul>
+<li><code>"delete_originals": true</code> 在消费后删除原始文档。这要求调用用户是该文档的所有者。</li>
+</ul>
+</li>
+<li>拆分操作只接受单个文档。</li>
+</ul>
+</li>
+<li><code>rotate</code><ul>
+<li>需要 <code>parameters</code>：<ul>
+<li><code>"degrees": DEGREES</code>。必须是整数，即 90、180、270。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>delete_pages</code><ul>
+<li>需要 <code>parameters</code>：<ul>
+<li><code>"pages": [..]</code> 该列表应是一个整数列表，例如 <code>"[2,3,4]"</code></li>
+</ul>
+</li>
+<li>delete_pages 操作只接受单个文档。</li>
+</ul>
+</li>
+<li><code>modify_custom_fields</code><ul>
+<li>需要 <code>parameters</code>：<ul>
+<li><code>"add_custom_fields": { CUSTOM_FIELD_ID: VALUE }</code>：由自定义字段 id:value 对组成的 JSON 对象，用于添加到文档，也可以是要添加的空值自定义字段 ID 列表。</li>
+<li><code>"remove_custom_fields": [CUSTOM_FIELD_ID]</code>：要从文档中移除的自定义字段 ID。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="_8">对象</h3>
+<p>对象（标签、文档类型等）的批量编辑目前支持设置权限或删除操作，使用端点：<code>/api/bulk_edit_objects/</code>，它需要以下格式的 JSON 负载：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">"objects"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">LIST_OF_OBJECT_IDS</span><span class="p">],</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">"object_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tags"</span><span class="p">,</span><span class="w"> </span><span class="s2">"correspondents"</span><span class="p">,</span><span class="w"> </span><span class="s2">"document_types"</span><span class="w"> </span><span class="err">or</span><span class="w"> </span><span class="s2">"storage_paths"</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">"operation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"set_permissions"</span><span class="w"> </span><span class="err">or</span><span class="w"> </span><span class="s2">"delete"</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">"owner"</span><span class="p">:</span><span class="w"> </span><span class="err">OWNER_ID</span><span class="p">,</span><span class="w"> </span><span class="c1">// 可选</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">"permissions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"view"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"users"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"change"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="c1">// （参见上面的 'set_permissions' 格式）</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span><span class="nt">"merge"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="err">/</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="c1">// 默认为 false，参见上文</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="p">}</span>
+</code></pre></div>
+<h2 id="api">API 版本控制</h2>
+<p>自 Paperless-ngx 1.3.0 起，REST API 已进行版本控制。</p>
+<ul>
+<li>版本控制确保对 API 的更改不会破坏旧客户端。</li>
+<li>客户端在每个请求中指定他们希望使用的 API 特定版本，Paperless 将使用指定的 API 版本处理请求。</li>
+<li>即使底层数据模型发生变化，较旧的 API 版本也将始终提供兼容的数据。</li>
+<li>如果未指定版本，Paperless 将提供版本 1，以确保与未请求特定 API 版本的旧客户端兼容。</li>
+</ul>
+<p>API 版本通过在每个请求中提交一个额外的 HTTP <code>Accept</code> 头来指定：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Accept: application/json; version=6
+</code></pre></div>
+<p>如果指定了无效版本，Paperless 1.3.0 将响应“406 Not Acceptable”并在正文中显示错误消息。早期版本的 Paperless 将提供 API 版本 1，无论是否通过 <code>Accept</code> 头指定了版本。</p>
+<p>如果客户端希望验证其是否与任何给定服务器兼容，应执行以下过程：</p>
+<ol>
+<li>
+<p>对任何 API 端点执行<em>经过身份验证的</em>请求。如果服务器是 1.3.0 或更高版本，服务器将向响应添加两个自定义头：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>X-Api-Version: 2
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>X-Version: 1.3.0
+</code></pre></div>
+</li>
+<li>
+<p>根据这些头的存在/不存在以及它们的存在时的值来确定客户端是否与此服务器兼容。</p>
+</li>
+</ol>
+<h3 id="api_1">API 版本弃用策略</h3>
+<p>较旧的 API 版本保证在新 API 版本发布后至少支持一年。之后，对较旧 API 版本的支持可能会（但不保证）被取消。</p>
+<h3 id="api_2">API 变更日志</h3>
+<h4 id="1">版本 1</h4>
+<p>初始 API 版本。</p>
+<h4 id="2">版本 2</h4>
+<ul>
+<li>添加了字段 <code>Tag.color</code>。此读/写字符串字段包含十六进制颜色，例如 <code>#a6cee3</code>。</li>
+<li>添加了只读字段 <code>Tag.text_color</code>。此字段包含用于特定标签的文本颜色，根据 <code>Tag.color</code> 的亮度，该颜色为黑色或白色。</li>
+<li>移除了字段 <code>Tag.colour</code>。</li>
+</ul>
+<h4 id="3">版本 3</h4>
+<ul>
+<li>添加了权限端点。</li>
+<li><code>/api/ui_settings/</code> 的格式已更改。</li>
+</ul>
+<h4 id="4">版本 4</h4>
+<ul>
+<li>消费模板被重构为工作流，API 端点也相应更改。</li>
+</ul>
+<h4 id="5">版本 5</h4>
+<ul>
+<li>添加了文档和对象的批量删除方法。</li>
+</ul>
+<h4 id="6">版本 6</h4>
+<ul>
+<li>将确认任务端点移至 <code>/api/tasks/acknowledge/</code>。</li>
+</ul>
+<h4 id="7">版本 7</h4>
+<ul>
+<li>选择类型自定义字段的格式已更改为将选项作为具有 <code>id</code> 和 <code>label</code> 字段的对象数组返回，而不是简单的字符串列表。为选择类型自定义字段创建或更新文档的自定义字段值时，该值应为选项的 <code>id</code>，而以前是选项的索引。</li>
+</ul>
+<h4 id="8">版本 8</h4>
+<ul>
+<li>文档注释的用户字段现在返回一个简化的用户对象，而不仅仅是用户 ID。</li>
+</ul>
+<h4 id="9">版本 9</h4>
+<ul>
+<li>文档的 <code>created</code> 字段现在是日期，而不是日期时间。<code>created_date</code> 字段被视为已弃用，并将在未来版本中移除。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2016 - 2023 Daniel Quinn, Jonas Winkler, and the Paperless-ngx team
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/paperless-ngx/paperless-ngx" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://hub.docker.com/r/paperlessngx/paperless-ngx" target="_blank" rel="noopener" title="hub.docker.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M349.9 236.3h-66.1v-59.4h66.1zm0-204.3h-66.1v60.7h66.1zm78.2 144.8H362v59.4h66.1zm-156.3-72.1h-66.1v60.1h66.1zm78.1 0h-66.1v60.1h66.1zm276.8 100c-14.4-9.7-47.6-13.2-73.1-8.4-3.3-24-16.7-44.9-41.1-63.7l-14-9.3-9.3 14c-18.4 27.8-23.4 73.6-3.7 103.8-8.7 4.7-25.8 11.1-48.4 10.7H2.4c-8.7 50.8 5.8 116.8 44 162.1 37.1 43.9 92.7 66.2 165.4 66.2 157.4 0 273.9-72.5 328.4-204.2 21.4.4 67.6.1 91.3-45.2 1.5-2.5 6.6-13.2 8.5-17.1zm-511.1-27.9h-66v59.4h66.1v-59.4zm78.1 0h-66.1v59.4h66.1zm78.1 0h-66.1v59.4h66.1zm-78.1-72.1h-66.1v60.1h66.1z"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://matrix.to/#/#paperless:matrix.org" target="_blank" rel="noopener" title="matrix.to" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c5.5 0 10 3.58 10 8s-4.5 8-10 8c-1.24 0-2.43-.18-3.53-.5C5.55 21 2 21 2 21c2.33-2.33 2.7-3.9 2.75-4.5C3.05 15.07 2 13.13 2 11c0-4.42 4.5-8 10-8"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.top", "toc.integrate", "content.code.annotate"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

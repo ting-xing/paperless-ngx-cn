@@ -1,22 +1,12 @@
-# Frequently Asked Questions
+# 常见问题解答
 
-## _What's the general plan for Paperless-ngx?_
+## _Paperless-ngx 的总体计划是什么？_
 
-**A:** While Paperless-ngx is already considered largely
-"feature-complete", it is a community-driven project and development
-will be guided in this way. New features can be submitted via
-[GitHub discussions](https://github.com/paperless-ngx/paperless-ngx/discussions)
-and "up-voted" by the community, but this is not a
-guarantee that the feature will be implemented. This project will always be
-open to collaboration in the form of PRs, ideas etc.
+**答：** 虽然 Paperless-ngx 在很大程度上已经被认为是“功能完备”的，但它是一个社区驱动的项目，开发将以此为指导。新功能可以通过 [GitHub 讨论区](https://github.com/paperless-ngx/paperless-ngx/discussions) 提交，并由社区“点赞投票”，但这并不能保证该功能一定会被实现。本项目始终欢迎以 PR、想法等形式进行合作。
 
-## _I'm using docker. Where are my documents?_
+## _我使用 Docker。我的文档在哪里？_
 
-**A:** By default, your documents are stored inside the docker volume
-`paperless_media`. Docker manages this volume automatically for you. It
-is a persistent storage and will persist as long as you don't
-explicitly delete it. The actual location depends on your host operating
-system. On Linux, chances are high that this location is
+**答：** 默认情况下，您的文档存储在 Docker 卷 `paperless_media` 中。Docker 会自动为您管理这个卷。它是一个持久化存储，只要您不显式删除它，数据就会一直保留。实际位置取决于您的主机操作系统。在 Linux 上，这个位置很可能是：
 
 ```
 /var/lib/docker/volumes/paperless_media/_data
@@ -24,98 +14,58 @@ system. On Linux, chances are high that this location is
 
 !!! warning
 
-    Do not mess with this folder. Don't change permissions and don't move
-    files around manually. This folder is meant to be entirely managed by
-    docker and paperless.
+    请勿随意操作此文件夹。不要更改权限，也不要手动移动文件。此文件夹完全由 Docker 和 Paperless 管理。
 
 !!! note
 
-    Files consumed from the consumption directory are re-created inside
-    this media directory and are removed from the consumption directory
-    itself.
+    从消费目录摄入的文件会在此媒体目录内重新创建，并从消费目录本身移除。
 
-## Let's say I want to switch tools in a year. Can I easily move to other systems?
+## 假设我一年后想换用其他工具。我能轻松迁移到其他系统吗？
 
-**A:** Your documents are stored as plain files inside the media folder.
-You can always drag those files out of that folder to use them
-elsewhere. Here are a couple notes about that.
+**答：** 您的文档以纯文件形式存储在媒体文件夹中。您随时可以将这些文件拖出该文件夹以在其他地方使用。以下是关于此操作的几点说明：
 
--   Paperless-ngx never modifies your original documents. It keeps
-    checksums of all documents and uses a scheduled sanity checker to
-    check that they remain the same.
--   By default, paperless uses the internal ID of each document as its
-    filename. This might not be very convenient for export. However, you
-    can adjust the way files are stored in paperless by
-    [configuring the filename format](advanced_usage.md#file-name-handling).
--   [The exporter](administration.md#exporter) is
-    another easy way to get your files out of paperless with reasonable
-    file names.
+-   Paperless-ngx 从不修改您的原始文档。它会保留所有文档的校验和，并使用计划任务检查器来确保它们保持不变。
+-   默认情况下，Paperless 使用每个文档的内部 ID 作为其文件名。这对于导出可能不太方便。但是，您可以通过 [配置文件名格式](advanced_usage.md#file-name-handling) 来调整 Paperless 中文件的存储方式。
+-   [导出器](administration.md#exporter) 是另一种以合理文件名将文件从 Paperless 中导出的简便方法。
 
-## _What file types does paperless-ngx support?_
+## _Paperless-ngx 支持哪些文件类型？_
 
-**A:** Currently, the following files are supported:
+**答：** 目前支持以下文件：
 
--   PDF documents, PNG images, JPEG images, TIFF images, GIF images and
-    WebP images are processed with OCR and converted into PDF documents.
--   Plain text documents are supported as well and are added verbatim to
-    paperless.
--   With the optional Tika integration enabled (see [Tika configuration](https://docs.paperless-ngx.com/configuration#tika)),
-    Paperless also supports various Office documents (.docx, .doc, odt,
-    .ppt, .pptx, .odp, .xls, .xlsx, .ods).
+-   PDF 文档、PNG 图像、JPEG 图像、TIFF 图像、GIF 图像和 WebP 图像会经过 OCR 处理并转换为 PDF 文档。
+-   纯文本文档也受支持，并会原样添加到 Paperless 中。
+-   启用可选的 Tika 集成后（参见 [Tika 配置](https://docs.paperless-ngx.com/configuration#tika)），Paperless 还支持各种 Office 文档（.docx、.doc、.odt、.ppt、.pptx、.odp、.xls、.xlsx、.ods）。
 
-Paperless-ngx determines the type of a file by inspecting its content.
-The file extensions do not matter.
+Paperless-ngx 通过检查文件内容来确定其类型。文件扩展名无关紧要。
 
-## _Will paperless-ngx run on Raspberry Pi?_
+## _Paperless-ngx 能在树莓派上运行吗？_
 
-**A:** The short answer is yes. I've tested it on a Raspberry Pi 3 B.
-The long answer is that certain parts of Paperless will run very slow,
-such as the OCR. On Raspberry Pi, try to OCR documents before feeding
-them into paperless so that paperless can reuse the text. The web
-interface is a lot snappier, since it runs in your browser and paperless
-has to do much less work to serve the data.
+**答：** 简短的回答是：可以。我已在树莓派 3 B 上测试过。详细的回答是：Paperless 的某些部分运行会非常慢，例如 OCR。在树莓派上，尽量在将文档输入 Paperless 之前先进行 OCR，以便 Paperless 可以复用文本。Web 界面会流畅得多，因为它运行在您的浏览器中，并且 Paperless 提供数据所需的工作量要少得多。
 
 !!! note
 
-    You can adjust some of the settings so that paperless uses less
-    processing power. See [setup](setup.md#less-powerful-devices) for details.
+    您可以调整一些设置，使 Paperless 使用更少的处理能力。详情请参阅 [安装指南](setup.md#less-powerful-devices)。
 
-## _How do I install paperless-ngx on Raspberry Pi?_
+## _如何在树莓派上安装 Paperless-ngx？_
 
-**A:** Docker images are available for arm64 hardware, so just
-follow the [Docker Compose instructions](https://docs.paperless-ngx.com/setup/#installation). Apart from more required disk
-space compared to a bare metal installation, docker comes with close to
-zero overhead, even on Raspberry Pi.
+**答：** 有针对 arm64 硬件的 Docker 镜像可用，因此只需按照 [Docker Compose 说明](https://docs.paperless-ngx.com/setup/#installation) 操作即可。与裸机安装相比，除了需要更多磁盘空间外，即使在树莓派上，Docker 带来的开销也几乎为零。
 
-If you decide to go with the bare metal route, be aware that some of
-the python requirements do not have precompiled packages for ARM /
-ARM64. Installation of these will require additional development
-libraries and compilation will take a long time.
+如果您决定采用裸机安装路线，请注意一些 Python 依赖项没有针对 ARM/ARM64 的预编译包。安装这些包需要额外的开发库，并且编译会花费很长时间。
 
 !!! note
 
-    For ARMv7 (32-bit) systems, paperless may still function, but it could require
-    modifications to the Dockerfile (if using Docker) or additional
-    tools for installing bare metal.  It is suggested to upgrade to arm64
-    instead.
+    对于 ARMv7（32 位）系统，Paperless 可能仍然可以运行，但可能需要修改 Dockerfile（如果使用 Docker）或安装额外的工具来进行裸机安装。建议升级到 arm64 系统。
 
-## _How do I run this on Unraid?_
+## _如何在 Unraid 上运行？_
 
-**A:** Paperless-ngx is available as [community
-app](https://unraid.net/community/apps?q=paperless-ngx) in Unraid. [Uli
-Fahrer](https://github.com/Tooa) created a container template for that.
+**答：** Paperless-ngx 在 Unraid 中作为 [社区应用](https://unraid.net/community/apps?q=paperless-ngx) 提供。[Uli Fahrer](https://github.com/Tooa) 为此创建了一个容器模板。
 
-## _How do I run this on my toaster?_
+## _如何在我的烤面包机上运行？_
 
-**A:** I honestly don't know! As for all other devices that might be
-able to run paperless, you're a bit on your own. If you can't run the
-docker image, the documentation has instructions for bare metal
-installs.
+**答：** 老实说，我不知道！对于所有其他可能能够运行 Paperless 的设备，您需要自己摸索。如果您无法运行 Docker 镜像，文档中提供了裸机安装的说明。
 
-## _What about the Redis licensing change and using one of the open source forks_?
+## _关于 Redis 许可变更和使用其开源分支的情况如何？_
 
-Currently (October 2024), forks of Redis such as Valkey or Redirect are not officially supported by our upstream
-libraries, so using one of these to replace Redis is not officially supported.
+目前（2024 年 10 月），像 Valkey 或 Redirect 这样的 Redis 分支尚未得到我们上游库的官方支持，因此使用它们来替代 Redis 不受官方支持。
 
-However, they do claim to be compatible with the Redis protocol and will likely work, but we will
-not be updating from using Redis as the broker officially just yet.
+然而，它们声称与 Redis 协议兼容，并且很可能可以工作，但我们目前还不会正式更新以使用这些分支作为代理。

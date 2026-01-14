@@ -1,1005 +1,240 @@
-# Usage Overview
+# 使用概述
 
-Paperless-ngx is an application that manages your personal documents. With
-the (optional) help of a document scanner (see [the scanners wiki](https://github.com/paperless-ngx/paperless-ngx/wiki/Scanner-&-Software-Recommendations)), Paperless-ngx transforms your unwieldy
-physical documents into a searchable archive and provides many utilities
-for finding and managing your documents.
+Paperless-ngx 是一款管理个人文档的应用程序。在（可选的）文档扫描仪（参见 [扫描仪维基](https://github.com/paperless-ngx/paperless-ngx/wiki/Scanner-&-Software-Recommendations)）的帮助下，Paperless-ngx 将您笨重的实体文档转换为可搜索的存档，并提供许多用于查找和管理文档的实用工具。
 
-## Terms and definitions
+## 术语和定义
 
-Paperless essentially consists of two different parts for managing your
-documents:
+Paperless 本质上由两个不同的部分组成，用于管理您的文档：
 
--   The _consumer_ watches a specified folder and adds all documents in
-    that folder to paperless.
--   The _web server_ (web UI) provides a UI that you use to manage and
-    search documents.
+*   **_消费者_** 监视指定的文件夹，并将该文件夹中的所有文档添加到 Paperless。
+*   **_Web 服务器_**（Web 用户界面）提供了一个用于管理和搜索文档的用户界面。
 
-Each document has data fields that you can assign to them:
+每个文档都有您可以分配给它们的数据字段：
 
--   A _Document_ is a piece of paper that sometimes contains valuable
-    information.
--   The _correspondent_ of a document is the person, institution or
-    company that a document either originates from, or is sent to.
--   A _tag_ is a label that you can assign to documents. Think of labels
-    as more powerful folders: Multiple documents can be grouped together
-    with a single tag, however, a single document can also have multiple
-    tags. This is not possible with folders. The reason folders are not
-    implemented in paperless is simply that tags are much more versatile
-    than folders.
--   A _document type_ is used to demarcate the type of a document such
-    as letter, bank statement, invoice, contract, etc. It is used to
-    identify what a document is about.
--   The document _storage path_ is the location where the document files
-    are stored. See [Storage Paths](advanced_usage.md#storage-paths) for
-    more information.
--   The _date added_ of a document is the date the document was scanned
-    into paperless. You cannot and should not change this date.
--   The _date created_ of a document is the date the document was
-    initially issued. This can be the date you bought a product, the
-    date you signed a contract, or the date a letter was sent to you.
--   The _archive serial number_ (short: ASN) of a document is the
-    identifier of the document in your physical document binders. See
-    [recommended workflow](#usage-recommended-workflow) below.
--   The _content_ of a document is the text that was OCR'ed from the
-    document. This text is fed into the search engine and is used for
-    matching tags, correspondents and document types.
--   Paperless-ngx also supports _custom fields_ which can be used to
-    store additional metadata about a document.
+*   **_文档_** 是一张纸，有时包含有价值的信息。
+*   文档的 **_通信方_** 是文档的发出者或接收者，可以是个人、机构或公司。
+*   **_标签_** 是您可以分配给文档的标记。可以将标签视为更强大的文件夹：多个文档可以用一个标签分组在一起，然而，一个文档也可以有多个标签。这对于文件夹来说是不可能的。Paperless 中没有实现文件夹的原因很简单，标签比文件夹灵活得多。
+*   **_文档类型_** 用于界定文档的类型，例如信件、银行对账单、发票、合同等。它用于识别文档的内容。
+*   文档的 **_存储路径_** 是存储文档文件的位置。更多信息请参见 [存储路径](advanced_usage.md#storage-paths)。
+*   文档的 **_添加日期_** 是文档被扫描到 Paperless 的日期。您不能也不应更改此日期。
+*   文档的 **_创建日期_** 是文档最初签发的日期。这可以是您购买产品的日期、签署合同的日期或信件发送给您的日期。
+*   文档的 **_存档序列号_**（简称：ASN）是文档在您实体文档夹中的标识符。请参见下面的 [推荐工作流程](#usage-recommended-workflow)。
+*   文档的 **_内容_** 是从文档中通过 OCR 提取的文本。此文本被输入搜索引擎，用于匹配标签、通信方和文档类型。
+*   Paperless-ngx 还支持 **_自定义字段_**，可用于存储有关文档的额外元数据。
 
-## The Web UI
+## Web 用户界面
 
-The web UI is the primary way to interact with Paperless-ngx. It is a
-single-page application that is built with modern web technologies and
-is designed to be fast and responsive. The web UI includes a robust
-interface for filtering, viewing, searching and editing documents.
-You can also manage tags, correspondents, document types, and other
-settings from the web UI.
+Web 用户界面是与 Paperless-ngx 交互的主要方式。它是一个使用现代 Web 技术构建的单页应用程序，旨在快速响应。Web 用户界面包含一个强大的界面，用于过滤、查看、搜索和编辑文档。您还可以通过 Web 用户界面管理标签、通信方、文档类型和其他设置。
 
-The web UI also includes a 'tour' feature that can be accessed from the
-settings page or from the dashboard for new users. The tour highlights
-some of the key features of the web UI and can be useful for new users.
+Web 用户界面还包括一个“导览”功能，可以从设置页面或新用户的仪表板访问。导览功能突出了 Web 用户界面的一些关键特性，对新用户很有用。
 
-### Dashboard
+### 仪表板
 
-The dashboard is the first page you see when you log in. By default, it
-does not show any documents, but you can add saved views to the dashboard
-to show documents that match certain criteria. The dashboard also includes
-a button to upload documents to Paperless-ngx but you can also drag and
-drop files anywhere in the app to initiate the consumption process.
+仪表板是您登录后看到的第一个页面。默认情况下，它不显示任何文档，但您可以将保存的视图添加到仪表板以显示符合特定条件的文档。仪表板还包括一个将文档上传到 Paperless-ngx 的按钮，但您也可以将文件拖放到应用程序的任何位置以启动消费过程。
 
-### Document List
+### 文档列表
 
-The document list is the primary way to view and interact with your documents.
-You can filter the list by tags, correspondents, document types, and other
-criteria. You can also edit documents in bulk including assigning tags,
-correspondents, document types, and custom fields. Selecting document(s) from
-the list will allow you to perform the various bulk edit operations. The
-document list also includes a search bar that allows you to search for documents
-by title, ASN, and use advanced search syntax.
+文档列表是查看和与文档交互的主要方式。您可以按标签、通信方、文档类型和其他条件过滤列表。您还可以批量编辑文档，包括分配标签、通信方、文档类型和自定义字段。从列表中选择文档将允许您执行各种批量编辑操作。文档列表还包括一个搜索栏，允许您按标题、ASN 搜索文档，并使用高级搜索语法。
 
-### Document Detail
+### 文档详情
 
-The document detail page shows all the information about a single document.
-You can view the document, edit its metadata, assign tags, correspondents,
-document types, and custom fields. You can also view the document history,
-download the document or share it via a share link.
+文档详情页面显示单个文档的所有信息。您可以查看文档、编辑其元数据、分配标签、通信方、文档类型和自定义字段。您还可以查看文档历史记录、下载文档或通过共享链接分享它。
 
-### Management Lists
+### 管理列表
 
-Paperless-ngx includes management lists for tags, correspondents, document types
-and more. These areas allow you to view, add, edit, delete and manage permissions
-for these objects. You can also manage saved views, mail accounts, mail rules,
-workflows and more from the management sections.
+Paperless-ngx 包含标签、通信方、文档类型等的管理列表。这些区域允许您查看、添加、编辑、删除和管理这些对象的权限。您还可以从管理部分管理保存的视图、邮件账户、邮件规则、工作流程等。
 
-### Nested Tags
+### 嵌套标签
 
-Paperless-ngx v2.19 introduces support for nested tags, allowing you to create a
-hierarchy of tags, which may be useful for organizing your documents. Tags can
-have a 'parent' tag, creating a tree-like structure, to a maximum depth of 5. When
-a tag is added to a document, all of its parent tags are also added automatically
-and similarly, when a tag is removed from a document, all of its child tags are
-also removed. Additionally, assigning a parent to an existing tag will automatically
-update all documents that have this tag assigned, adding the parent tag as well.
+Paperless-ngx v2.19 引入了对嵌套标签的支持，允许您创建标签的层次结构，这可能有助于组织您的文档。标签可以有一个“父”标签，创建一个树状结构，最大深度为 5。当标签添加到文档时，其所有父标签也会自动添加；同样，当标签从文档中移除时，其所有子标签也会被移除。此外，为现有标签分配父标签将自动更新所有分配了此标签的文档，同时添加父标签。
 
-## Adding documents to Paperless-ngx
+## 向 Paperless-ngx 添加文档
 
-Once you've got Paperless setup, you need to start feeding documents
-into it. When adding documents to paperless, it will perform the
-following operations on your documents:
+设置好 Paperless 后，您需要开始向其输入文档。向 Paperless 添加文档时，它将对您的文档执行以下操作：
 
-1.  OCR the document, if it has no text. Digital documents usually have
-    text, and this step will be skipped for those documents.
-2.  Paperless will create an archivable PDF/A document from your
-    document. If this document is coming from your scanner, it will have
-    embedded selectable text.
-3.  Paperless performs automatic matching of tags, correspondents and
-    types on the document before storing it in the database.
+1.  对文档进行 OCR（如果它没有文本）。数字文档通常有文本，对于这些文档，此步骤将被跳过。
+2.  Paperless 将从您的文档创建一个可存档的 PDF/A 文档。如果此文档来自您的扫描仪，它将包含嵌入的可选择文本。
+3.  在将文档存储到数据库之前，Paperless 会对文档执行标签、通信方和类型的自动匹配。
 
 !!! tip
 
-    This process can be configured to fit your needs. If you don't want
-    paperless to create archived versions for digital documents, you can
-    configure that by configuring
-    `PAPERLESS_OCR_SKIP_ARCHIVE_FILE=with_text`. Please read the
-    [relevant section in the documentation](configuration.md#ocr).
+    此过程可以配置以满足您的需求。如果您不希望 Paperless 为数字文档创建存档版本，可以通过配置 `PAPERLESS_OCR_SKIP_ARCHIVE_FILE=with_text` 来实现。请阅读 [文档中的相关部分](configuration.md#ocr)。
 
 !!! note
 
-    No matter which options you choose, Paperless will always store the
-    original document that it found in the consumption directory or in the
-    mail and will never overwrite that document (except when using certain
-    document actions, which make that clear). Archived versions are
-    stored alongside the original versions. Any files found in the
-    consumption directory will stored inside the Paperless-ngx file
-    structure and will not be retained in the consumption directory.
+    无论您选择哪个选项，Paperless 将始终存储它在消费目录或邮件中找到的原始文档，并且永远不会覆盖该文档（除非使用某些明确说明的文档操作）。存档版本与原始版本一起存储。在消费目录中找到的任何文件都将存储在 Paperless-ngx 文件结构中，并且不会保留在消费目录中。
 
-### The consumption directory
+### 消费目录
 
-The primary method of getting documents into your database is by putting
-them in the consumption directory. The consumer waits patiently, looking
-for new additions to this directory. When it finds them,
-the consumer goes about the process of parsing them with the OCR,
-indexing what it finds, and storing it in the media directory. You should
-think of this folder as a temporary location, as files will be re-created
-inside Paperless-ngx and removed from the consumption folder.
+将文档放入数据库的主要方法是将它们放在消费目录中。消费者耐心等待，寻找此目录中的新增内容。当它找到它们时，消费者会通过 OCR 解析它们，索引找到的内容，并将其存储在媒体目录中。您应该将此文件夹视为临时位置，因为文件将在 Paperless-ngx 内部重新创建并从消费文件夹中移除。
 
-Getting stuff into this directory is up to you. If you're running
-Paperless on your local computer, you might just want to drag and drop
-files there, but if you're running this on a server and want your
-scanner to automatically push files to this directory, you'll need to
-setup some sort of service to accept the files from the scanner.
-Typically, you're looking at an FTP server like
-[Proftpd](http://www.proftpd.org/) or a Windows folder share with
-[Samba](https://www.samba.org/).
+如何将文件放入此目录取决于您。如果您在本地计算机上运行 Paperless，您可能只想将文件拖放到那里，但如果您在服务器上运行并希望扫描仪自动将文件推送到此目录，则需要设置某种服务来接受来自扫描仪的文件。通常，您需要一个 FTP 服务器，如 [Proftpd](http://www.proftpd.org/)，或使用 [Samba](https://www.samba.org/) 的 Windows 文件夹共享。
 
 !!! warning
 
-    Files found in the consumption directory that are consumed will be
-    removed from the consumption directory and stored inside the
-    Paperless-ngx file structure using any settings / storage paths
-    you have specified. This action is performed as safely as possible
-    but this means it is expected that files in the consumption
-    directory will no longer exist (there) after being consumed.
+    在消费目录中找到并被消费的文件将从消费目录中移除，并使用您指定的任何设置/存储路径存储在 Paperless-ngx 文件结构中。此操作尽可能安全地执行，但这意味着消费目录中的文件在被消费后将不再（在那里）存在。
 
-### Web UI Upload
+### Web 用户界面上传
 
-The dashboard has a button to upload documents to paperless or you
-can simply drag a file anywhere into the app to initiate the consumption
-process.
+仪表板有一个按钮可以将文档上传到 Paperless，或者您只需将文件拖放到应用程序的任何位置即可启动消费过程。
 
-### Mobile upload {#usage-mobile_upload}
+### 移动设备上传 {#usage-mobile_upload}
 
-Please see [the wiki](https://github.com/paperless-ngx/paperless-ngx/wiki/Related-Projects) for a user-maintained list of related projects and
-software (e.g. for mobile devices) that is compatible with Paperless-ngx.
+请参阅 [维基](https://github.com/paperless-ngx/paperless-ngx/wiki/Related-Projects) 以获取用户维护的相关项目和软件（例如用于移动设备）列表，这些与 Paperless-ngx 兼容。
 
-### Incoming Email {#incoming-mail}
+### 接收邮件 {#incoming-mail}
 
-You can tell paperless-ngx to consume documents from your email
-accounts. This is a very flexible and powerful feature, if you regularly
-received documents via mail that you need to archive. The mail consumer
-can be configured via the frontend settings (/settings/mail) in the following
-manner:
+您可以告诉 Paperless-ngx 从您的电子邮件账户消费文档。如果您定期收到需要通过邮件存档的文档，这是一个非常灵活和强大的功能。邮件消费者可以通过前端设置（/settings/mail）按以下方式配置：
 
-1.  Define e-mail accounts.
-2.  Define mail rules for your account.
+1.  定义电子邮件账户。
+2.  为您的账户定义邮件规则。
 
-These rules perform the following:
+这些规则执行以下操作：
 
-1.  Connect to the mail server.
-2.  Fetch all matching mails (as defined by folder, maximum age and the
-    filters)
-3.  Check if there are any consumable attachments.
-4.  If so, instruct paperless to consume the attachments and optionally
-    use the metadata provided in the rule for the new document.
-5.  If documents were consumed from a mail, the rule action is performed
-    on that mail.
+1.  连接到邮件服务器。
+2.  获取所有匹配的邮件（根据文件夹、最长期限和过滤器定义）
+3.  检查是否有任何可消费的附件。
+4.  如果有，指示 Paperless 消费附件，并可选择使用规则中为新文档提供的元数据。
+5.  如果从邮件中消费了文档，则对该邮件执行规则操作。
 
-Paperless will check all emails only once and completely ignore messages
-that do not match your filters. It will also only perform the rule action
-on e-mails that it has consumed documents from. The filename attachment
-patterns can include wildcards and multiple patterns separated by a comma.
+Paperless 将仅检查所有邮件一次，并完全忽略不符合您过滤条件的消息。它也只对已从中消费文档的电子邮件执行规则操作。文件名附件模式可以包含通配符和多个以逗号分隔的模式。
 
-The actions all ensure that the same mail is not consumed twice by
-different means. These are as follows:
+所有操作都确保同一封邮件不会通过不同方式被消费两次。这些操作如下：
 
--   **Delete:** Immediately deletes mail that paperless has consumed
-    documents from. Use with caution.
--   **Mark as read:** Mark consumed mail as read. Paperless will not
-    consume documents from already read mails. If you read a mail before
-    paperless sees it, it will be ignored.
--   **Flag:** Sets the 'important' flag on mails with consumed
-    documents. Paperless will not consume flagged mails.
--   **Move to folder:** Moves consumed mails out of the way so that
-    paperless won't consume them again.
--   **Add custom Tag:** Adds a custom tag to mails with consumed
-    documents (the IMAP standard calls these "keywords"). Paperless
-    will not consume mails already tagged. Not all mail servers support
-    this feature!
-
-    -   **Apple Mail support:** Apple Mail clients allow differently colored tags. For this to work use `apple:<color>` (e.g. _apple:green_) as a custom tag. Available colors are _red_, _orange_, _yellow_, _blue_, _green_, _violet_ and _grey_.
+*   **删除：** 立即删除 Paperless 已从中消费文档的邮件。请谨慎使用。
+*   **标记为已读：** 将已消费的邮件标记为已读。Paperless 不会从已读邮件中消费文档。如果您在 Paperless 看到邮件之前阅读了它，它将被忽略。
+*   **标记：** 为已消费文档的邮件设置“重要”标记。Paperless 不会消费已标记的邮件。
+*   **移动到文件夹：** 将已消费的邮件移开，以便 Paperless 不会再次消费它们。
+*   **添加自定义标签：** 为已消费文档的邮件添加自定义标签（IMAP 标准称之为“关键词”）。Paperless 不会消费已标记的邮件。并非所有邮件服务器都支持此功能！
+    *   **Apple Mail 支持：** Apple Mail 客户端允许不同颜色的标签。为此，请使用 `apple:<color>`（例如 _apple:green_）作为自定义标签。可用颜色为 _red_、_orange_、_yellow_、_blue_、_green_、_violet_ 和 _grey_。
 
 !!! warning
 
-    The mail consumer will perform these actions on all mails it has
-    consumed documents from. Keep in mind that the actual consumption
-    process may fail for some reason, leaving you with missing documents in
-    paperless.
+    邮件消费者将对所有已从中消费文档的邮件执行这些操作。请注意，实际消费过程可能因某些原因失败，导致 Paperless 中缺少文档。
 
 !!! note
 
-    With the correct set of rules, you can completely automate your email
-    documents. Create rules for every correspondent you receive digital
-    documents from and paperless will read them automatically. The default
-    action "mark as read" is pretty tame and will not cause any damage or
-    data loss whatsoever.
+    通过正确的规则集，您可以完全自动化您的电子邮件文档。为您接收数字文档的每个通信方创建规则，Paperless 将自动读取它们。默认操作“标记为已读”相当温和，不会造成任何损害或数据丢失。
 
-    You can also setup a special folder in your mail account for paperless
-    and use your favorite mail client to move to be consumed mails into that
-    folder automatically or manually and tell paperless to move them to yet
-    another folder after consumption. It's up to you.
+    您还可以在邮件账户中为 Paperless 设置一个特殊文件夹，并使用您喜欢的邮件客户端自动或手动将待消费的邮件移动到该文件夹，并告诉 Paperless 在消费后将它们移动到另一个文件夹。这取决于您。
 
 !!! note
 
-    When defining a mail rule with a folder, you may need to try different
-    characters to define how the sub-folders are separated. Common values
-    include ".", "/" or "\|", but this varies by the mail server.
-    Check the documentation for your mail server. In the event of an error
-    fetching mail from a certain folder, check the Paperless logs. When a
-    folder is not located, Paperless will attempt to list all folders found
-    in the account to the Paperless logs.
+    定义带有文件夹的邮件规则时，您可能需要尝试不同的字符来定义子文件夹的分隔方式。常见值包括“.”、“/”或“\|”，但这因邮件服务器而异。请查看您的邮件服务器文档。如果从某个文件夹获取邮件时出错，请检查 Paperless 日志。当找不到文件夹时，Paperless 将尝试将账户中找到的所有文件夹列出到 Paperless 日志中。
 
 !!! note
 
-    Paperless will process the rules in the order defined in the admin page.
+    Paperless 将按照管理页面中定义的顺序处理规则。
 
-    You can define catch-all rules and have them executed last to consume
-    any documents not matched by previous rules. Such a rule may assign an
-    "Unknown mail document" tag to consumed documents so you can inspect
-    them further.
+    您可以定义捕获所有规则，并让它们在最后执行，以消费未被先前规则匹配的任何文档。这样的规则可以为消费的文档分配一个“未知邮件文档”标签，以便您进一步检查它们。
 
-Paperless is set up to check your mails every 10 minutes. This can be
-configured via [`PAPERLESS_EMAIL_TASK_CRON`](configuration.md#PAPERLESS_EMAIL_TASK_CRON)
+Paperless 设置为每 10 分钟检查一次您的邮件。这可以通过 [`PAPERLESS_EMAIL_TASK_CRON`](configuration.md#PAPERLESS_EMAIL_TASK_CRON) 进行配置。
 
-#### Processed Mail
+#### 已处理邮件
 
-Paperless keeps track of emails it has processed in order to avoid processing the same mail multiple times. This uses the message `UID` provided by the mail server, which should be unique for each message. You can view and manage processed mails from the web UI under Mail > Processed Mails. If you need to re-process a message, you can delete the corresponding processed mail entry, which will allow Paperless-ngx to process the email again the next time the mail fetch task runs.
+Paperless 会跟踪已处理的电子邮件，以避免多次处理同一封邮件。这使用邮件服务器提供的消息 `UID`，该 ID 对于每条消息应该是唯一的。您可以从 Web 用户界面的“邮件 > 已处理邮件”下查看和管理已处理的邮件。如果需要重新处理某条消息，您可以删除相应的已处理邮件条目，这将允许 Paperless-ngx 在下次邮件获取任务运行时再次处理该电子邮件。
 
-#### OAuth Email Setup
+#### OAuth 电子邮件设置
 
-Paperless-ngx supports OAuth2 authentication for Gmail and Outlook email accounts. To set up an email account with OAuth2, you will need to create a 'developer' app with the respective provider and obtain the client ID and client secret and set the appropriate [configuration variables](configuration.md#email_oauth). You will also need to set either [`PAPERLESS_OAUTH_CALLBACK_BASE_URL`](configuration.md#PAPERLESS_OAUTH_CALLBACK_BASE_URL) or [`PAPERLESS_URL`](configuration.md#PAPERLESS_URL) to the correct value for the OAuth2 flow to work correctly.
+Paperless-ngx 支持 Gmail 和 Outlook 电子邮件账户的 OAuth2 身份验证。要使用 OAuth2 设置电子邮件账户，您需要在相应的提供商处创建一个“开发者”应用，获取客户端 ID 和客户端密钥，并设置适当的 [配置变量](configuration.md#email_oauth)。您还需要将 [`PAPERLESS_OAUTH_CALLBACK_BASE_URL`](configuration.md#PAPERLESS_OAUTH_CALLBACK_BASE_URL) 或 [`PAPERLESS_URL`](configuration.md#PAPERLESS_URL) 设置为正确的值，以便 OAuth2 流程正常工作。
 
-Specific instructions for setting up the required 'developer' app with Google or Microsoft are beyond the scope of this documentation, but you can find user-maintained instructions in [the wiki](https://github.com/paperless-ngx/paperless-ngx/wiki/Email-OAuth-App-Setup) or by searching the web.
+设置 Google 或 Microsoft 所需“开发者”应用的具体说明超出了本文档的范围，但您可以在 [维基](https://github.com/paperless-ngx/paperless-ngx/wiki/Email-OAuth-App-Setup) 中找到用户维护的说明，或通过搜索网络找到。
 
-Once setup, navigating to the email settings page in Paperless-ngx will allow you to add an email account for Gmail or Outlook using OAuth2. After authenticating, you will be presented with the newly-created account where you will need to enter and save your email address. After this, the account will work as any other email account in Paperless-ngx and refreshing tokens will be handled automatically.
+设置完成后，导航到 Paperless-ngx 中的电子邮件设置页面将允许您使用 OAuth2 添加 Gmail 或 Outlook 电子邮件账户。身份验证后，您将看到新创建的账户，您需要在此输入并保存您的电子邮件地址。之后，该账户将像 Paperless-ngx 中的任何其他电子邮件账户一样工作，刷新令牌将自动处理。
 
 ### REST API
 
-You can also submit a document using the REST API, see [POSTing documents](api.md#file-uploads)
-for details.
+您也可以使用 REST API 提交文档，详情请参见 [POST 文档](api.md#file-uploads)。
 
-## Document Suggestions
+## 文档建议
 
-Paperless-ngx can suggest tags, correspondents, document types and storage paths for documents based on the content of the document. This is done using a (non-LLM) machine learning model that is trained on the documents in your database. The suggestions are shown in the document detail page and can be accepted or rejected by the user.
+Paperless-ngx 可以根据文档内容建议标签、通信方、文档类型和存储路径。这是通过一个（非 LLM）机器学习模型完成的，该模型在您数据库中的文档上进行训练。建议显示在文档详情页面，用户可以接受或拒绝。
 
-## AI Features
+## AI 功能
 
-Paperless-ngx includes several features that use AI to enhance the document management experience. These features are optional and can be enabled or disabled in the settings. If you are using the AI features, you may want to also enable the "LLM index" feature, which supports Retrieval-Augmented Generation (RAG) designed to improve the quality of AI responses. The LLM index feature is not enabled by default and requires additional configuration.
+Paperless-ngx 包含几个使用 AI 来增强文档管理体验的功能。这些功能是可选的，可以在设置中启用或禁用。如果您使用 AI 功能，您可能还想启用“LLM 索引”功能，该功能支持检索增强生成（RAG），旨在提高 AI 响应的质量。LLM 索引功能默认未启用，需要额外配置。
 
 !!! warning
 
-    Remember that Paperless-ngx will send document content to the AI provider you have configured, so consider the privacy implications of using these features, especially if using a remote model (e.g. OpenAI), instead of the default local model.
+    请记住，Paperless-ngx 会将文档内容发送到您配置的 AI 提供商，因此请考虑使用这些功能的隐私影响，特别是如果使用远程模型（例如 OpenAI），而不是默认的本地模型。
 
-The AI features work by creating an embedding of the text content and metadata of documents, which is then used for various tasks such as similarity search and question answering. This uses the FAISS vector store.
+AI 功能通过创建文档文本内容和元数据的嵌入向量来工作，然后用于各种任务，如相似性搜索和问答。这使用 FAISS 向量存储。
 
-### AI-Enhanced Suggestions
+### AI 增强建议
 
-If enabled, Paperless-ngx can use an AI LLM model to suggest document titles, dates, tags, correspondents and document types for documents. This feature will always be "opt-in" and does not disable the existing classifier-based suggestion system. Currently, both remote (via the OpenAI API) and local (via Ollama) models are supported, see [configuration](configuration.md#ai) for details.
+如果启用，Paperless-ngx 可以使用 AI LLM 模型为文档建议文档标题、日期、标签、通信方和文档类型。此功能将始终是“选择加入”，并且不会禁用现有的基于分类器的建议系统。目前支持远程（通过 OpenAI API）和本地（通过 Ollama）模型，详情请参见 [配置](configuration.md#ai)。
 
-### Document Chat
+### 文档聊天
 
-Paperless-ngx can use an AI LLM model to answer questions about a document or across multiple documents. Again, this feature works best when RAG is enabled. The chat feature is available in the upper app toolbar and will switch between chatting across multiple documents or a single document based on the current view.
+Paperless-ngx 可以使用 AI LLM 模型回答关于单个文档或多个文档的问题。同样，此功能在启用 RAG 时效果最佳。聊天功能可在应用程序顶部工具栏中找到，将根据当前视图在跨多个文档聊天或单个文档聊天之间切换。
 
-## Sharing documents from Paperless-ngx
+## 从 Paperless-ngx 共享文档
 
-Paperless-ngx supports sharing documents with other users by assigning them [permissions](#object-permissions)
-to the document. Document files can also be shared externally via [share links](#share-links), [email](#email-sharing)
-or using [email](#workflow-action-email) or [webhook](#workflow-action-webhook) actions in workflows.
+Paperless-ngx 支持通过为用户分配文档的 [权限](#object-permissions) 来与其他用户共享文档。文档文件也可以通过 [共享链接](#share-links)、[电子邮件](#email-sharing) 或在工作流程中使用 [电子邮件](#workflow-action-email) 或 [Webhook](#workflow-action-webhook) 操作进行外部共享。
 
-### Share Links
+### 共享链接
 
-"Share links" are shareable public links to files and can be created and managed under the 'Send' button on the document detail screen.
+“共享链接”是文件的可共享公共链接，可以在文档详情屏幕的“发送”按钮下创建和管理。
 
--   Share links do not require a user to login and thus link directly to a file.
--   Links are unique and are of the form `{paperless-url}/share/{randomly-generated-slug}`.
--   Links can optionally have an expiration time set.
--   After a link expires or is deleted users will be redirected to the regular paperless-ngx login.
+*   共享链接不需要用户登录，因此直接链接到文件。
+*   链接是唯一的，形式为 `{paperless-url}/share/{随机生成的-slug}`。
+*   链接可以可选地设置过期时间。
+*   链接过期或删除后，用户将被重定向到常规的 Paperless-ngx 登录页面。
 
 !!! tip
 
-    If your paperless-ngx instance is behind a reverse-proxy you may want to create an exception to bypass any authentication layers that are part of your setup in order to make links truly publicly-accessible. Of course, do so with caution.
+    如果您的 Paperless-ngx 实例位于反向代理之后，您可能需要创建一个例外来绕过设置中的任何身份验证层，以使链接真正公开可访问。当然，请谨慎操作。
 
-### Email Sharing {#email-sharing}
+### 电子邮件共享 {#email-sharing}
 
-Paperless-ngx supports directly sending documents via email. If an email server has been [configured](configuration.md#email-sending)
-the "Send" button on the document detail page will include an "Email" option. You can also share files via email automatically by using
-a [workflow action](#workflow-action-email).
+Paperless-ngx 支持直接通过电子邮件发送文档。如果已 [配置](configuration.md#email-sending) 电子邮件服务器，文档详情页面上的“发送”按钮将包含“电子邮件”选项。您也可以通过使用 [工作流程操作](#workflow-action-email) 自动通过电子邮件共享文件。
 
-## Permissions
+## 权限
 
-Permissions in Paperless-ngx are based around ['global' permissions](#global-permissions) as well as
-['object-level' permissions](#object-permissions). Global permissions determine which parts of the
-application a user can access (e.g. Documents, Tags, Settings) and object-level determine which
-objects are visible or editable. All objects have an 'owner' and 'view' and 'edit' permissions which
-can be granted to other users or groups. The paperless-ngx permissions system uses the built-in user
-model of the backend framework, Django.
+Paperless-ngx 中的权限基于 [“全局”权限](#global-permissions) 以及 [“对象级”权限](#object-permissions)。全局权限决定用户可以访问应用程序的哪些部分（例如文档、标签、设置），对象级权限决定哪些对象可见或可编辑。所有对象都有一个“所有者”以及“查看”和“编辑”权限，这些权限可以授予其他用户或组。Paperless-ngx 权限系统使用后端框架 Django 的内置用户模型。
 
 !!! tip
 
-    Object-level permissions only apply to the object itself. In other words, setting permissions
-    for a Tag will _not_ affect the permissions of documents that have the Tag.
+    对象级权限仅适用于对象本身。换句话说，为标签设置权限 _不会_ 影响具有该标签的文档的权限。
 
-Permissions can be set using the new "Permissions" tab when editing documents, or bulk-applied
-in the UI by selecting documents and choosing the "Permissions" button.
+权限可以在编辑文档时使用新的“权限”选项卡设置，也可以在用户界面中通过选择文档并选择“权限”按钮批量应用。
 
-### Default permissions
+### 默认权限
 
-[Workflows](#workflows) provide advanced ways to control permissions.
+[工作流程](#workflows) 提供了控制权限的高级方法。
 
-For objects created via the web UI (tags, doc types, etc.) the default is to set the current user
-as owner and no extra permissions, but you can explicitly set these under Settings > Permissions.
+对于通过 Web 用户界面创建的对象（标签、文档类型等），默认设置是将当前用户设置为所有者，没有额外权限，但您可以在“设置 > 权限”下明确设置这些。
 
-Documents consumed via the consumption directory do not have an owner or additional permissions set by default, but again, can be controlled with [Workflows](#workflows).
+通过消费目录消费的文档默认没有所有者或额外权限，但同样可以通过 [工作流程](#workflows) 控制。
 
-### Users and Groups
+### 用户和组
 
-Paperless-ngx supports editing users and groups via the 'frontend' UI, which can be found under
-Settings > Users & Groups, assuming the user has access. If a user is designated
-as a member of a group those permissions will be inherited and this is reflected in the UI. Explicit
-permissions can be granted to limit access to certain parts of the UI (and corresponding API endpoints).
+Paperless-ngx 支持通过“前端”用户界面编辑用户和组，该界面位于“设置 > 用户和组”下，前提是用户有访问权限。如果用户被指定为组的成员，则将继承这些权限，并且这会在用户界面中反映出来。可以授予显式权限以限制对用户界面（以及相应的 API 端点）某些部分的访问。
 
 !!! tip
 
-    By default, new users are not granted any permissions, except those inherited from any group(s) of which they are a member.
+    默认情况下，新用户不被授予任何权限，除了从他们所属的任何组继承的权限。
 
-#### Superusers
+#### 超级用户
 
-Superusers can access all parts of the front and backend application as well as any and all objects. Superuser status can only be granted by another superuser.
+超级用户可以访问前端和后端应用程序的所有部分以及任何和所有对象。超级用户状态只能由另一个超级用户授予。
 
-#### Admin Status
+#### 管理员状态
 
-Admin status (Django 'staff status') grants access to viewing the paperless logs and the system status dialog
-as well as accessing the Django backend.
+管理员状态（Django 的“员工状态”）授予查看 Paperless 日志和系统状态对话框以及访问 Django 后端的权限。
 
-#### Detailed Explanation of Global Permissions {#global-permissions}
+#### 全局权限详细说明 {#global-permissions}
 
-Global permissions define what areas of the app and API endpoints users can access. For example, they
-determine if a user can create, edit, delete or view _any_ documents, but individual documents themselves
-still have "object-level" permissions.
+全局权限定义用户可以访问应用程序和 API 端点的哪些区域。例如，它们决定用户是否可以创建、编辑、删除或查看 _任何_ 文档，但单个文档本身仍然具有“对象级”权限。
 
-| Type          | Details                                                                                                                                                                                                                         |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AppConfig     | _Change_ or higher permissions grants access to the "Application Configuration" area.                                                                                                                                           |
-| Correspondent | Add, edit, delete or view Correspondents.                                                                                                                                                                                       |
-| CustomField   | Add, edit, delete or view Custom Fields.                                                                                                                                                                                        |
-| Document      | Add, edit, delete or view Documents.                                                                                                                                                                                            |
-| DocumentType  | Add, edit, delete or view Document Types.                                                                                                                                                                                       |
-| Group         | Add, edit, delete or view Groups.                                                                                                                                                                                               |
-| MailAccount   | Add, edit, delete or view Mail Accounts.                                                                                                                                                                                        |
-| MailRule      | Add, edit, delete or view Mail Rules.                                                                                                                                                                                           |
-| Note          | Add, edit, delete or view Notes.                                                                                                                                                                                                |
-| PaperlessTask | View or dismiss (_Change_) File Tasks.                                                                                                                                                                                          |
-| SavedView     | Add, edit, delete or view Saved Views.                                                                                                                                                                                          |
-| ShareLink     | Add, delete or view Share Links.                                                                                                                                                                                                |
-| StoragePath   | Add, edit, delete or view Storage Paths.                                                                                                                                                                                        |
-| Tag           | Add, edit, delete or view Tags.                                                                                                                                                                                                 |
-| UISettings    | Add, edit, delete or view the UI settings that are used by the web app.<br/>:warning: **Users that will access the web UI must be granted at least _View_ permissions.**                                                        |
-| User          | Add, edit, delete or view Users.                                                                                                                                                                                                |
-| Workflow      | Add, edit, delete or view Workflows.<br/>Note that Workflows are global; all users who can access workflows see the same set. Workflows have other permission implications — see [Workflow permissions](#workflow-permissions). |
-
-#### Detailed Explanation of Object Permissions {#object-permissions}
-
-| Type  | Details                                                                                                                                                                                                                                                                                                                                  |
-| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Owner | By default objects are only visible and editable by their owner.<br/>Only the object owner can grant permissions to other users or groups.<br/>Additionally, only document owners can create share links and add / remove custom fields.<br/>For backwards compatibility objects can have no owner which makes them visible to any user. |
-| View  | Confers the ability to view (not edit) a document, tag, etc.<br/>Users without 'view' (or higher) permissions will be shown _'Private'_ in place of the object name for example when viewing a document with a tag for which the user doesn't have permissions.                                                                          |
-| Edit  | Confers the ability to edit (and view) a document, tag, etc.                                                                                                                                                                                                                                                                             |
-
-### Password reset
-
-In order to enable the password reset feature you will need to setup an SMTP backend, see
-[`PAPERLESS_EMAIL_HOST`](configuration.md#PAPERLESS_EMAIL_HOST). If your installation does not have
-[`PAPERLESS_URL`](configuration.md#PAPERLESS_URL) set, the reset link included in emails will use the server host.
-
-### Two-factor authentication
-
-Users can enable two-factor authentication (2FA) for their accounts from the 'My Profile' dialog. Opening the dropdown reveals a QR code that can be scanned by a 2FA app (e.g. Google Authenticator) to generate a code. The code must then be entered in the dialog to enable 2FA. If the code is accepted and 2FA is enabled, the user will be shown a set of 10 recovery codes that can be used to login in the event that the 2FA device is lost or unavailable. These codes should be stored securely and cannot be retrieved again. Once enabled, users will be required to enter a code from their 2FA app when logging in.
-
-Should a user lose access to their 2FA device and all recovery codes, a superuser can disable 2FA for the user from the 'Users & Groups' management screen.
-
-## Workflows
-
-!!! note
-
-    v2.3 added "Workflows" and existing "Consumption Templates" were converted automatically to the new more powerful format.
-
-Workflows allow hooking into the Paperless-ngx document pipeline, for example to alter what metadata (tags, doc types) and
-permissions (owner, privileges) are assigned to documents. Workflows can have multiple 'triggers' and 'actions'. Triggers
-are events (with optional filtering rules) that will cause the workflow to be run and actions are the set of sequential
-actions to apply.
-
-In general, workflows and any actions they contain are applied sequentially by sort order. For "assignment" actions, subsequent
-workflow actions will override previous assignments, except for assignments that accept multiple items e.g. tags, custom
-fields and permissions, which will be merged.
-
-### Workflow Triggers
-
-#### Types {#workflow-trigger-types}
-
-Currently, there are four events that correspond to workflow trigger 'types':
-
-1. **Consumption Started**: _before_ a document is consumed, so events can include filters by source (mail, consumption
-   folder or API), file path, file name, mail rule
-2. **Document Added**: _after_ a document is added. At this time, file path and source information is no longer available,
-   but the document content has been extracted and metadata such as document type, tags, etc. have been set, so these can now
-   be used for filtering.
-3. **Document Updated**: when a document is updated. Similar to 'added' events, triggers can include filtering by content matching,
-   tags, doc type, correspondent or storage path.
-4. **Scheduled**: a scheduled trigger that can be used to run workflows at a specific time. The date used can be either the document
-   added, created, updated date or you can specify a (date) custom field. You can also specify a day offset from the date (positive
-   offsets will trigger after the date, negative offsets will trigger before).
-
-The following flow diagram illustrates the four document trigger types:
-
-```mermaid
-flowchart TD
-    consumption{"Matching
-    'Consumption'
-    trigger(s)"}
-
-    added{"Matching
-    'Added'
-    trigger(s)"}
-
-    updated{"Matching
-    'Updated'
-    trigger(s)"}
-
-    scheduled{"Documents
-    matching
-    trigger(s)"}
-
-    A[New Document] --> consumption
-    consumption --> |Yes| C[Workflow Actions Run]
-    consumption --> |No| D
-    C --> D[Document Added]
-    D -- Paperless-ngx 'matching' of tags, etc. --> added
-    added --> |Yes| F[Workflow Actions Run]
-    added --> |No| G
-    F --> G[Document Finalized]
-    H[Existing Document Changed] --> updated
-    updated --> |Yes| J[Workflow Actions Run]
-    updated --> |No| K
-    J --> K[Document Saved]
-    L[Scheduled Task Check<br/>hourly at :05] --> M[Get All Scheduled Triggers]
-    M --> scheduled
-    scheduled --> |Yes| N[Workflow Actions Run]
-    scheduled --> |No| O[Document Saved]
-    N --> O
-```
-
-#### Filters {#workflow-trigger-filters}
-
-Workflows allow you to filter by:
-
--   Source, e.g. documents uploaded via consume folder, API (& the web UI) and mail fetch
--   File name, including wildcards e.g. \*.pdf will apply to all pdfs.
--   File path, including wildcards. Note that enabling `PAPERLESS_CONSUMER_RECURSIVE` would allow, for
-    example, automatically assigning documents to different owners based on the upload directory.
--   Mail rule. Choosing this option will force 'mail fetch' to be the workflow source.
--   Content matching (`Added`, `Updated` and `Scheduled` triggers only). Filter document content using the matching settings.
-
-There are also 'advanced' filters available for `Added`, `Updated` and `Scheduled` triggers:
-
--   Any Tags: Filter for documents with any of the specified tags.
--   All Tags: Filter for documents with all of the specified tags.
--   No Tags: Filter for documents with none of the specified tags.
--   Document type: Filter documents with this document type.
--   Not Document types: Filter documents without any of these document types.
--   Correspondent: Filter documents with this correspondent.
--   Not Correspondents: Filter documents without any of these correspondents.
--   Storage path: Filter documents with this storage path.
--   Not Storage paths: Filter documents without any of these storage paths.
--   Custom field query: Filter documents with a custom field query (the same as used for the document list filters).
-
-### Workflow Actions
-
-#### Types {#workflow-action-types}
-
-The following workflow action types are available:
-
-##### Assignment {#workflow-action-assignment}
-
-"Assignment" actions can assign:
-
--   Title, see [workflow placeholders](usage.md#workflow-placeholders) below
--   Tags, correspondent, document type and storage path
--   Document owner
--   View and / or edit permissions to users or groups
--   Custom fields. Note that no value for the field will be set
-
-##### Removal {#workflow-action-removal}
-
-"Removal" actions can remove either all of or specific sets of the following:
-
--   Tags, correspondents, document types or storage paths
--   Document owner
--   View and / or edit permissions
--   Custom fields
-
-##### Email {#workflow-action-email}
-
-"Email" actions can send documents via email. This action requires a mail server to be [configured](configuration.md#email-sending). You can specify:
-
--   The recipient email address(es) separated by commas
--   The subject and body of the email, which can include placeholders, see [placeholders](usage.md#workflow-placeholders) below
--   Whether to include the document as an attachment
-
-##### Webhook {#workflow-action-webhook}
-
-"Webhook" actions send a POST request to a specified URL. You can specify:
-
--   The URL to send the request to
--   The request body as text or as key-value pairs, which can include placeholders, see [placeholders](usage.md#workflow-placeholders) below.
--   Encoding for the request body, either JSON or form data
--   The request headers as key-value pairs
-
-For security reasons, webhooks can be limited to specific ports and disallowed from connecting to local URLs. See the relevant
-[configuration settings](configuration.md#workflow-webhooks) to change this behavior. If you are allowing non-admins to create workflows,
-you may want to adjust these settings to prevent abuse.
-
-#### Workflow placeholders
-
-Titles can be assigned by workflows using [Jinja templates](https://jinja.palletsprojects.com/en/3.1.x/templates/).
-This allows for complex logic to be used to generate the title, including [logical structures](https://jinja.palletsprojects.com/en/3.1.x/templates/#list-of-control-structures)
-and [filters](https://jinja.palletsprojects.com/en/3.1.x/templates/#id11).
-The template is provided as a string.
-
-Using Jinja2 Templates is also useful for [Date localization](advanced_usage.md#Date-Localization) in the title.
-
-The available inputs differ depending on the type of workflow trigger.
-This is because at the time of consumption (when the text is to be set), no automatic tags etc. have been
-applied. You can use the following placeholders in the template with any trigger type:
-
--   `{{correspondent}}`: assigned correspondent name
--   `{{document_type}}`: assigned document type name
--   `{{owner_username}}`: assigned owner username
--   `{{added}}`: added datetime
--   `{{added_year}}`: added year
--   `{{added_year_short}}`: added year
--   `{{added_month}}`: added month
--   `{{added_month_name}}`: added month name
--   `{{added_month_name_short}}`: added month short name
--   `{{added_day}}`: added day
--   `{{added_time}}`: added time in HH:MM format
--   `{{original_filename}}`: original file name without extension
--   `{{filename}}`: current file name without extension
--   `{{doc_title}}`: current document title
-
-The following placeholders are only available for "added" or "updated" triggers
-
--   `{{created}}`: created datetime
--   `{{created_year}}`: created year
--   `{{created_year_short}}`: created year
--   `{{created_month}}`: created month
--   `{{created_month_name}}`: created month name
--   `{created_month_name_short}}`: created month short name
--   `{{created_day}}`: created day
--   `{{created_time}}`: created time in HH:MM format
--   `{{doc_url}}`: URL to the document in the web UI. Requires the `PAPERLESS_URL` setting to be set.
-
-##### Examples
-
-```jinja2
-{{ created | localize_date('MMMM', 'en_US') }}
-<!-- Output: "January" -->
-
-{{ added | localize_date('MMMM', 'de_DE') }}
-<!-- Output: "Juni" --> # codespell:ignore
-```
-
-### Workflow permissions
-
-All users who have application permissions for editing workflows can see the same set
-of workflows. In other words, workflows themselves intentionally do not have an owner or permissions.
-
-Given their potentially far-reaching capabilities, including changing the permissions of existing documents, you may want to restrict access to workflows.
-
-Upon migration, existing installs will grant access to workflows to users who can add
-documents (and superusers who can always access all parts of the app).
-
-## Custom Fields {#custom-fields}
-
-Paperless-ngx supports the use of custom fields for documents as of v2.0, allowing a user
-to optionally attach data to documents which does not fit in the existing set of fields
-Paperless-ngx provides.
-
-1. First, create a custom field (under "Manage"), with a given name and data type. This could be something like "Invoice Number" or "Date Paid", with a data type of "Number", "Date", "String", etc.
-2. Once created, a field can be used with documents and data stored. To do so, use the "Custom Fields" menu on the document detail page, choose your existing field from the dropdown. Once the field is visible in the form you can enter the appropriate data which will be validated according to the custom field "data type".
-3. Fields can be removed by hovering over the field name revealing a "Remove" button.
-
-!!! important
-
-    Added / removed fields, as well as any data, is not saved to the document until you
-    actually hit the "Save" button, similar to other changes on the document details page.
-
-!!! note
-
-    Once the data type for a field is set, it cannot be changed.
-
-Multiple fields may be attached to a document but the same field name cannot be assigned multiple times to the a single document.
-
-The following custom field types are supported:
-
--   `Text`: any text
--   `Boolean`: true / false (check / unchecked) field
--   `Date`: date
--   `URL`: a valid url
--   `Integer`: integer number e.g. 12
--   `Number`: float number e.g. 12.3456
--   `Monetary`: [ISO 4217 currency code](https://en.wikipedia.org/wiki/ISO_4217#List_of_ISO_4217_currency_codes) and a number with exactly two decimals, e.g. USD12.30
--   `Document Link`: reference(s) to other document(s) displayed as links, automatically creates a symmetrical link in reverse
--   `Select`: a pre-defined list of strings from which the user can choose
-
-## PDF Actions
-
-Paperless-ngx supports basic editing operations for PDFs (these operations currently cannot be performed on non-PDF files). When viewing an individual document you can
-open the 'PDF Editor' to use a simple UI for re-arranging, rotating, deleting pages and splitting documents.
-
--   Merging documents: available when selecting multiple documents for 'bulk editing'.
--   Rotating documents: available when selecting multiple documents for 'bulk editing' and via the pdf editor on an individual document's details page.
--   Splitting documents: via the pdf editor on an individual document's details page.
--   Deleting pages: via the pdf editor on an individual document's details page.
--   Re-arranging pages: via the pdf editor on an individual document's details page.
-
-!!! important
-
-    Note that rotation and deleting pages alter the Paperless-ngx _original_ file, which would, for example, invalidate a digital signature.
-
-## Document History
-
-As of version 2.7, Paperless-ngx automatically records all changes to a document and records this in an audit log. The feature requires [`PAPERLESS_AUDIT_LOG_ENABLED`](configuration.md#PAPERLESS_AUDIT_LOG_ENABLED) be enabled, which it is by default as of version 2.7.
-Changes to documents are visible under the "History" tab. Note that certain changes such as those made by workflows, record the 'actor'
-as "System".
-
-## Document Trash
-
-When you first delete a document it is moved to the 'trash' until either it is explicitly deleted or it is automatically removed after a set amount of time has passed.
-You can set how long documents remain in the trash before being automatically deleted with [`PAPERLESS_EMPTY_TRASH_DELAY`](configuration.md#PAPERLESS_EMPTY_TRASH_DELAY), which defaults
-to 30 days. Until the file is actually deleted (e.g. the trash is emptied), all files and database content remains intact and can be restored at any point up until that time.
-
-Additionally you may configure a directory where deleted files are moved to when the trash is emptied with [`PAPERLESS_EMPTY_TRASH_DIR`](configuration.md#PAPERLESS_EMPTY_TRASH_DIR).
-Note that the empty trash directory only stores the original file, the archive file and all database information is permanently removed once a document is fully deleted.
-
-## Best practices {#basic-searching}
-
-Paperless offers a couple tools that help you organize your document
-collection. However, it is up to you to use them in a way that helps you
-organize documents and find specific documents when you need them. This
-section offers a couple ideas for managing your collection.
-
-Document types allow you to classify documents according to what they
-are. You can define types such as "Receipt", "Invoice", or
-"Contract". If you used to collect all your receipts in a single
-binder, you can recreate that system in paperless by defining a document
-type, assigning documents to that type and then filtering by that type
-to only see all receipts.
-
-Not all documents need document types. Sometimes its hard to determine
-what the type of a document is or it is hard to justify creating a
-document type that you only need once or twice. This is okay. As long as
-the types you define help you organize your collection in the way you
-want, paperless is doing its job.
-
-Tags can be used in many different ways. Think of tags are more
-versatile folders or binders. If you have a binder for documents related
-to university / your car or health care, you can create these binders in
-paperless by creating tags and assigning them to relevant documents.
-Just as with documents, you can filter the document list by tags and
-only see documents of a certain topic.
-
-With physical documents, you'll often need to decide which folder the
-document belongs to. The advantage of tags over folders and binders is
-that a single document can have multiple tags. A physical document
-cannot magically appear in two different folders, but with tags, this is
-entirely possible.
-
-!!! tip
-
-    This can be used in many different ways. One example: Imagine you're
-    working on a particular task, such as signing up for university. Usually
-    you'll need to collect a bunch of different documents that are already
-    sorted into various folders. With the tag system of paperless, you can
-    create a new group of documents that are relevant to this task without
-    destroying the already existing organization. When you're done with the
-    task, you could delete the tag again, which would be equal to sorting
-    documents back into the folder they belong into. Or keep the tag, up to
-    you.
-
-All of the logic above applies to correspondents as well. Attach them to
-documents if you feel that they help you organize your collection.
-
-When you've started organizing your documents, create a couple saved
-views for document collections you regularly access. This is equal to
-having labeled physical binders on your desk, except that these saved
-views are dynamic and simply update themselves as you add documents to
-the system.
-
-Here are a couple examples of tags and types that you could use in your
-collection.
-
--   An `inbox` tag for newly added documents that you haven't manually
-    edited yet.
--   A tag `car` for everything car related (repairs, registration,
-    insurance, etc)
--   A tag `todo` for documents that you still need to do something with,
-    such as reply, or perform some task online.
--   A tag `bank account x` for all bank statement related to that
-    account.
--   A tag `mail` for anything that you added to paperless via its mail
-    processing capabilities.
--   A tag `missing_metadata` when you still need to add some metadata to
-    a document, but can't or don't want to do this right now.
-
-## Searching {#basic-usage_searching}
-
-### Global search
-
-The top search bar in the web UI performs a "global" search of the various
-objects Paperless-ngx uses, including documents, tags, workflows, etc. Only
-objects for which the user has appropriate permissions are returned. For
-documents, if there are < 3 results, "advanced" search results (which use
-the document index) will also be included. This can be disabled under settings.
-
-### Document searches
-
-Paperless offers an extensive searching mechanism that is designed to
-allow you to quickly find a document you're looking for (for example,
-that thing that just broke and you bought a couple months ago, that
-contract you signed 8 years ago).
-
-When you search paperless for a document, it tries to match this query
-against your documents. Paperless will look for matching documents by
-inspecting their content, title, correspondent, type and tags. Paperless
-returns a scored list of results, so that documents matching your query
-better will appear further up in the search results.
-
-By default, paperless returns only documents which contain all words
-typed in the search bar. However, paperless also offers advanced search
-syntax if you want to drill down the results further.
-
-Matching documents with logical expressions:
-
-```
-shopname AND (product1 OR product2)
-```
-
-Matching specific tags, correspondents or types:
-
-```
-type:invoice tag:unpaid
-correspondent:university certificate
-```
-
-Matching dates:
-
-```
-created:[2005 to 2009]
-added:yesterday
-modified:today
-```
-
-Matching inexact words:
-
-```
-produ*name
-```
-
-!!! note
-
-    Inexact terms are hard for search indexes. These queries might take a
-    while to execute. That's why paperless offers auto complete and query
-    correction.
-
-All of these constructs can be combined as you see fit. If you want to
-learn more about the query language used by paperless, paperless uses
-Whoosh's default query language. Head over to [Whoosh query
-language](https://whoosh.readthedocs.io/en/latest/querylang.html). For
-details on what date parsing utilities are available, see [Date
-parsing](https://whoosh.readthedocs.io/en/latest/dates.html#parsing-date-queries).
-
-## Keyboard shortcuts / hotkeys
-
-A list of available hotkeys can be shown on any page using <kbd>Shift</kbd> +
-<kbd>?</kbd>. The help dialog shows only the keys that are currently available
-based on which area of Paperless-ngx you are using.
-
-## The recommended workflow {#usage-recommended-workflow}
-
-Once you have familiarized yourself with paperless and are ready to use
-it for all your documents, the recommended workflow for managing your
-documents is as follows. This workflow also takes into account that some
-documents have to be kept in physical form, but still ensures that you
-get all the advantages for these documents as well.
-
-The following diagram shows how easy it is to manage your documents.
-
-![image](assets/recommended_workflow.png){width=400}
-
-### Preparations in paperless
-
--   Create an inbox tag that gets assigned to all new documents.
--   Create a TODO tag.
-
-### Processing of the physical documents
-
-Keep a physical inbox. Whenever you receive a document that you need to
-archive, put it into your inbox. Regularly, do the following for all
-documents in your inbox:
-
-1.  For each document, decide if you need to keep the document in
-    physical form. This applies to certain important documents, such as
-    contracts and certificates.
-2.  If you need to keep the document, write a running number on the
-    document before scanning, starting at one and counting upwards. This
-    is the archive serial number, or ASN in short.
-3.  Scan the document.
-4.  If the document has an ASN assigned, store it in a _single_ binder,
-    sorted by ASN. Don't order this binder in any other way.
-5.  If the document has no ASN, throw it away. Yay!
-
-!!! tip
-
-    Instead of writing a number on the document by hand, you may also prepare
-    a spool of labels with barcodes with an ascending serial number, that are
-    formatted like `ASN00001`.
-    This also enables Paperless to automatically parse and process the ASN
-    (if enabled in the config), so that you don't need to manually assign it.
-
-Over time, you will notice that your physical binder will fill up. If it
-is full, label the binder with the range of ASNs in this binder (i.e.,
-"Documents 1 to 343"), store the binder in your cellar or elsewhere,
-and start a new binder.
-
-The idea behind this process is that you will never have to use the
-physical binders to find a document. If you need a specific physical
-document, you may find this document by:
-
-1.  Searching in paperless for the document.
-2.  Identify the ASN of the document, since it appears on the scan.
-3.  Grab the relevant document binder and get the document. This is easy
-    since they are sorted by ASN.
-
-### Processing of documents in paperless
-
-Once you have scanned in a document, proceed in paperless as follows.
-
-1.  If the document has an ASN, assign the ASN to the document.
-2.  Assign a correspondent to the document (i.e., your employer, bank,
-    etc) This isn't strictly necessary but helps in finding a document
-    when you need it.
-3.  Assign a document type (i.e., invoice, bank statement, etc) to the
-    document This isn't strictly necessary but helps in finding a
-    document when you need it.
-4.  Assign a proper title to the document (the name of an item you
-    bought, the subject of the letter, etc)
-5.  Check that the date of the document is correct. Paperless tries to
-    read the date from the content of the document, but this fails
-    sometimes if the OCR is bad or multiple dates appear on the
-    document.
-6.  Remove inbox tags from the documents.
-
-!!! tip
-
-    You can setup manual matching rules for your correspondents and tags and
-    paperless will assign them automatically. After consuming a couple
-    documents, you can even ask paperless to *learn* when to assign tags and
-    correspondents by itself. For details on this feature, see
-    [advanced matching](advanced_usage.md#matching).
-
-### Task management
-
-Some documents require attention and require you to act on the document.
-You may take two different approaches to handle these documents based on
-how regularly you intend to scan documents and use paperless.
-
--   If you scan and process your documents in paperless regularly,
-    assign a TODO tag to all scanned documents that you need to process.
-    Create a saved view on the dashboard that shows all documents with
-    this tag.
--   If you do not scan documents regularly and use paperless solely for
-    archiving, create a physical todo box next to your physical inbox
-    and put documents you need to process in the TODO box. When you
-    performed the task associated with the document, move it to the
-    inbox.
-
-## Remote OCR
-
-!!! important
-
-    This feature is disabled by default and will always remain strictly "opt-in".
-
-Paperless-ngx supports performing OCR on documents using remote services. At the moment, this is limited to
-[Microsoft's Azure "Document Intelligence" service](https://azure.microsoft.com/en-us/products/ai-services/ai-document-intelligence).
-This is of course a paid service (with a free tier) which requires an Azure account and subscription. Azure AI is not affiliated with
-Paperless-ngx in any way. When enabled, Paperless-ngx will automatically send appropriate documents to Azure for OCR processing, bypassing
-the local OCR engine. See the [configuration](configuration.md#PAPERLESS_REMOTE_OCR_ENGINE) options for more details.
-
-Additionally, when using a commercial service with this feature, consider both potential costs as well as any associated file size
-or page limitations (e.g. with a free tier).
-
-## Architecture
-
-Paperless-ngx consists of the following components:
-
--   **The webserver:** This serves the administration pages, the API,
-    and the new frontend. This is the main tool you'll be using to interact
-    with paperless. You may start the webserver directly with
-
-    ```shell-session
-    cd /path/to/paperless/src/
-    granian --interface asginl --ws "paperless.asgi:application"
-    ```
-
-    or by any other means such as Apache `mod_wsgi`.
-
--   **The consumer:** This is what watches your consumption folder for
-    documents. However, the consumer itself does not really consume your
-    documents. Now it notifies a task processor that a new file is ready
-    for consumption. I suppose it should be named differently. This was
-    also used to check your emails, but that's now done elsewhere as
-    well.
-
-    Start the consumer with the management command `document_consumer`:
-
-    ```shell-session
-    cd /path/to/paperless/src/
-    python3 manage.py document_consumer
-    ```
-
--   **The task processor:** Paperless relies on [Celery - Distributed
-    Task Queue](https://docs.celeryq.dev/en/stable/index.html) for doing
-    most of the heavy lifting. This is a task queue that accepts tasks
-    from multiple sources and processes these in parallel. It also comes
-    with a scheduler that executes certain commands periodically.
-
-    This task processor is responsible for:
-
-    -   Consuming documents. When the consumer finds new documents, it
-        notifies the task processor to start a consumption task.
-    -   The task processor also performs the consumption of any
-        documents you upload through the web interface.
-    -   Consuming emails. It periodically checks your configured
-        accounts for new emails and notifies the task processor to
-        consume the attachment of an email.
-    -   Maintaining the search index and the automatic matching
-        algorithm. These are things that paperless needs to do from time
-        to time in order to operate properly.
-
-    This allows paperless to process multiple documents from your
-    consumption folder in parallel! On a modern multi core system, this
-    makes the consumption process with full OCR blazingly fast.
-
-    The task processor comes with a built-in admin interface that you
-    can use to check whenever any of the tasks fail and inspect the
-    errors (i.e., wrong email credentials, errors during consuming a
-    specific file, etc).
-
--   A [redis](https://redis.io/) message broker: This is a really
-    lightweight service that is responsible for getting the tasks from
-    the webserver and the consumer to the task scheduler. These run in a
-    different process (maybe even on different machines!), and
-    therefore, this is necessary.
-
--   Optional: A database server. Paperless supports PostgreSQL, MariaDB
-    and SQLite for storing its data.
+| 类型 | 详情 |
+| :--- | :--- |
+| AppConfig | _更改_ 或更高权限授予访问“应用程序配置”区域的权限。 |
+| Correspondent | 添加、编辑、删除或查看通信方。 |
+| CustomField | 添加、编辑、删除或查看自定义字段。 |
+| Document | 添加、编辑、删除或查看文档。 |
+| DocumentType | 添加、编辑、删除或查看文档类型。 |
+| Group | 添加、编辑、删除或查看组。 |
+| MailAccount | 添加、编辑、删除或查看邮件账户。 |
+| MailRule | 添加、编辑、删除或查看邮件规则。 |
+| Note |

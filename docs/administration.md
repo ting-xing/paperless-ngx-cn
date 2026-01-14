@@ -1,94 +1,71 @@
-# Administration
+# 管理
 
-## Making backups {#backup}
+## 创建备份 {#backup}
 
-Multiple options exist for making backups of your paperless instance,
-depending on how you installed paperless.
+根据您安装 Paperless 的方式，有多种创建 Paperless 实例备份的选项。
 
-Before making a backup, it's probably best to make sure that paperless is not actively
-consuming documents at that time.
+在创建备份之前，最好确保 Paperless 当时没有正在处理文档。
 
-Options available to any installation of paperless:
+适用于任何 Paperless 安装的选项：
 
--   Use the [document exporter](#exporter). The document exporter exports all your documents,
-    thumbnails, metadata, and database contents to a specific folder. You may import your
-    documents and settings into a fresh instance of paperless again or store your
-    documents in another DMS with this export.
+-   使用[文档导出器](#exporter)。文档导出器会将您的所有文档、缩略图、元数据和数据库内容导出到特定文件夹。您可以将文档和设置重新导入到新的 Paperless 实例中，或者使用此导出将文档存储到另一个 DMS 中。
 
-    The document exporter is also able to update an already existing
-    export. Therefore, incremental backups with `rsync` are entirely
-    possible.
+    文档导出器还能够更新已存在的导出。因此，使用 `rsync` 进行增量备份是完全可行的。
 
-    The exporter does not include API tokens and they will need to be re-generated after importing.
+    导出器不包含 API 令牌，导入后需要重新生成。
 
 !!! caution
 
-    You cannot import the export generated with one version of paperless in
-    a different version of paperless. The export contains an exact image of
-    the database, and migrations may change the database layout.
+    您无法将使用一个 Paperless 版本生成的导出导入到另一个不同版本的 Paperless 中。导出包含数据库的精确镜像，而数据库迁移可能会更改数据库结构。
 
-Options available to docker installations:
+适用于 Docker 安装的选项：
 
--   Backup the docker volumes. These usually reside within
-    `/var/lib/docker/volumes` on the host and you need to be root in
-    order to access them.
+-   备份 Docker 卷。这些卷通常位于主机的 `/var/lib/docker/volumes` 目录下，您需要 root 权限才能访问它们。
 
-    Paperless uses 4 volumes:
+    Paperless 使用 4 个卷：
 
-    -   `paperless_media`: This is where your documents are stored.
-    -   `paperless_data`: This is where auxiliary data is stored. This
-        folder also contains the SQLite database, if you use it.
-    -   `paperless_pgdata`: Exists only if you use PostgreSQL and
-        contains the database.
-    -   `paperless_dbdata`: Exists only if you use MariaDB and contains
-        the database.
+    -   `paperless_media`：这是存储文档的位置。
+    -   `paperless_data`：这是存储辅助数据的位置。如果您使用 SQLite，此文件夹也包含 SQLite 数据库。
+    -   `paperless_pgdata`：仅在使用 PostgreSQL 时存在，包含数据库。
+    -   `paperless_dbdata`：仅在使用 MariaDB 时存在，包含数据库。
 
-Options available to bare-metal and non-docker installations:
+适用于裸机和非 Docker 安装的选项：
 
--   Backup the entire paperless folder. This ensures that if your
-    paperless instance crashes at some point or your disk fails, you can
-    simply copy the folder back into place and it works.
+-   备份整个 Paperless 文件夹。这确保了如果您的 Paperless 实例在某个时刻崩溃或磁盘故障，您可以简单地将文件夹复制回原位，它就能正常工作。
 
-    When using PostgreSQL or MariaDB, you'll also have to backup the
-    database.
+    当使用 PostgreSQL 或 MariaDB 时，您还需要备份数据库。
 
-### Restoring {#migrating-restoring}
+### 恢复 {#migrating-restoring}
 
-If you've backed-up Paperless-ngx using the [document exporter](#exporter),
-restoring can simply be done with the [document importer](#importer).
+如果您使用[文档导出器](#exporter)备份了 Paperless-ngx，则可以使用[文档导入器](#importer)轻松恢复。
 
-Of course, other backup strategies require restoring any volumes, folders and database
-copies you created in the steps above.
+当然，其他备份策略需要恢复您在上述步骤中创建的任何卷、文件夹和数据库副本。
 
-## Updating Paperless {#updating}
+## 更新 Paperless {#updating}
 
-### Docker Route {#docker-updating}
+### Docker 方式 {#docker-updating}
 
-If a new release of paperless-ngx is available, upgrading depends on how
-you installed paperless-ngx in the first place. The releases are
-available at the [release
-page](https://github.com/paperless-ngx/paperless-ngx/releases).
+如果有新的 Paperless-ngx 版本可用，升级方式取决于您最初安装 Paperless-ngx 的方式。发布版本可在[发布页面](https://github.com/paperless-ngx/paperless-ngx/releases)找到。
 
-First of all, make sure no active processes (like consumption) are running, then [make a backup](#backup).
+首先，确保没有正在运行的活跃进程（如消费），然后[创建备份](#backup)。
 
-After that, ensure that paperless is stopped:
+之后，确保 Paperless 已停止：
 
 ```shell-session
 $ cd /path/to/paperless
 $ docker compose down
 ```
 
-1.  If you pull the image from the docker hub, all you need to do is:
+1.  如果您从 Docker Hub 拉取镜像，您只需要：
 
     ```shell-session
     docker compose pull
     docker compose up
     ```
 
-    The Docker Compose files refer to the `latest` version, which is
-    always the latest stable release.
+    Docker Compose 文件引用 `latest` 版本，该版本始终是最新的稳定版本。
 
-1.  If you built the image yourself, do the following:
+1.  如果您自己构建镜像，请执行以下操作：
 
     ```shell-session
     git pull
@@ -96,26 +73,18 @@ $ docker compose down
     docker compose up
     ```
 
-Running `docker compose up` will also apply any new database migrations.
-If you see everything working, press CTRL+C once to gracefully stop
-paperless. Then you can start paperless-ngx with `-d` to have it run in
-the background.
+运行 `docker compose up` 也会应用任何新的数据库迁移。
+如果您看到一切正常，请按一次 CTRL+C 以优雅地停止 Paperless。然后您可以使用 `-d` 参数启动 Paperless-ngx，使其在后台运行。
 
 !!! note
 
-    In version 0.9.14, the update process was changed. In 0.9.13 and
-    earlier, the Docker Compose files specified exact versions and pull
-    won't automatically update to newer versions. In order to enable
-    updates as described above, either get the new `docker-compose.yml`
-    file from
-    [here](https://github.com/paperless-ngx/paperless-ngx/tree/main/docker/compose)
-    or edit the `docker-compose.yml` file, find the line that says
+    在版本 0.9.14 中，更新过程发生了变化。在 0.9.13 及更早版本中，Docker Compose 文件指定了确切的版本，`pull` 不会自动更新到新版本。为了启用如上所述的更新，要么从[此处](https://github.com/paperless-ngx/paperless-ngx/tree/main/docker/compose)获取新的 `docker-compose.yml` 文件，要么编辑 `docker-compose.yml` 文件，找到以下行：
 
     ```
     image: ghcr.io/paperless-ngx/paperless-ngx:0.9.x
     ```
 
-    and replace the version with `latest`:
+    并将版本替换为 `latest`：
 
     ```
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
@@ -123,36 +92,25 @@ the background.
 
 !!! note
 
-    In version 1.7.1 and onwards, the Docker image can now be pinned to a
-    release series. This is often combined with automatic updaters such as
-    Watchtower to allow safer unattended upgrading to new bugfix releases
-    only. It is still recommended to always review release notes before
-    upgrading. To pin your install to a release series, edit the
-    `docker-compose.yml` find the line that says
+    从版本 1.7.1 开始，Docker 镜像现在可以固定到某个发布系列。这通常与自动更新工具（如 Watchtower）结合使用，以允许仅安全地无人值守升级到新的错误修复版本。仍然建议在升级前始终查看发布说明。要将您的安装固定到某个发布系列，请编辑 `docker-compose.yml`，找到以下行：
 
     ```
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     ```
 
-    and replace the version with the series you want to track, for
-    example:
+    并将版本替换为您想要跟踪的系列，例如：
 
     ```
     image: ghcr.io/paperless-ngx/paperless-ngx:1.7
     ```
 
-### Bare Metal Route {#bare-metal-updating}
+### 裸机方式 {#bare-metal-updating}
 
-After grabbing the new release and unpacking the contents, do the
-following:
+获取新版本并解压内容后，执行以下操作：
 
-1.  Update dependencies. New paperless version may require additional
-    dependencies. The dependencies required are listed in the section
-    about
-    [bare metal installations](setup.md#bare_metal).
+1.  更新依赖项。新的 Paperless 版本可能需要额外的依赖项。所需的依赖项列在[裸机安装](setup.md#bare_metal)部分。
 
-2.  Update python requirements. Keep in mind to activate your virtual
-    environment before that, if you use one.
+2.  更新 Python 依赖项。请记住，如果您使用虚拟环境，请在此之前激活它。
 
     ```shell-session
     pip install -r requirements.txt
@@ -160,90 +118,75 @@ following:
 
     !!! note
 
-        At times, some dependencies will be removed from requirements.txt.
-        Comparing the versions and removing no longer needed dependencies
-        will keep your system or virtual environment clean and prevent
-        possible conflicts.
+        有时，某些依赖项会从 requirements.txt 中移除。比较版本并移除不再需要的依赖项将保持您的系统或虚拟环境清洁，并防止可能的冲突。
 
-3.  Migrate the database.
+3.  迁移数据库。
 
     ```shell-session
     cd src
     python3 manage.py migrate # (1)
     ```
 
-    1.  Including `sudo -Hu <paperless_user>` may be required
+    1.  可能需要包含 `sudo -Hu <paperless_user>`
 
-    This might not actually do anything. Not every new paperless version
-    comes with new database migrations.
+    这可能实际上不会执行任何操作。并非每个新的 Paperless 版本都附带新的数据库迁移。
 
-### Database Upgrades
+### 数据库升级
 
-Paperless-ngx is compatible with Django-supported versions of PostgreSQL and MariaDB and it is generally
-safe to update them to newer versions. However, you should always take a backup and follow
-the instructions from your database's documentation for how to upgrade between major versions.
+Paperless-ngx 与 Django 支持的 PostgreSQL 和 MariaDB 版本兼容，通常可以安全地将它们更新到新版本。但是，您应该始终进行备份，并按照数据库文档中的说明进行主要版本之间的升级。
 
 !!! note
 
-    As of Paperless-ngx v2.18, the minimum supported version of PostgreSQL is 14.
+    从 Paperless-ngx v2.18 开始，PostgreSQL 的最低支持版本是 14。
 
-For PostgreSQL, refer to [Upgrading a PostgreSQL Cluster](https://www.postgresql.org/docs/current/upgrading.html).
+对于 PostgreSQL，请参考[升级 PostgreSQL 集群](https://www.postgresql.org/docs/current/upgrading.html)。
 
-For MariaDB, refer to [Upgrading MariaDB](https://mariadb.com/kb/en/upgrading/)
+对于 MariaDB，请参考[升级 MariaDB](https://mariadb.com/kb/en/upgrading/)。
 
-You may also use the exporter and importer with the `--data-only` flag, after creating a new database with the updated version of PostgreSQL or MariaDB.
+您也可以在创建了更新版本的 PostgreSQL 或 MariaDB 数据库后，使用带有 `--data-only` 标志的导出器和导入器。
 
 !!! warning
 
-    You should not change any settings, especially paths, when doing this or there is a
-    risk of data loss
+    执行此操作时，不应更改任何设置，尤其是路径，否则存在数据丢失的风险。
 
-## Management utilities {#management-commands}
+## 管理工具 {#management-commands}
 
-Paperless comes with some management commands that perform various
-maintenance tasks on your paperless instance. You can invoke these
-commands in the following way:
+Paperless 附带一些管理命令，用于在您的 Paperless 实例上执行各种维护任务。您可以通过以下方式调用这些命令：
 
-With Docker Compose, while paperless is running:
+使用 Docker Compose，在 Paperless 运行时：
 
 ```shell-session
 $ cd /path/to/paperless
 $ docker compose exec webserver <command> <arguments>
 ```
 
-With docker, while paperless is running:
+使用 Docker，在 Paperless 运行时：
 
 ```shell-session
 $ docker exec -it <container-name> <command> <arguments>
 ```
 
-Bare metal:
+裸机：
 
 ```shell-session
 $ cd /path/to/paperless/src
 $ python3 manage.py <command> <arguments> # (1)
 ```
 
-1.  Including `sudo -Hu <paperless_user>` may be required
+1.  可能需要包含 `sudo -Hu <paperless_user>`
 
-All commands have built-in help, which can be accessed by executing them
-with the argument `--help`.
+所有命令都有内置帮助，可以通过使用 `--help` 参数执行它们来访问。
 
-### Document exporter {#exporter}
+### 文档导出器 {#exporter}
 
-The document exporter exports all your data (including your settings
-and database contents) from paperless into a folder for backup or
-migration to another DMS.
+文档导出器将您的所有数据（包括设置和数据库内容）从 Paperless 导出到一个文件夹中，用于备份或迁移到另一个 DMS。
 
-If you use the document exporter within a cronjob to backup your data
-you might use the `-T` flag behind exec to suppress "The input device
-is not a TTY" errors. For example:
-`docker compose exec -T webserver document_exporter ../export`
+如果您在 cronjob 中使用文档导出器来备份数据，可以在 exec 后面使用 `-T` 标志来抑制 "The input device is not a TTY" 错误。例如：`docker compose exec -T webserver document_exporter ../export`
 
 ```
 document_exporter target [-c] [-d] [-f] [-na] [-nt] [-p] [-sm] [-z]
 
-optional arguments:
+可选参数：
 -c,  --compare-checksums
 -cj, --compare-json
 -d,  --delete
@@ -259,123 +202,75 @@ optional arguments:
 --passphrase
 ```
 
-`target` is a folder to which the data gets written. This includes
-documents, thumbnails and a `manifest.json` file. The manifest contains
-all metadata from the database (correspondents, tags, etc).
+`target` 是数据写入的文件夹。这包括文档、缩略图和一个 `manifest.json` 文件。清单包含数据库中的所有元数据（通信者、标签等）。
 
-When you use the provided docker compose script, specify `../export` as
-the target. This path inside the container is automatically mounted on
-your host on the folder `export`.
+当您使用提供的 Docker Compose 脚本时，请指定 `../export` 作为目标。容器内的此路径会自动挂载到您主机上的 `export` 文件夹。
 
-If the target directory already exists and contains files, paperless
-will assume that the contents of the export directory are a previous
-export and will attempt to update the previous export. Paperless will
-only export changed and added files. Paperless determines whether a file
-has changed by inspecting the file attributes "date/time modified" and
-"size". If that does not work out for you, specify `-c` or
-`--compare-checksums` and paperless will attempt to compare file
-checksums instead. This is slower. The manifest and metadata json files
-are always updated, unless `cj` or `--compare-json` is specified.
+如果目标目录已存在并包含文件，Paperless 将假定导出目录的内容是之前的导出，并尝试更新先前的导出。Paperless 只会导出已更改和新增的文件。Paperless 通过检查文件属性"修改日期/时间"和"大小"来确定文件是否已更改。如果这对您不起作用，请指定 `-c` 或 `--compare-checksums`，Paperless 将尝试比较文件校验和。这速度较慢。清单和元数据 JSON 文件总是会更新，除非指定了 `cj` 或 `--compare-json`。
 
-Paperless will not remove any existing files in the export directory. If
-you want paperless to also remove files that do not belong to the
-current export such as files from deleted documents, specify `-d` or `--delete`.
-Be careful when pointing paperless to a directory that already contains
-other files.
+Paperless 不会删除导出目录中的任何现有文件。如果您希望 Paperless 也删除不属于当前导出的文件（例如已删除文档的文件），请指定 `-d` 或 `--delete`。将 Paperless 指向已包含其他文件的目录时要小心。
 
-The filenames generated by this command follow the format
-`[date created] [correspondent] [title].[extension]`. If you want
-paperless to use [`PAPERLESS_FILENAME_FORMAT`](configuration.md#PAPERLESS_FILENAME_FORMAT) for exported filenames
-instead, specify `-f` or `--use-filename-format`.
+此命令生成的文件名遵循格式 `[创建日期] [通信者] [标题].[扩展名]`。如果您希望 Paperless 使用 [`PAPERLESS_FILENAME_FORMAT`](configuration.md#PAPERLESS_FILENAME_FORMAT) 作为导出的文件名，请指定 `-f` 或 `--use-filename-format`。
 
-If `-na` or `--no-archive` is provided, no archive files will be exported,
-only the original files.
+如果提供了 `-na` 或 `--no-archive`，则不会导出归档文件，只导出原始文件。
 
-If `-nt` or `--no-thumbnail` is provided, thumbnail files will not be exported.
+如果提供了 `-nt` 或 `--no-thumbnail`，则不会导出缩略图文件。
 
 !!! note
 
-    When using the `-na`/`--no-archive` or `-nt`/`--no-thumbnail` options
-    the exporter will not output these files for backup.  After importing,
-    the [sanity checker](#sanity-checker) will warn about missing thumbnails and archive files
-    until they are regenerated with `document_thumbnails` or [`document_archiver`](#archiver).
-    It can make sense to omit these files from backup as their content and checksum
-    can change (new archiver algorithm) and may then cause additional used space in
-    a deduplicated backup.
+    当使用 `-na`/`--no-archive` 或 `-nt`/`--no-thumbnail` 选项时，导出器将不会输出这些文件进行备份。导入后，[完整性检查器](#sanity-checker) 会警告缺少缩略图和归档文件，直到使用 `document_thumbnails` 或 [`document_archiver`](#archiver) 重新生成它们。从备份中省略这些文件可能是有意义的，因为它们的内容和校验和可能会更改（新的归档算法），并可能导致去重备份中额外的空间使用。
 
-If `-p` or `--use-folder-prefix` is provided, files will be exported
-in dedicated folders according to their nature: `archive`, `originals`,
-`thumbnails` or `json`
+如果提供了 `-p` 或 `--use-folder-prefix`，文件将根据其性质导出到专用文件夹：`archive`、`originals`、`thumbnails` 或 `json`。
 
-If `-sm` or `--split-manifest` is provided, information about document
-will be placed in individual json files, instead of a single JSON file. The main
-manifest.json will still contain application wide information (e.g. tags, correspondent,
-document type, etc)
+如果提供了 `-sm` 或 `--split-manifest`，文档信息将放置在单独的 JSON 文件中，而不是单个 JSON 文件中。主要的 manifest.json 仍将包含应用程序范围的信息（例如标签、通信者、文档类型等）。
 
-If `-z` or `--zip` is provided, the export will be a zip file
-in the target directory, named according to the current local date or the
-value set in `-zn` or `--zip-name`.
+如果提供了 `-z` 或 `--zip`，导出将是目标目录中的一个 zip 文件，根据当前本地日期或 `-zn` 或 `--zip-name` 中设置的值命名。
 
-If `--data-only` is provided, only the database will be exported. This option is intended
-to facilitate database upgrades without needing to clean documents and thumbnails from the media directory.
+如果提供了 `--data-only`，则只导出数据库。此选项旨在方便数据库升级，而无需从媒体目录中清理文档和缩略图。
 
-If `--no-progress-bar` is provided, the progress bar will be hidden, rendering the
-exporter quiet. This option is useful for scripting scenarios, such as when using the
-exporter with `crontab`.
+如果提供了 `--no-progress-bar`，进度条将被隐藏，使导出器静默运行。此选项对于脚本场景很有用，例如将导出器与 `crontab` 一起使用时。
 
-If `--passphrase` is provided, it will be used to encrypt certain fields in the export. This value
-must be provided to import. If this value is lost, the export cannot be imported.
+如果提供了 `--passphrase`，它将用于加密导出中的某些字段。导入时必须提供此值。如果此值丢失，则无法导入导出。
 
 !!! warning
 
-    If exporting with the file name format, there may be errors due to
-    your operating system's maximum path lengths.  Try adjusting the export
-    target or consider not using the filename format.
+    如果使用文件名格式导出，可能会由于操作系统的最大路径长度而导致错误。尝试调整导出目标，或者考虑不使用文件名格式。
 
-### Document importer {#importer}
+### 文档导入器 {#importer}
 
-The document importer takes the export produced by the [Document
-exporter](#exporter) and imports it into paperless.
+文档导入器接收由[文档导出器](#exporter)生成的导出，并将其导入到 Paperless 中。
 
-The importer works just like the exporter. You point it at a directory or the generated .zip file,
-and the script does the rest of the work:
+导入器的工作方式与导出器类似。您将其指向一个目录或生成的 .zip 文件，脚本会完成其余工作：
 
 ```shell
 document_importer source
 ```
 
-| Option              | Required | Default | Description                                                               |
+| 选项                | 必需 | 默认值 | 描述                                                                 |
 | ------------------- | -------- | ------- | ------------------------------------------------------------------------- |
-| source              | Yes      | N/A     | The directory containing an export                                        |
-| `--no-progress-bar` | No       | False   | If provided, the progress bar will be hidden                              |
-| `--data-only`       | No       | False   | If provided, only import data, do not import document files or thumbnails |
-| `--passphrase`      | No       | N/A     | If your export was encrypted with a passphrase, must be provided          |
+| source              | 是       | N/A     | 包含导出的目录                                                           |
+| `--no-progress-bar` | 否       | False   | 如果提供，进度条将被隐藏                                                  |
+| `--data-only`       | 否       | False   | 如果提供，仅导入数据，不导入文档文件或缩略图                              |
+| `--passphrase`      | 否       | N/A     | 如果您的导出使用了密码短语加密，则必须提供                                |
 
-When you use the provided docker compose script, put the export inside
-the `export` folder in your paperless source directory. Specify
-`../export` as the `source`.
+当您使用提供的 Docker Compose 脚本时，请将导出放在 Paperless 源代码目录的 `export` 文件夹中。将 `source` 指定为 `../export`。
 
 !!! note
 
-    Importing from a previous version of Paperless may work, but for best
-    results it is suggested to match the versions.
+    从旧版本的 Paperless 导入可能有效，但为了获得最佳效果，建议版本匹配。
 
 !!! warning
 
-    The importer should be run against a completely empty installation (database and directories) of Paperless-ngx.
-    If using a data only import, only the database must be empty.
+    导入器应针对完全空（数据库和目录）的 Paperless-ngx 安装运行。如果使用仅数据导入，则只有数据库必须为空。
 
-### Document retagger {#retagger}
+### 文档重标记器 {#retagger}
 
-Say you've imported a few hundred documents and now want to introduce a
-tag or set up a new correspondent, and apply its matching to all of the
-currently-imported docs. This problem is common enough that there are
-tools for it.
+假设您导入了数百个文档，现在想要引入一个标签或设置一个新的通信者，并将其匹配应用于所有当前已导入的文档。这个问题很常见，因此有相应的工具。
 
 ```
 document_retagger [-h] [-c] [-T] [-t] [-i] [--id-range] [--use-first] [-f]
 
-optional arguments:
+可选参数：
 -c, --correspondent
 -T, --tags
 -t, --document_type
@@ -386,271 +281,102 @@ optional arguments:
 -f, --overwrite
 ```
 
-Run this after changing or adding matching rules. It'll loop over all
-of the documents in your database and attempt to match documents
-according to the new rules.
+在更改或添加匹配规则后运行此命令。它将遍历数据库中的所有文档，并尝试根据新规则匹配文档。
 
-Specify any combination of `-c`, `-T`, `-t` and `-s` to have the
-retagger perform matching of the specified metadata type. If you don't
-specify any of these options, the document retagger won't do anything.
+指定 `-c`、`-T`、`-t` 和 `-s` 的任何组合，让重标记器执行指定元数据类型的匹配。如果您不指定任何这些选项，文档重标记器将不会执行任何操作。
 
-Specify `-i` to have the document retagger work on documents tagged with
-inbox tags only. This is useful when you don't want to mess with your
-already processed documents.
+指定 `-i` 让文档重标记器仅处理带有收件箱标签的文档。当您不想弄乱已处理的文档时，这很有用。
 
-Specify `--id-range 1 100` to have the document retagger work only on a
-specific range of document id´s. This can be useful if you have a lot of
-documents and want to test the matching rules only on a subset of
-documents.
+指定 `--id-range 1 100` 让文档重标记器仅处理特定的文档 ID 范围。如果您有很多文档并且只想在文档子集上测试匹配规则，这可能很有用。
 
-When multiple document types or correspondents match a single document,
-the retagger won't assign these to the document. Specify `--use-first`
-to override this behavior and just use the first correspondent or type
-it finds. This option does not apply to tags, since any amount of tags
-can be applied to a document.
+当多个文档类型或通信者匹配单个文档时，重标记器不会将这些分配给文档。指定 `--use-first` 来覆盖此行为，仅使用它找到的第一个通信者或类型。此选项不适用于标签，因为任何数量的标签都可以应用于文档。
 
-Finally, `-f` specifies that you wish to overwrite already assigned
-correspondents, types and/or tags. The default behavior is to not assign
-correspondents and types to documents that have this data already
-assigned. `-f` works differently for tags: By default, only additional
-tags get added to documents, no tags will be removed. With `-f`, tags
-that don't match a document anymore get removed as well.
+最后，`-f` 指定您希望覆盖已分配的通信者、类型和/或标签。默认行为是不将通信者和类型分配给已分配了此数据的文档。`-f` 对标签的工作方式不同：默认情况下，只会向文档添加额外的标签，不会删除任何标签。使用 `-f` 时，不再匹配文档的标签也会被删除。
 
-### Managing the Automatic matching algorithm
+### 管理自动匹配算法
 
-The _Auto_ matching algorithm requires a trained neural network to work.
-This network needs to be updated whenever something in your data
-changes. The docker image takes care of that automatically with the task
-scheduler. You can manually renew the classifier by invoking the
-following management command:
+_自动_ 匹配算法需要一个训练好的神经网络才能工作。每当您的数据发生变化时，都需要更新此网络。Docker 镜像通过任务调度程序自动处理此问题。您可以通过调用以下管理命令手动更新分类器：
 
 ```
 document_create_classifier
 ```
 
-This command takes no arguments.
+此命令不带参数。
 
-### Document thumbnails {#thumbnails}
+### 文档缩略图 {#thumbnails}
 
-Use this command to re-create document thumbnails. Optionally include the ` --document {id}` option to generate thumbnails for a specific document only.
+使用此命令重新创建文档缩略图。可选地包含 `--document {id}` 选项以仅为特定文档生成缩略图。
 
-You may also specify `--processes` to control the number of processes used to generate new thumbnails. The default is to utilize
-a quarter of the available processors.
+您还可以指定 `--processes` 来控制用于生成新缩略图的进程数。默认是使用可用处理器的四分之一。
 
 ```
 document_thumbnails
 ```
 
-### Managing the document search index {#index}
+### 管理文档搜索索引 {#index}
 
-The document search index is responsible for delivering search results
-for the website. The document index is automatically updated whenever
-documents get added to, changed, or removed from paperless. However, if
-the search yields non-existing documents or won't find anything, you
-may need to recreate the index manually.
+文档搜索索引负责为网站提供搜索结果。每当文档被添加到 Paperless、更改或从 Paperless 中删除时，文档索引都会自动更新。但是，如果搜索产生不存在的文档或找不到任何内容，您可能需要手动重新创建索引。
 
 ```
 document_index {reindex,optimize}
 ```
 
-Specify `reindex` to have the index created from scratch. This may take
-some time.
+指定 `reindex` 以从头开始创建索引。这可能需要一些时间。
 
-Specify `optimize` to optimize the index. This updates certain aspects
-of the index and usually makes queries faster and also ensures that the
-autocompletion works properly. This command is regularly invoked by the
-task scheduler.
+指定 `optimize` 以优化索引。这会更新索引的某些方面，通常使查询更快，并确保自动补全正常工作。此命令由任务调度程序定期调用。
 
-### Clearing the database read cache
+### 清除数据库读取缓存
 
-If the database read cache is enabled, **you must run this command** after making any changes to the database outside the application context.
-This includes operations such as restoring a database backup or executing SQL statements like UPDATE, INSERT, DELETE, ALTER, CREATE, or DROP.
+如果启用了数据库读取缓存，**在应用程序上下文之外对数据库进行任何更改后，您必须运行此命令**。这包括诸如恢复数据库备份或执行 SQL 语句（如 UPDATE、INSERT、DELETE、ALTER、CREATE 或 DROP）等操作。
 
-Failing to invalidate the cache after such modifications can lead to stale data being served from the cache, and **may cause data corruption** or inconsistent behavior in the application.
+在此类修改后未能使缓存失效，可能导致从缓存提供过时数据，并**可能导致数据损坏**或应用程序行为不一致。
 
-Use the following management command to clear the cache:
+使用以下管理命令清除缓存：
 
 ```
 python3 manage.py invalidate_cachalot
 ```
 
 !!! info
-The database read cache is based on Django-Cachalot. You can refer to their [documentation](https://django-cachalot.readthedocs.io/en/latest/quickstart.html#manage-py-command).
+数据库读取缓存基于 Django-Cachalot。您可以参考其[文档](https://django-cachalot.readthedocs.io/en/latest/quickstart.html#manage-py-command)。
 
-### Managing filenames {#renamer}
+### 管理文件名 {#renamer}
 
-If you use paperless' feature to
-[assign custom filenames to your documents](advanced_usage.md#file-name-handling), you can use this command to move all your files after
-changing the naming scheme.
+如果您使用 Paperless 的功能为文档[分配自定义文件名](advanced_usage.md#file-name-handling)，您可以使用此命令在更改命名方案后移动所有文件。
 
 !!! warning
 
-    Since this command moves your documents, it is advised to do a backup
-    beforehand. The renaming logic is robust and will never overwrite or
-    delete a file, but you can't ever be careful enough.
+    由于此命令会移动您的文档，建议事先进行备份。重命名逻辑是健壮的，永远不会覆盖或删除文件，但再怎么小心也不为过。
 
 ```
 document_renamer
 ```
 
-The command takes no arguments and processes all your documents at once.
+该命令不带参数，一次性处理所有文档。
 
-Learn how to use
-[Management Utilities](#management-commands).
+了解如何使用[管理工具](#management-commands)。
 
-### Sanity checker {#sanity-checker}
+### 完整性检查器 {#sanity-checker}
 
-Paperless has a built-in sanity checker that inspects your document
-collection for issues.
+Paperless 有一个内置的完整性检查器，用于检查您的文档集合是否存在问题。
 
-The issues detected by the sanity checker are as follows:
+完整性检查器检测到的问题如下：
 
--   Missing original files.
--   Missing archive files.
--   Inaccessible original files due to improper permissions.
--   Inaccessible archive files due to improper permissions.
--   Corrupted original documents by comparing their checksum against
-    what is stored in the database.
--   Corrupted archive documents by comparing their checksum against what
-    is stored in the database.
--   Missing thumbnails.
--   Inaccessible thumbnails due to improper permissions.
--   Documents without any content (warning).
--   Orphaned files in the media directory (warning). These are files
-    that are not referenced by any document in paperless.
+-   缺少原始文件。
+-   缺少归档文件。
+-   由于权限不当导致无法访问原始文件。
+-   由于权限不当导致无法访问归档文件。
+-   通过将其校验和与数据库中存储的内容进行比较，检查原始文档是否损坏。
+-   通过将其校验和与数据库中存储的内容进行比较，检查归档文档是否损坏。
+-   缺少缩略图。
+-   由于权限不当导致无法访问缩略图。
+-   没有任何内容的文档（警告）。
+-   媒体目录中的孤立文件（警告）。这些是 Paperless 中任何文档都未引用的文件。
 
 ```
 document_sanity_checker
 ```
 
-The command takes no arguments. Depending on the size of your document
-archive, this may take some time.
+该命令不带参数。根据您的文档存档大小，这可能需要一些时间。
 
-### Fetching e-mail
-
-Paperless automatically fetches your e-mail every 10 minutes by default.
-If you want to invoke the email consumer manually, call the following
-management command:
-
-```
-mail_fetcher
-```
-
-The command takes no arguments and processes all your mail accounts and
-rules.
-
-!!! tip
-
-    To use OAuth access tokens for mail fetching,
-    select the box to indicate the password is actually
-    a token when creating or editing a mail account. The
-    details for creating a token depend on your email
-    provider.
-
-### Creating archived documents {#archiver}
-
-Paperless stores archived PDF/A documents alongside your original
-documents. These archived documents will also contain selectable text
-for image-only originals. These documents are derived from the
-originals, which are always stored unmodified. If coming from an earlier
-version of paperless, your documents won't have archived versions.
-
-This command creates PDF/A documents for your documents.
-
-```
-document_archiver --overwrite --document <id>
-```
-
-This command will only attempt to create archived documents when no
-archived document exists yet, unless `--overwrite` is specified. If
-`--document <id>` is specified, the archiver will only process that
-document.
-
-!!! note
-
-    This command essentially performs OCR on all your documents again,
-    according to your settings. If you run this with
-    `PAPERLESS_OCR_MODE=redo`, it will potentially run for a very long time.
-    You can cancel the command at any time, since this command will skip
-    already archived versions the next time it is run.
-
-!!! note
-
-    Some documents will cause errors and cannot be converted into PDF/A
-    documents, such as encrypted PDF documents. The archiver will skip over
-    these documents each time it sees them.
-
-### Managing encryption {#encryption}
-
-!!! warning
-
-    Encryption was removed in [paperless-ng 0.9](changelog.md#paperless-ng-090)
-    because it did not really provide any additional security, the passphrase
-    was stored in a configuration file on the same system as the documents.
-    Furthermore, the entire text content of the documents is stored plain in
-    the database, even if your documents are encrypted. Filenames are not
-    encrypted as well. Finally, the web server provides transparent access to
-    your encrypted documents.
-
-    Consider running paperless on an encrypted filesystem instead, which
-    will then at least provide security against physical hardware theft.
-
-#### Enabling encryption
-
-Enabling encryption is no longer supported.
-
-#### Disabling encryption
-
-Basic usage to disable encryption of your document store:
-
-(Note: If `PAPERLESS_PASSPHRASE` isn't set already, you need to specify
-it here)
-
-```
-decrypt_documents [--passphrase SECR3TP4SSPHRA$E]
-```
-
-### Detecting duplicates {#fuzzy_duplicate}
-
-Paperless already catches and prevents upload of exactly matching documents,
-however a new scan of an existing document may not produce an exact bit for bit
-duplicate. But the content should be exact or close, allowing detection.
-
-This tool does a fuzzy match over document content, looking for
-those which look close according to a given ratio.
-
-At this time, other metadata (such as correspondent or type) is not
-taken into account by the detection.
-
-```
-document_fuzzy_match [--ratio] [--processes N]
-```
-
-| Option      | Required | Default             | Description                                                                                                                    |
-| ----------- | -------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| --ratio     | No       | 85.0                | a number between 0 and 100, setting how similar a document must be for it to be reported. Higher numbers mean more similarity. |
-| --processes | No       | 1/4 of system cores | Number of processes to use for matching. Setting 1 disables multiple processes                                                 |
-| --delete    | No       | False               | If provided, one document of a matched pair above the ratio will be deleted.                                                   |
-
-!!! warning
-
-    If providing the `--delete` option, it is highly recommended to have a backup.
-    While every effort has been taken to ensure proper operation, there is always the
-    chance of deletion of a file you want to keep.
-
-### Prune history (audit log) entries {#prune-history}
-
-If the audit log is enabled Paperless-ngx keeps an audit log of all changes made to documents. Functionality to automatically remove entries for deleted documents was added but
-entries created prior to this are not removed. This command allows you to prune the audit log of entries that are no longer needed.
-
-```shell
-prune_audit_logs
-```
-
-### Create superuser {#create-superuser}
-
-If you need to create a superuser, use the following command:
-
-```shell
-createsuperuser
-```
+### 获取电子邮件

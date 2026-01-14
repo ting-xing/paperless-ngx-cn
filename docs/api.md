@@ -1,73 +1,55 @@
-# The REST API
+# REST API
 
-Paperless-ngx now ships with a fully-documented REST API and a browsable
-web interface to explore it. The API browsable interface is available at
-`/api/schema/view/`.
+Paperless-ngx 现在附带了一个完整文档化的 REST API 和一个可浏览的 Web 界面以供探索。API 的可浏览界面位于 `/api/schema/view/`。
 
-Further documentation is provided here for some endpoints and features.
+本文档进一步提供了一些端点和功能的说明。
 
-## Authorization
+## 授权
 
-The REST api provides four different forms of authentication.
+REST API 提供四种不同的身份验证方式。
 
-1.  Basic authentication
+1.  基本身份验证
 
-    Authorize by providing a HTTP header in the form
+    通过提供以下形式的 HTTP 头进行授权：
 
     ```
     Authorization: Basic <credentials>
     ```
 
-    where `credentials` is a base64-encoded string of
-    `<username>:<password>`
+    其中 `credentials` 是 `<username>:<password>` 的 base64 编码字符串。
 
-2.  Session authentication
+2.  会话身份验证
 
-    When you're logged into paperless in your browser, you're
-    automatically logged into the API as well and don't need to provide
-    any authorization headers.
+    当您在浏览器中登录 Paperless 时，您也会自动登录到 API，无需提供任何授权头。
 
-3.  Token authentication
+3.  令牌身份验证
 
-    You can create (or re-create) an API token by opening the "My Profile"
-    link in the user dropdown found in the web UI and clicking the circular
-    arrow button.
+    您可以通过在 Web 界面用户下拉菜单中打开“我的个人资料”链接并点击圆形箭头按钮来创建（或重新创建）API 令牌。
 
-    Paperless also offers an endpoint to acquire authentication tokens.
+    Paperless 还提供了一个端点来获取身份验证令牌。
 
-    POST a username and password as a form or json string to
-    `/api/token/` and paperless will respond with a token, if the login
-    data is correct. This token can be used to authenticate other
-    requests with the following HTTP header:
+    将用户名和密码作为表单或 JSON 字符串 POST 到 `/api/token/`，如果登录数据正确，Paperless 将响应一个令牌。此令牌可用于通过以下 HTTP 头对其他请求进行身份验证：
 
     ```
     Authorization: Token <token>
     ```
 
-    Tokens can also be managed in the Django admin.
+    令牌也可以在 Django 管理界面中管理。
 
-4.  Remote User authentication
+4.  远程用户身份验证
 
-    If enabled (see
-    [configuration](configuration.md#PAPERLESS_ENABLE_HTTP_REMOTE_USER_API)),
-    you can authenticate against the API using Remote User auth.
+    如果启用（请参阅[配置](configuration.md#PAPERLESS_ENABLE_HTTP_REMOTE_USER_API)），您可以使用远程用户身份验证来验证 API。
 
-## Searching for documents
+## 搜索文档
 
-Full text searching is available on the `/api/documents/` endpoint. Two
-specific query parameters cause the API to return full text search
-results:
+全文搜索在 `/api/documents/` 端点上可用。两个特定的查询参数会导致 API 返回全文搜索结果：
 
--   `/api/documents/?query=your%20search%20query`: Search for a document
-    using a full text query. For details on the syntax, see [Basic Usage - Searching](usage.md#basic-usage_searching).
--   `/api/documents/?more_like_id=1234`: Search for documents similar to
-    the document with id 1234.
+-   `/api/documents/?query=your%20search%20query`：使用全文查询搜索文档。有关语法详情，请参阅[基本用法 - 搜索](usage.md#basic-usage_searching)。
+-   `/api/documents/?more_like_id=1234`：搜索与 ID 为 1234 的文档相似的文档。
 
-Pagination works exactly the same as it does for normal requests on this
-endpoint.
+分页的工作方式与此端点的普通请求完全相同。
 
-Furthermore, each returned document has an additional `__search_hit__`
-attribute with various information about the search results:
+此外，每个返回的文档都有一个额外的 `__search_hit__` 属性，其中包含有关搜索结果的各种信息：
 
 ```
 {
@@ -98,116 +80,83 @@ attribute with various information about the search results:
 }
 ```
 
--   `score` is an indication how well this document matches the query
-    relative to the other search results.
--   `highlights` is an excerpt from the document content and highlights
-    the search terms with `<span>` tags as shown above.
--   `rank` is the index of the search results. The first result will
-    have rank 0.
+-   `score` 表示此文档相对于其他搜索结果与查询的匹配程度。
+-   `highlights` 是文档内容的摘录，并使用 `<span>` 标签高亮显示搜索词，如上所示。
+-   `rank` 是搜索结果的索引。第一个结果的排名为 0。
 
-### Filtering by custom fields
+### 按自定义字段筛选
 
-You can filter documents by their custom field values by specifying the
-`custom_field_query` query parameter. Here are some recipes for common
-use cases:
+您可以通过指定 `custom_field_query` 查询参数来按自定义字段值筛选文档。以下是一些常见用例的示例：
 
-1. Documents with a custom field "due" (date) between Aug 1, 2024 and
-   Sept 1, 2024 (inclusive):
+1.  自定义字段 "due"（日期）在 2024 年 8 月 1 日至 2024 年 9 月 1 日（含）之间的文档：
 
     `?custom_field_query=["due", "range", ["2024-08-01", "2024-09-01"]]`
 
-2. Documents with a custom field "customer" (text) that equals "bob"
-   (case sensitive):
+2.  自定义字段 "customer"（文本）等于 "bob"（区分大小写）的文档：
 
     `?custom_field_query=["customer", "exact", "bob"]`
 
-3. Documents with a custom field "answered" (boolean) set to `true`:
+3.  自定义字段 "answered"（布尔值）设置为 `true` 的文档：
 
     `?custom_field_query=["answered", "exact", true]`
 
-4. Documents with a custom field "favorite animal" (select) set to either
-   "cat" or "dog":
+4.  自定义字段 "favorite animal"（选择）设置为 "cat" 或 "dog" 的文档：
 
     `?custom_field_query=["favorite animal", "in", ["cat", "dog"]]`
 
-5. Documents with a custom field "address" (text) that is empty:
+5.  自定义字段 "address"（文本）为空的文档：
 
     `?custom_field_query=["OR", [["address", "isnull", true], ["address", "exact", ""]]]`
 
-6. Documents that don't have a field called "foo":
+6.  没有名为 "foo" 的字段的文档：
 
     `?custom_field_query=["foo", "exists", false]`
 
-7. Documents that have document links "references" to both document 3 and 7:
+7.  具有指向文档 3 和 7 的文档链接 "references" 的文档：
 
     `?custom_field_query=["references", "contains", [3, 7]]`
 
-All field types support basic operations including `exact`, `in`, `isnull`,
-and `exists`. String, URL, and monetary fields support case-insensitive
-substring matching operations including `icontains`, `istartswith`, and
-`iendswith`. Integer, float, and date fields support arithmetic comparisons
-including `gt` (>), `gte` (>=), `lt` (<), `lte` (<=), and `range`.
-Lastly, document link fields support a `contains` operator that behaves
-like a "is superset of" check.
+所有字段类型都支持基本操作，包括 `exact`、`in`、`isnull` 和 `exists`。字符串、URL 和货币字段支持不区分大小写的子字符串匹配操作，包括 `icontains`、`istartswith` 和 `iendswith`。整数、浮点数和日期字段支持算术比较，包括 `gt` (>)、`gte` (>=)、`lt` (<)、`lte` (<=) 和 `range`。最后，文档链接字段支持 `contains` 操作符，其行为类似于“是超集”检查。
 
 ### `/api/search/autocomplete/`
 
-Get auto completions for a partial search term.
+获取部分搜索词的自动补全建议。
 
-Query parameters:
+查询参数：
 
--   `term`: The incomplete term.
--   `limit`: Amount of results. Defaults to 10.
+-   `term`：不完整的词。
+-   `limit`：结果数量。默认为 10。
 
-Results returned by the endpoint are ordered by importance of the term
-in the document index. The first result is the term that has the highest
-[Tf/Idf](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) score in the index.
+端点返回的结果按词在文档索引中的重要性排序。第一个结果是索引中具有最高 [Tf/Idf](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) 分数的词。
 
 ```json
 ["term1", "term3", "term6", "term4"]
 ```
 
-## POSTing documents {#file-uploads}
+## 上传文档 {#file-uploads}
 
-The API provides a special endpoint for file uploads:
+API 提供了一个用于文件上传的特殊端点：
 
 `/api/documents/post_document/`
 
-POST a multipart form to this endpoint, where the form field `document`
-contains the document that you want to upload to paperless. The filename
-is sanitized and then used to store the document in a temporary
-directory, and the consumer will be instructed to consume the document
-from there.
+向此端点 POST 一个多部分表单，其中表单字段 `document` 包含要上传到 Paperless 的文档。文件名会被清理，然后用于将文档存储在临时目录中，消费者将被指示从那里消费该文档。
 
-The endpoint supports the following optional form fields:
+该端点支持以下可选表单字段：
 
--   `title`: Specify a title that the consumer should use for the
-    document.
--   `created`: Specify a DateTime where the document was created (e.g.
-    "2016-04-19" or "2016-04-19 06:15:00+02:00").
--   `correspondent`: Specify the ID of a correspondent that the consumer
-    should use for the document.
--   `document_type`: Similar to correspondent.
--   `storage_path`: Similar to correspondent.
--   `tags`: Similar to correspondent. Specify this multiple times to
-    have multiple tags added to the document.
--   `archive_serial_number`: An optional archive serial number to set.
--   `custom_fields`: Either an array of custom field ids to assign (with an empty
-    value) to the document or an object mapping field id -> value.
+-   `title`：指定消费者应用于文档的标题。
+-   `created`：指定文档创建的日期时间（例如 "2016-04-19" 或 "2016-04-19 06:15:00+02:00"）。
+-   `correspondent`：指定消费者应用于文档的通信人 ID。
+-   `document_type`：类似于通信人。
+-   `storage_path`：类似于通信人。
+-   `tags`：类似于通信人。多次指定此字段可为文档添加多个标签。
+-   `archive_serial_number`：要设置的可选档案序列号。
+-   `custom_fields`：要分配给文档的自定义字段 ID 数组（值为空）或字段 ID -> 值的映射对象。
 
-The endpoint will immediately return HTTP 200 if the document consumption
-process was started successfully, with the UUID of the consumption task
-as the data. No additional status information about the consumption process
-itself is available immediately, since that happens in a different process.
-However, querying the tasks endpoint with the returned UUID e.g.
-`/api/tasks/?task_id={uuid}` will provide information on the state of the
-consumption including the ID of a created document if consumption succeeded.
+如果文档消费过程成功启动，端点将立即返回 HTTP 200，数据为消费任务的 UUID。由于消费过程发生在不同的进程中，因此无法立即获得有关消费过程本身的额外状态信息。但是，使用返回的 UUID 查询任务端点，例如 `/api/tasks/?task_id={uuid}`，将提供有关消费状态的信息，包括消费成功时创建的文档 ID。
 
-## Permissions
+## 权限
 
-All objects (documents, tags, etc.) allow setting object-level permissions
-with optional `owner` and / or a `set_permissions` parameters which are of
-the form:
+所有对象（文档、标签等）都允许使用可选的 `owner` 和/或 `set_permissions` 参数设置对象级权限，其格式如下：
 
 ```
 "owner": ...,
@@ -225,221 +174,180 @@ the form:
 
 !!! note
 
-    Arrays should contain user or group ID numbers.
+    数组应包含用户或组的 ID 号。
 
-If these parameters are supplied the object's permissions will be overwritten,
-assuming the authenticated user has permission to do so (the user must be
-the object owner or a superuser).
+如果提供了这些参数，对象的权限将被覆盖，前提是经过身份验证的用户有权这样做（用户必须是对象所有者或超级用户）。
 
-### Retrieving full permissions
+### 检索完整权限
 
-By default, the API will return a truncated version of object-level
-permissions, returning `user_can_change` indicating whether the current user
-can edit the object (either because they are the object owner or have permissions
-granted). You can pass the parameter `full_perms=true` to API calls to view the
-full permissions of objects in a format that mirrors the `set_permissions`
-parameter above.
+默认情况下，API 将返回对象级权限的截断版本，返回 `user_can_change` 指示当前用户是否可以编辑对象（因为他们要么是对象所有者，要么被授予了权限）。您可以将参数 `full_perms=true` 传递给 API 调用，以查看对象的完整权限，其格式与上面的 `set_permissions` 参数类似。
 
-## Bulk Editing
+## 批量编辑
 
-The API supports various bulk-editing operations which are executed asynchronously.
+API 支持各种异步执行的批量编辑操作。
 
-### Documents
+### 文档
 
-For bulk operations on documents, use the endpoint `/api/documents/bulk_edit/` which accepts
-a json payload of the format:
+对于文档的批量操作，请使用端点 `/api/documents/bulk_edit/`，它接受以下格式的 JSON 负载：
 
 ```json
 {
   "documents": [LIST_OF_DOCUMENT_IDS],
-  "method": METHOD, // see below
-  "parameters": args // see below
+  "method": METHOD, // 见下文
+  "parameters": args // 见下文
 }
 ```
 
-The following methods are supported:
+支持以下方法：
 
 -   `set_correspondent`
-    -   Requires `parameters`: `{ "correspondent": CORRESPONDENT_ID }`
+    -   需要 `parameters`：`{ "correspondent": CORRESPONDENT_ID }`
 -   `set_document_type`
-    -   Requires `parameters`: `{ "document_type": DOCUMENT_TYPE_ID }`
+    -   需要 `parameters`：`{ "document_type": DOCUMENT_TYPE_ID }`
 -   `set_storage_path`
-    -   Requires `parameters`: `{ "storage_path": STORAGE_PATH_ID }`
+    -   需要 `parameters`：`{ "storage_path": STORAGE_PATH_ID }`
 -   `add_tag`
-    -   Requires `parameters`: `{ "tag": TAG_ID }`
+    -   需要 `parameters`：`{ "tag": TAG_ID }`
 -   `remove_tag`
-    -   Requires `parameters`: `{ "tag": TAG_ID }`
+    -   需要 `parameters`：`{ "tag": TAG_ID }`
 -   `modify_tags`
-    -   Requires `parameters`: `{ "add_tags": [LIST_OF_TAG_IDS] }` and `{ "remove_tags": [LIST_OF_TAG_IDS] }`
+    -   需要 `parameters`：`{ "add_tags": [LIST_OF_TAG_IDS] }` 和 `{ "remove_tags": [LIST_OF_TAG_IDS] }`
 -   `delete`
-    -   No `parameters` required
+    -   不需要 `parameters`
 -   `reprocess`
-    -   No `parameters` required
+    -   不需要 `parameters`
 -   `set_permissions`
-    -   Requires `parameters`:
-        -   `"set_permissions": PERMISSIONS_OBJ` (see format [above](#permissions)) and / or
+    -   需要 `parameters`：
+        -   `"set_permissions": PERMISSIONS_OBJ`（参见上面的[格式](#permissions)）和/或
         -   `"owner": OWNER_ID or null`
-        -   `"merge": true or false` (defaults to false)
-    -   The `merge` flag determines if the supplied permissions will overwrite all existing permissions (including
-        removing them) or be merged with existing permissions.
+        -   `"merge": true or false`（默认为 false）
+    -   `merge` 标志决定提供的权限是覆盖所有现有权限（包括删除它们）还是与现有权限合并。
 -   `edit_pdf`
-    -   Requires `parameters`:
-        -   `"doc_ids": [DOCUMENT_ID]` A list of a single document ID to edit.
-        -   `"operations": [OPERATION, ...]` A list of operations to perform on the documents. Each operation is a dictionary
-            with the following keys:
-            -   `"page": PAGE_NUMBER` The page number to edit (1-based).
-            -   `"rotate": DEGREES` Optional rotation in degrees (90, 180, 270).
-            -   `"doc": OUTPUT_DOCUMENT_INDEX` Optional index of the output document for split operations.
-    -   Optional `parameters`:
-        -   `"delete_original": true` to delete the original documents after editing.
-        -   `"update_document": true` to update the existing document with the edited PDF.
-        -   `"include_metadata": true` to copy metadata from the original document to the edited document.
+    -   需要 `parameters`：
+        -   `"doc_ids": [DOCUMENT_ID]` 要编辑的单个文档 ID 列表。
+        -   `"operations": [OPERATION, ...]` 要在文档上执行的操作列表。每个操作都是一个字典，包含以下键：
+            -   `"page": PAGE_NUMBER` 要编辑的页码（从 1 开始）。
+            -   `"rotate": DEGREES` 可选旋转角度（90、180、270）。
+            -   `"doc": OUTPUT_DOCUMENT_INDEX` 拆分操作的输出文档的可选索引。
+    -   可选 `parameters`：
+        -   `"delete_original": true` 在编辑后删除原始文档。
+        -   `"update_document": true` 用编辑后的 PDF 更新现有文档。
+        -   `"include_metadata": true` 将元数据从原始文档复制到编辑后的文档。
 -   `remove_password`
-    -   Requires `parameters`:
-        -   `"password": "PASSWORD_STRING"` The password to remove from the PDF documents.
-    -   Optional `parameters`:
-        -   `"update_document": true` to replace the existing document with the password-less PDF.
-        -   `"delete_original": true` to delete the original document after editing.
-        -   `"include_metadata": true` to copy metadata from the original document to the new password-less document.
+    -   需要 `parameters`：
+        -   `"password": "PASSWORD_STRING"` 要从 PDF 文档中移除的密码。
+    -   可选 `parameters`：
+        -   `"update_document": true` 用无密码的 PDF 替换现有文档。
+        -   `"delete_original": true` 在编辑后删除原始文档。
+        -   `"include_metadata": true` 将元数据从原始文档复制到新的无密码文档。
 -   `merge`
-    -   No additional `parameters` required.
-    -   The ordering of the merged document is determined by the list of IDs.
-    -   Optional `parameters`:
-        -   `"metadata_document_id": DOC_ID` apply metadata (tags, correspondent, etc.) from this document to the merged document.
-        -   `"delete_originals": true` to delete the original documents. This requires the calling user being the owner of
-            all documents that are merged.
+    -   不需要额外的 `parameters`。
+    -   合并文档的顺序由 ID 列表决定。
+    -   可选 `parameters`：
+        -   `"metadata_document_id": DOC_ID` 将此文档的元数据（标签、通信人等）应用于合并后的文档。
+        -   `"delete_originals": true` 删除原始文档。这要求调用用户是所有被合并文档的所有者。
 -   `split`
-    -   Requires `parameters`:
-        -   `"pages": [..]` The list should be a list of pages and/or a ranges, separated by commas e.g. `"[1,2-3,4,5-7]"`
-    -   Optional `parameters`:
-        -   `"delete_originals": true` to delete the original document after consumption. This requires the calling user being the owner of
-            the document.
-    -   The split operation only accepts a single document.
+    -   需要 `parameters`：
+        -   `"pages": [..]` 该列表应是一个页面和/或范围的列表，用逗号分隔，例如 `"[1,2-3,4,5-7]"`
+    -   可选 `parameters`：
+        -   `"delete_originals": true` 在消费后删除原始文档。这要求调用用户是该文档的所有者。
+    -   拆分操作只接受单个文档。
 -   `rotate`
-    -   Requires `parameters`:
-        -   `"degrees": DEGREES`. Must be an integer i.e. 90, 180, 270
+    -   需要 `parameters`：
+        -   `"degrees": DEGREES`。必须是整数，即 90、180、270。
 -   `delete_pages`
-    -   Requires `parameters`:
-        -   `"pages": [..]` The list should be a list of integers e.g. `"[2,3,4]"`
-    -   The delete_pages operation only accepts a single document.
+    -   需要 `parameters`：
+        -   `"pages": [..]` 该列表应是一个整数列表，例如 `"[2,3,4]"`
+    -   delete_pages 操作只接受单个文档。
 -   `modify_custom_fields`
-    -   Requires `parameters`:
-        -   `"add_custom_fields": { CUSTOM_FIELD_ID: VALUE }`: JSON object consisting of custom field id:value pairs to add to the document, can also be a list of custom field IDs
-            to add with empty values.
-        -   `"remove_custom_fields": [CUSTOM_FIELD_ID]`: custom field ids to remove from the document.
+    -   需要 `parameters`：
+        -   `"add_custom_fields": { CUSTOM_FIELD_ID: VALUE }`：由自定义字段 id:value 对组成的 JSON 对象，用于添加到文档，也可以是要添加的空值自定义字段 ID 列表。
+        -   `"remove_custom_fields": [CUSTOM_FIELD_ID]`：要从文档中移除的自定义字段 ID。
 
-### Objects
+### 对象
 
-Bulk editing for objects (tags, document types etc.) currently supports set permissions or delete
-operations, using the endpoint: `/api/bulk_edit_objects/`, which requires a json payload of the format:
+对象（标签、文档类型等）的批量编辑目前支持设置权限或删除操作，使用端点：`/api/bulk_edit_objects/`，它需要以下格式的 JSON 负载：
 
 ```json
 {
   "objects": [LIST_OF_OBJECT_IDS],
   "object_type": "tags", "correspondents", "document_types" or "storage_paths",
   "operation": "set_permissions" or "delete",
-  "owner": OWNER_ID, // optional
-  "permissions": { "view": { "users": [] ... }, "change": { ... } }, // (see 'set_permissions' format above)
-  "merge": true / false // defaults to false, see above
+  "owner": OWNER_ID, // 可选
+  "permissions": { "view": { "users": [] ... }, "change": { ... } }, // （参见上面的 'set_permissions' 格式）
+  "merge": true / false // 默认为 false，参见上文
 }
 ```
 
-## API Versioning
+## API 版本控制
 
-The REST API is versioned since Paperless-ngx 1.3.0.
+自 Paperless-ngx 1.3.0 起，REST API 已进行版本控制。
 
--   Versioning ensures that changes to the API don't break older
-    clients.
--   Clients specify the specific version of the API they wish to use
-    with every request and Paperless will handle the request using the
-    specified API version.
--   Even if the underlying data model changes, older API versions will
-    always serve compatible data.
--   If no version is specified, Paperless will serve version 1 to ensure
-    compatibility with older clients that do not request a specific API
-    version.
+-   版本控制确保对 API 的更改不会破坏旧客户端。
+-   客户端在每个请求中指定他们希望使用的 API 特定版本，Paperless 将使用指定的 API 版本处理请求。
+-   即使底层数据模型发生变化，较旧的 API 版本也将始终提供兼容的数据。
+-   如果未指定版本，Paperless 将提供版本 1，以确保与未请求特定 API 版本的旧客户端兼容。
 
-API versions are specified by submitting an additional HTTP `Accept`
-header with every request:
+API 版本通过在每个请求中提交一个额外的 HTTP `Accept` 头来指定：
 
 ```
 Accept: application/json; version=6
 ```
 
-If an invalid version is specified, Paperless 1.3.0 will respond with
-"406 Not Acceptable" and an error message in the body. Earlier
-versions of Paperless will serve API version 1 regardless of whether a
-version is specified via the `Accept` header.
+如果指定了无效版本，Paperless 1.3.0 将响应“406 Not Acceptable”并在正文中显示错误消息。早期版本的 Paperless 将提供 API 版本 1，无论是否通过 `Accept` 头指定了版本。
 
-If a client wishes to verify whether it is compatible with any given
-server, the following procedure should be performed:
+如果客户端希望验证其是否与任何给定服务器兼容，应执行以下过程：
 
-1.  Perform an _authenticated_ request against any API endpoint. If the
-    server is on version 1.3.0 or newer, the server will add two custom
-    headers to the response:
+1.  对任何 API 端点执行*经过身份验证的*请求。如果服务器是 1.3.0 或更高版本，服务器将向响应添加两个自定义头：
 
     ```
     X-Api-Version: 2
     X-Version: 1.3.0
     ```
 
-2.  Determine whether the client is compatible with this server based on
-    the presence/absence of these headers and their values if present.
+2.  根据这些头的存在/不存在以及它们的存在时的值来确定客户端是否与此服务器兼容。
 
-### API Version Deprecation Policy
+### API 版本弃用策略
 
-Older API versions are guaranteed to be supported for at least one year
-after the release of a new API version. After that, support for older
-API versions may be (but is not guaranteed to be) dropped.
+较旧的 API 版本保证在新 API 版本发布后至少支持一年。之后，对较旧 API 版本的支持可能会（但不保证）被取消。
 
-### API Changelog
+### API 变更日志
 
-#### Version 1
+#### 版本 1
 
-Initial API version.
+初始 API 版本。
 
-#### Version 2
+#### 版本 2
 
--   Added field `Tag.color`. This read/write string field contains a hex
-    color such as `#a6cee3`.
--   Added read-only field `Tag.text_color`. This field contains the text
-    color to use for a specific tag, which is either black or white
-    depending on the brightness of `Tag.color`.
--   Removed field `Tag.colour`.
+-   添加了字段 `Tag.color`。此读/写字符串字段包含十六进制颜色，例如 `#a6cee3`。
+-   添加了只读字段 `Tag.text_color`。此字段包含用于特定标签的文本颜色，根据 `Tag.color` 的亮度，该颜色为黑色或白色。
+-   移除了字段 `Tag.colour`。
 
-#### Version 3
+#### 版本 3
 
--   Permissions endpoints have been added.
--   The format of the `/api/ui_settings/` has changed.
+-   添加了权限端点。
+-   `/api/ui_settings/` 的格式已更改。
 
-#### Version 4
+#### 版本 4
 
--   Consumption templates were refactored to workflows and API endpoints
-    changed as such.
+-   消费模板被重构为工作流，API 端点也相应更改。
 
-#### Version 5
+#### 版本 5
 
--   Added bulk deletion methods for documents and objects.
+-   添加了文档和对象的批量删除方法。
 
-#### Version 6
+#### 版本 6
 
--   Moved acknowledge tasks endpoint to be under `/api/tasks/acknowledge/`.
+-   将确认任务端点移至 `/api/tasks/acknowledge/`。
 
-#### Version 7
+#### 版本 7
 
--   The format of select type custom fields has changed to return the options
-    as an array of objects with `id` and `label` fields as opposed to a simple
-    list of strings. When creating or updating a custom field value of a
-    document for a select type custom field, the value should be the `id` of
-    the option whereas previously was the index of the option.
+-   选择类型自定义字段的格式已更改为将选项作为具有 `id` 和 `label` 字段的对象数组返回，而不是简单的字符串列表。为选择类型自定义字段创建或更新文档的自定义字段值时，该值应为选项的 `id`，而以前是选项的索引。
 
-#### Version 8
+#### 版本 8
 
--   The user field of document notes now returns a simplified user object
-    rather than just the user ID.
+-   文档注释的用户字段现在返回一个简化的用户对象，而不仅仅是用户 ID。
 
-#### Version 9
+#### 版本 9
 
--   The document `created` field is now a date, not a datetime. The
-    `created_date` field is considered deprecated and will be removed in a
-    future version.
+-   文档的 `created` 字段现在是日期，而不是日期时间。`created_date` 字段被视为已弃用，并将在未来版本中移除。

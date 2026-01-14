@@ -1,33 +1,26 @@
-## Installation
+## 安装
 
-You can go multiple routes to setup and run Paperless:
+您可以通过多种途径来设置和运行 Paperless：
 
--   [Use the script to setup a Docker install](#docker_script)
--   [Use the Docker compose templates](#docker)
--   [Build the Docker image yourself](#docker_build)
--   [Install Paperless-ngx directly on your system manually ("bare metal")](#bare_metal)
--   A user-maintained list of commercial hosting providers can be found [in the wiki](https://github.com/paperless-ngx/paperless-ngx/wiki/Related-Projects)
+-   [使用脚本设置 Docker 安装](#docker_script)
+-   [使用 Docker Compose 模板](#docker)
+-   [自行构建 Docker 镜像](#docker_build)
+-   [直接在您的系统上手动安装 Paperless-ngx（"裸机"安装）](#bare_metal)
+-   用户维护的商业托管提供商列表可以在 [wiki](https://github.com/paperless-ngx/paperless-ngx/wiki/Related-Projects) 中找到。
 
-The Docker routes are quick & easy. These are the recommended routes.
-This configures all the stuff from the above automatically so that it
-just works and uses sensible defaults for all configuration options.
-Here you find a cheat-sheet for docker beginners: [CLI
-Basics](https://www.sehn.tech/refs/devops-with-docker/)
+Docker 方式快速且简单，是推荐的方法。
+它会自动配置上述所有组件，使其正常工作，并为所有配置选项使用合理的默认值。
+这里有一份 Docker 初学者的速查表：[CLI 基础](https://www.sehn.tech/refs/devops-with-docker/)。
 
-The bare metal route is complicated to setup but makes it easier should
-you want to contribute some code back. You need to configure and run the
-above mentioned components yourself.
+裸机安装方式设置起来比较复杂，但如果您想贡献一些代码，这种方式会更方便。您需要自己配置和运行上述组件。
 
-### Use the Installation Script {#docker_script}
+### 使用安装脚本 {#docker_script}
 
-Paperless provides an interactive installation script to setup a Docker Compose
-installation. The script asks for a couple configuration options, and will then create the
-necessary configuration files, pull the docker image, start Paperless-ngx and create your superuser
-account. The script essentially automatically performs the steps described in [Docker setup](#docker).
+Paperless 提供了一个交互式安装脚本来设置 Docker Compose 安装。该脚本会询问一些配置选项，然后创建必要的配置文件、拉取 Docker 镜像、启动 Paperless-ngx 并创建您的超级用户账户。该脚本本质上自动执行了 [Docker 设置](#docker) 中描述的步骤。
 
-1.  Make sure that Docker and Docker Compose are [installed](https://docs.docker.com/engine/install/){:target="\_blank"}.
+1.  确保 Docker 和 Docker Compose 已[安装](https://docs.docker.com/engine/install/){:target="\_blank"}。
 
-2.  Download and run the installation script:
+2.  下载并运行安装脚本：
 
     ```shell-session
     bash -c "$(curl --location --silent --show-error https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/main/install-paperless-ngx.sh)"
@@ -35,65 +28,51 @@ account. The script essentially automatically performs the steps described in [D
 
     !!! note
 
-        macOS users will need to install [gnu-sed](https://formulae.brew.sh/formula/gnu-sed) with support
-        for running as `sed` as well as [wget](https://formulae.brew.sh/formula/wget).
+        macOS 用户需要安装支持以 `sed` 运行的 [gnu-sed](https://formulae.brew.sh/formula/gnu-sed) 以及 [wget](https://formulae.brew.sh/formula/wget)。
 
-### Use Docker Compose {#docker}
+### 使用 Docker Compose {#docker}
 
-1.  Make sure that Docker and Docker Compose are [installed](https://docs.docker.com/engine/install/){:target="\_blank"}.
+1.  确保 Docker 和 Docker Compose 已[安装](https://docs.docker.com/engine/install/){:target="\_blank"}。
 
-2.  Go to the [/docker/compose directory on the project
-    page](https://github.com/paperless-ngx/paperless-ngx/tree/main/docker/compose){:target="\_blank"}
-    and download one of the `docker-compose.*.yml` files, depending on which database backend
-    you want to use. Place the files in a local directory and rename it `docker-compose.yml`. Download the
-    `docker-compose.env` file and the `.env` file as well in the same directory.
+2.  转到项目页面的 [/docker/compose 目录](https://github.com/paperless-ngx/paperless-ngx/tree/main/docker/compose){:target="\_blank"}，根据您想要使用的数据库后端，下载其中一个 `docker-compose.*.yml` 文件。将文件放在本地目录中，并将其重命名为 `docker-compose.yml`。在同一目录下也下载 `docker-compose.env` 文件和 `.env` 文件。
 
-    If you want to enable optional support for Office and other documents, download a
-    file with `-tika` in the file name.
+    如果您想启用对 Office 和其他文档的可选支持，请下载文件名中包含 `-tika` 的文件。
 
     !!! tip
 
-        For new installations, it is recommended to use PostgreSQL as the
-        database backend.
+        对于新安装，建议使用 PostgreSQL 作为数据库后端。
 
-3.  Modify `docker-compose.yml` as needed. For example, you may want to change the paths to the
-    consumption, media etc. directories to use 'bind mounts'.
-    Find the line that specifies where to mount the directory, e.g.:
+3.  根据需要修改 `docker-compose.yml`。例如，您可能希望更改消费目录、媒体目录等的路径以使用"绑定挂载"。
+    找到指定挂载目录的行，例如：
 
     ```yaml
     - ./consume:/usr/src/paperless/consume
     ```
 
-    Replace the part _before_ the colon with a local directory of your choice:
+    将冒号*之前*的部分替换为您选择的本地目录：
 
     ```yaml
     - /home/jonaswinkler/paperless-inbox:/usr/src/paperless/consume
     ```
 
-    You may also want to change the default port that the webserver will
-    use from the default (8000) to something else, e.g. for port 8010:
+    您可能还想将 Web 服务器使用的默认端口（8000）更改为其他端口，例如端口 8010：
 
     ```yaml
     ports:
         - 8010:8000
     ```
 
-    **Rootless**
+    **无根模式**
 
     !!! warning
 
-        It is currently not possible to run the container rootless if additional languages are specified via `PAPERLESS_OCR_LANGUAGES`.
+        如果通过 `PAPERLESS_OCR_LANGUAGES` 指定了额外的语言，目前无法以无根模式运行容器。
 
-    If you want to run Paperless as a rootless container, you will need
-    to do the following in your `docker-compose.yml`:
+    如果您想以无根容器模式运行 Paperless，您需要在 `docker-compose.yml` 中执行以下操作：
 
-    -   set the `user` running the container to map to the `paperless`
-        user in the container. This value (`user_id` below), should be
-        the same id that `USERMAP_UID` and `USERMAP_GID` are set to in
-        the next step. See `USERMAP_UID` and `USERMAP_GID`
-        [here](configuration.md#docker).
+    -   将运行容器的 `user` 设置为映射到容器内的 `paperless` 用户。此值（下面的 `user_id`）应与下一步中设置的 `USERMAP_UID` 和 `USERMAP_GID` 相同。请参阅[此处](configuration.md#docker)的 `USERMAP_UID` 和 `USERMAP_GID`。
 
-    Your entry for Paperless should contain something like:
+    您的 Paperless 条目应包含类似以下内容：
 
     > ```
     > webserver:
@@ -101,67 +80,45 @@ account. The script essentially automatically performs the steps described in [D
     >   user: <user_id>
     > ```
 
-4.  Modify `docker-compose.env` with any configuration options you'd like.
-    See the [configuration documentation](configuration.md) for all options.
+4.  使用您想要的任何配置选项修改 `docker-compose.env`。
+    有关所有选项，请参阅[配置文档](configuration.md)。
 
-    You may also need to set `USERMAP_UID` and `USERMAP_GID` to
-    the uid and gid of your user on the host system. Use `id -u` and
-    `id -g` to get these. This ensures that both the container and the host
-    user have write access to the consumption directory. If your UID
-    and GID on the host system is 1000 (the default for the first normal
-    user on most systems), it will work out of the box without any
-    modifications. Run `id "username"` to check.
+    您可能还需要将 `USERMAP_UID` 和 `USERMAP_GID` 设置为主机系统上您的用户的 uid 和 gid。使用 `id -u` 和 `id -g` 来获取这些值。这确保了容器和主机用户都对消费目录具有写访问权限。如果您主机系统上的 UID 和 GID 是 1000（大多数系统上第一个普通用户的默认值），则无需任何修改即可开箱即用。运行 `id "用户名"` 来检查。
 
     !!! note
 
-        You can utilize Docker secrets for configuration settings by
-        appending `_FILE` to configuration values. For example [`PAPERLESS_DBUSER`](configuration.md#PAPERLESS_DBUSER)
-        can be set using `PAPERLESS_DBUSER_FILE=/var/run/secrets/password.txt`.
+        您可以通过在配置值后附加 `_FILE` 来利用 Docker 密钥进行配置设置。例如，[`PAPERLESS_DBUSER`](configuration.md#PAPERLESS_DBUSER) 可以使用 `PAPERLESS_DBUSER_FILE=/var/run/secrets/password.txt` 来设置。
 
     !!! warning
 
-        Some file systems such as NFS network shares don't support file
-        system notifications with `inotify`. When storing the consumption
-        directory on such a file system, paperless will not pick up new
-        files with the default configuration. You will need to use
-        [`PAPERLESS_CONSUMER_POLLING`](configuration.md#PAPERLESS_CONSUMER_POLLING), which will disable inotify. See
-        [here](configuration.md#polling).
+        某些文件系统（如 NFS 网络共享）不支持使用 `inotify` 的文件系统通知。当将消费目录存储在此类文件系统上时，Paperless 将无法通过默认配置拾取新文件。您需要使用 [`PAPERLESS_CONSUMER_POLLING`](configuration.md#PAPERLESS_CONSUMER_POLLING)，这将禁用 inotify。请参阅[此处](configuration.md#polling)。
 
-5.  Run `docker compose pull`. This will pull the image from the GitHub container registry
-    by default but you can change the image to pull from Docker Hub by changing the `image`
-    line to `image: paperlessngx/paperless-ngx:latest`.
+5.  运行 `docker compose pull`。默认情况下，这将从 GitHub 容器注册表拉取镜像，但您可以通过将 `image` 行更改为 `image: paperlessngx/paperless-ngx:latest` 来更改为从 Docker Hub 拉取镜像。
 
-6.  Run `docker compose up -d`. This will create and start the necessary containers.
+6.  运行 `docker compose up -d`。这将创建并启动必要的容器。
 
-7.  Congratulations! Your Paperless-ngx instance should now be accessible at `http://127.0.0.1:8000`
-    (or similar, depending on your configuration). When you first access the web interface, you will be
-    prompted to create a superuser account.
+7.  恭喜！您的 Paperless-ngx 实例现在应该可以通过 `http://127.0.0.1:8000`（或类似地址，取决于您的配置）访问。当您首次访问 Web 界面时，系统将提示您创建超级用户账户。
 
-### Build the Docker image yourself {#docker_build}
+### 自行构建 Docker 镜像 {#docker_build}
 
-1.  Clone the entire repository of paperless:
+1.  克隆 Paperless 的整个仓库：
 
     ```shell-session
     git clone https://github.com/paperless-ngx/paperless-ngx
     ```
 
-    The main branch always reflects the latest stable version.
+    主分支始终反映最新的稳定版本。
 
-2.  Copy one of the `docker/compose/docker-compose.*.yml` to
-    `docker-compose.yml` in the root folder, depending on which database
-    backend you want to use. Copy `docker-compose.env` into the project
-    root as well.
+2.  根据您想要使用的数据库后端，将 `docker/compose/docker-compose.*.yml` 中的一个复制到根文件夹中的 `docker-compose.yml`。同样将 `docker-compose.env` 复制到项目根目录。
 
-3.  In the `docker-compose.yml` file, find the line that instructs
-    Docker Compose to pull the paperless image from Docker Hub:
+3.  在 `docker-compose.yml` 文件中，找到指示 Docker Compose 从 Docker Hub 拉取 Paperless 镜像的行：
 
     ```yaml
     webserver:
         image: ghcr.io/paperless-ngx/paperless-ngx:latest
     ```
 
-    and replace it with a line that instructs Docker Compose to build
-    the image from the current working directory instead:
+    并将其替换为指示 Docker Compose 从当前工作目录构建镜像的行：
 
     ```yaml
     webserver:
@@ -169,52 +126,43 @@ account. The script essentially automatically performs the steps described in [D
             context: .
     ```
 
-4.  Follow the [Docker setup](#docker) above except when asked to run
-    `docker compose pull` to pull the image, run
+4.  按照上面的 [Docker 设置](#docker) 进行操作，但当要求运行 `docker compose pull` 来拉取镜像时，改为运行以下命令来构建镜像：
 
     ```shell-session
     docker compose build
     ```
 
-    instead to build the image.
+### 裸机安装方式 {#bare_metal}
 
-### Bare Metal Route {#bare_metal}
+Paperless 仅在 Linux 上运行。以下过程已在 Debian/Buster 的最小化安装上测试过，这是撰写本文时的当前稳定版本。Windows 不受支持，也永远不会支持。
 
-Paperless runs on linux only. The following procedure has been tested on
-a minimal installation of Debian/Buster, which is the current stable
-release at the time of writing. Windows is not and will never be
-supported.
+Paperless 需要 Python 3。目前，3.10 - 3.12 是经过测试的版本。
+更新的版本可能可以工作，但某些依赖项可能不完全支持新版本。
+随着旧版本 Python 达到生命周期终点或新版本发布、依赖项支持得到确认等，可能会停止对旧版本 Python 的支持。
 
-Paperless requires Python 3. At this time, 3.10 - 3.12 are tested versions.
-Newer versions may work, but some dependencies may not fully support newer versions.
-Support for older Python versions may be dropped as they reach end of life or as newer versions
-are released, dependency support is confirmed, etc.
-
-1.  Install dependencies. Paperless requires the following packages.
+1.  安装依赖项。Paperless 需要以下软件包。
 
     -   `python3`
     -   `python3-pip`
     -   `python3-dev`
-    -   `default-libmysqlclient-dev` for MariaDB
-    -   `pkg-config` for mysqlclient (python dependency)
-    -   `fonts-liberation` for generating thumbnails for plain text
-        files
-    -   `imagemagick` >= 6 for PDF conversion
-    -   `gnupg` for handling encrypted documents
-    -   `libpq-dev` for PostgreSQL
-    -   `libmagic-dev` for mime type detection
-    -   `mariadb-client` for MariaDB compile time
-    -   `libzbar0` for barcode detection
-    -   `poppler-utils` for barcode detection
+    -   `default-libmysqlclient-dev` 用于 MariaDB
+    -   `pkg-config` 用于 mysqlclient（Python 依赖项）
+    -   `fonts-liberation` 用于为纯文本文件生成缩略图
+    -   `imagemagick` >= 6 用于 PDF 转换
+    -   `gnupg` 用于处理加密文档
+    -   `libpq-dev` 用于 PostgreSQL
+    -   `libmagic-dev` 用于 MIME 类型检测
+    -   `mariadb-client` 用于 MariaDB 编译时
+    -   `libzbar0` 用于条形码检测
+    -   `poppler-utils` 用于条形码检测
 
-    Use this list for your preferred package management:
+    使用以下列表进行您首选的包管理：
 
     ```
     python3 python3-pip python3-dev imagemagick fonts-liberation gnupg libpq-dev default-libmysqlclient-dev pkg-config libmagic-dev libzbar0 poppler-utils
     ```
 
-    These dependencies are required for OCRmyPDF, which is used for text
-    recognition.
+    这些依赖项是 OCRmyPDF 所需的，OCRmyPDF 用于文本识别。
 
     -   `unpaper`
     -   `ghostscript`
@@ -222,127 +170,98 @@ are released, dependency support is confirmed, etc.
     -   `qpdf`
     -   `liblept5`
     -   `libxml2`
-    -   `pngquant` (suggested for certain PDF image optimizations)
+    -   `pngquant`（建议用于某些 PDF 图像优化）
     -   `zlib1g`
-    -   `tesseract-ocr` >= 4.0.0 for OCR
-    -   `tesseract-ocr` language packs (`tesseract-ocr-eng`,
-        `tesseract-ocr-deu`, etc)
+    -   `tesseract-ocr` >= 4.0.0 用于 OCR
+    -   `tesseract-ocr` 语言包（`tesseract-ocr-eng`、`tesseract-ocr-deu` 等）
 
-    Use this list for your preferred package management:
+    使用以下列表进行您首选的包管理：
 
     ```
     unpaper ghostscript icc-profiles-free qpdf liblept5 libxml2 pngquant zlib1g tesseract-ocr
     ```
 
-    On Raspberry Pi, these libraries are required as well:
+    在 Raspberry Pi 上，还需要这些库：
 
     -   `libatlas-base-dev`
     -   `libxslt1-dev`
     -   `mime-support`
 
-    You will also need these for installing some of the python dependencies:
+    您还需要这些来安装一些 Python 依赖项：
 
     -   `build-essential`
     -   `python3-setuptools`
     -   `python3-wheel`
 
-    Use this list for your preferred package management:
+    使用以下列表进行您首选的包管理：
 
     ```
     build-essential python3-setuptools python3-wheel
     ```
 
-2.  Install `redis` >= 6.0 and configure it to start automatically.
+2.  安装 `redis` >= 6.0 并将其配置为自动启动。
 
-3.  Optional. Install `postgresql` and configure a database, user and
-    password for paperless. If you do not wish to use PostgreSQL,
-    MariaDB and SQLite are available as well.
+3.  可选。安装 `postgresql` 并为 Paperless 配置数据库、用户和密码。如果您不希望使用 PostgreSQL，MariaDB 和 SQLite 也可用。
 
     !!! note
 
-        On bare-metal installations using SQLite, ensure the [JSON1
-        extension](https://code.djangoproject.com/wiki/JSON1Extension) is
-        enabled. This is usually the case, but not always.
+        在使用 SQLite 的裸机安装中，请确保启用了 [JSON1 扩展](https://code.djangoproject.com/wiki/JSON1Extension)。通常情况如此，但并非总是如此。
 
-4.  Create a system user with a new home folder under which you wish
-    to run paperless.
+4.  创建一个系统用户，并为其指定一个新的主目录，您希望在此用户下运行 Paperless。
 
     ```shell-session
     adduser paperless --system --home /opt/paperless --group
     ```
 
-5.  Get the release archive from
-    <https://github.com/paperless-ngx/paperless-ngx/releases> for example with
+5.  从 <https://github.com/paperless-ngx/paperless-ngx/releases> 获取发布存档，例如使用：
 
     ```shell-session
     curl -O -L https://github.com/paperless-ngx/paperless-ngx/releases/download/v1.10.2/paperless-ngx-v1.10.2.tar.xz
     ```
 
-    Extract the archive with
+    使用以下命令解压存档：
 
     ```shell-session
     tar -xf paperless-ngx-v1.10.2.tar.xz
     ```
 
-    and copy the contents to the
-    home folder of the user you created before (`/opt/paperless`).
+    并将内容复制到您之前创建的用户的主文件夹（`/opt/paperless`）。
 
-    Optional: If you cloned the git repo, you will have to
-    compile the frontend yourself, see [here](development.md#front-end-development)
-    and use the `build` step, not `serve`.
+    可选：如果您克隆了 git 仓库，您将需要自己编译前端，请参阅[此处](development.md#front-end-development)并使用 `build` 步骤，而不是 `serve`。
 
-6.  Configure paperless. See [configuration](configuration.md) for details.
-    Edit the included `paperless.conf` and adjust the settings to your
-    needs. Required settings for getting
-    paperless running are:
+6.  配置 Paperless。有关详细信息，请参阅[配置](configuration.md)。
+    编辑包含的 `paperless.conf` 并根据您的需要调整设置。使 Paperless 运行所需的设置包括：
 
-    -   [`PAPERLESS_REDIS`](configuration.md#PAPERLESS_REDIS) should point to your redis server, such as
-        <redis://localhost:6379>.
-    -   [`PAPERLESS_DBENGINE`](configuration.md#PAPERLESS_DBENGINE) optional, and should be one of `postgres`,
-        `mariadb`, or `sqlite`
-    -   [`PAPERLESS_DBHOST`](configuration.md#PAPERLESS_DBHOST) should be the hostname on which your
-        PostgreSQL server is running. Do not configure this to use
-        SQLite instead. Also configure port, database name, user and
-        password as necessary.
-    -   [`PAPERLESS_CONSUMPTION_DIR`](configuration.md#PAPERLESS_CONSUMPTION_DIR) should point to a folder which
-        paperless should watch for documents. You might want to have
-        this somewhere else. Likewise, [`PAPERLESS_DATA_DIR`](configuration.md#PAPERLESS_DATA_DIR) and
-        [`PAPERLESS_MEDIA_ROOT`](configuration.md#PAPERLESS_MEDIA_ROOT) define where paperless stores its data.
-        If you like, you can point both to the same directory.
-    -   [`PAPERLESS_SECRET_KEY`](configuration.md#PAPERLESS_SECRET_KEY) should be a random sequence of
-        characters. It's used for authentication. Failure to do so
-        allows third parties to forge authentication credentials.
-    -   [`PAPERLESS_URL`](configuration.md#PAPERLESS_URL) if you are behind a reverse proxy. This should
-        point to your domain. Please see
-        [configuration](configuration.md) for more
-        information.
+    -   [`PAPERLESS_REDIS`](configuration.md#PAPERLESS_REDIS) 应指向您的 Redis 服务器，例如 <redis://localhost:6379>。
+    -   [`PAPERLESS_DBENGINE`](configuration.md#PAPERLESS_DBENGINE) 可选，应为 `postgres`、`mariadb` 或 `sqlite` 之一。
+    -   [`PAPERLESS_DBHOST`](configuration.md#PAPERLESS_DBHOST) 应是运行 PostgreSQL 服务器的主机名。不要配置此项以使用 SQLite。同时根据需要配置端口、数据库名称、用户和密码。
+    -   [`PAPERLESS_CONSUMPTION_DIR`](configuration.md#PAPERLESS_CONSUMPTION_DIR) 应指向 Paperless 应监视文档的文件夹。您可能希望将其放在其他地方。同样，[`PAPERLESS_DATA_DIR`](configuration.md#PAPERLESS_DATA_DIR) 和 [`PAPERLESS_MEDIA_ROOT`](configuration.md#PAPERLESS_MEDIA_ROOT) 定义了 Paperless 存储其数据的位置。如果您愿意，可以将两者指向同一目录。
+    -   [`PAPERLESS_SECRET_KEY`](configuration.md#PAPERLESS_SECRET_KEY) 应是一个随机字符序列。它用于身份验证。不这样做会允许第三方伪造身份验证凭据。
+    -   [`PAPERLESS_URL`](configuration.md#PAPERLESS_URL) 如果您在反向代理后面。这应指向您的域名。请参阅[配置](configuration.md)以获取更多信息。
 
-    Many more adjustments can be made to paperless, especially the OCR
-    part. The following options are recommended for everyone:
+    可以对 Paperless 进行更多调整，尤其是 OCR 部分。以下选项推荐给所有人：
 
-    -   Set [`PAPERLESS_OCR_LANGUAGE`](configuration.md#PAPERLESS_OCR_LANGUAGE) to the language most of your
-        documents are written in.
-    -   Set [`PAPERLESS_TIME_ZONE`](configuration.md#PAPERLESS_TIME_ZONE) to your local time zone.
+    -   将 [`PAPERLESS_OCR_LANGUAGE`](configuration.md#PAPERLESS_OCR_LANGUAGE) 设置为您大多数文档所使用的语言。
+    -   将 [`PAPERLESS_TIME_ZONE`](configuration.md#PAPERLESS_TIME_ZONE) 设置为您当地的时区。
 
     !!! warning
 
-        Ensure your Redis instance [is secured](https://redis.io/docs/latest/operate/oss_and_stack/management/security/).
+        确保您的 Redis 实例[是安全的](https://redis.io/docs/latest/operate/oss_and_stack/management/security/)。
 
-7.  Create the following directories if they are missing:
+7.  如果以下目录缺失，请创建它们：
 
     -   `/opt/paperless/media`
     -   `/opt/paperless/data`
     -   `/opt/paperless/consume`
 
-    Adjust as necessary if you configured different folders.
-    Ensure that the paperless user has write permissions for every one
-    of these folders with
+    如果您配置了不同的文件夹，请相应调整。
+    确保 Paperless 用户对每个文件夹都有写权限，使用：
 
     ```shell-session
     ls -l -d /opt/paperless/media
     ```
 
-    If needed, change the owner with
+    如果需要，使用以下命令更改所有者：
 
     ```shell-session
     sudo chown paperless:paperless /opt/paperless/media
@@ -350,394 +269,65 @@ are released, dependency support is confirmed, etc.
     sudo chown paperless:paperless /opt/paperless/consume
     ```
 
-8.  Install python requirements from the `requirements.txt` file.
+8.  从 `requirements.txt` 文件安装 Python 依赖项。
 
     ```shell-session
     sudo -Hu paperless pip3 install -r requirements.txt
     ```
 
-    This will install all python dependencies in the home directory of
-    the new paperless user.
+    这将在新的 Paperless 用户的主目录中安装所有 Python 依赖项。
 
     !!! tip
 
-        It is up to you if you wish to use a virtual environment or not for the Python
-        dependencies.  This is an alternative to the above and may require adjusting
-        the example scripts to utilize the virtual environment paths
+        是否使用虚拟环境来管理 Python 依赖项由您决定。这是上述方法的替代方案，可能需要调整示例脚本以使用虚拟环境路径。
 
     !!! tip
 
-        If you use modern Python tooling, such as `uv`, installation will not include
-        dependencies for Postgres or Mariadb.  You can select those extras with `--extra <EXTRA>`
-        or all with `--all-extras`
+        如果您使用现代的 Python 工具，例如 `uv`，安装将不包括 Postgres 或 MariaDB 的依赖项。您可以使用 `--extra <EXTRA>` 选择这些额外项，或使用 `--all-extras` 选择所有额外项。
 
-9.  Go to `/opt/paperless/src`, and execute the following command:
+9.  转到 `/opt/paperless/src`，并执行以下命令：
 
     ```bash
-    # This creates the database schema.
+    # 这将创建数据库模式。
     sudo -Hu paperless python3 manage.py migrate
     ```
 
-    When you first access the web interface you will be prompted to create a superuser account.
+    当您首次访问 Web 界面时，系统将提示您创建超级用户账户。
 
-10. Optional: Test that paperless is working by executing
+10. 可选：通过执行以下命令测试 Paperless 是否正常工作：
 
     ```bash
-    # Manually starts the webserver
+    # 手动启动 Web 服务器
     sudo -Hu paperless python3 manage.py runserver
     ```
 
-    and pointing your browser to http://localhost:8000 if
-    accessing from the same devices on which paperless is installed.
-    If accessing from another machine, set up systemd services. You may need
-    to set `PAPERLESS_DEBUG=true` in order for the development server to work
-    normally in your browser.
+    如果从安装 Paperless 的同一设备访问，请将浏览器指向 http://localhost:8000。
+    如果从另一台机器访问，请设置 systemd 服务。您可能需要设置 `PAPERLESS_DEBUG=true` 才能使开发服务器在浏览器中正常工作。
 
     !!! warning
 
-        This is a development server which should not be used in production.
-        It is not audited for security and performance is inferior to
-        production ready web servers.
+        这是一个开发服务器，不应在生产环境中使用。
+        它未经安全审计，性能也低于生产就绪的 Web 服务器。
 
     !!! tip
 
-        This will not start the consumer. Paperless does this in a separate
-        process.
+        这不会启动消费者。Paperless 在一个单独的进程中执行此操作。
 
-11. Setup systemd services to run paperless automatically. You may use
-    the service definition files included in the `scripts` folder as a
-    starting point.
+11. 设置 systemd 服务以自动运行 Paperless。您可以使用 `scripts` 文件夹中包含的服务定义文件作为起点。
 
-    Paperless needs the `webserver` script to run the webserver, the
-    `consumer` script to watch the input folder, `taskqueue` for the
-    background workers used to handle things like document consumption
-    and the `scheduler` script to run tasks such as email checking at
-    certain times .
+    Paperless 需要 `webserver` 脚本来运行 Web 服务器，需要 `consumer` 脚本来监视输入文件夹，需要 `taskqueue` 来处理文档消费等后台工作，需要 `scheduler` 脚本来在特定时间运行诸如电子邮件检查等任务。
 
     !!! note
 
-        The `socket` script enables `granian` to run on port 80 without
-        root privileges. For this you need to uncomment the
-        `Require=paperless-webserver.socket` in the `webserver` script
-        and configure `granian` to listen on port 80 (set `GRANIAN_PORT`).
+        `socket` 脚本使 `granian` 能够在端口 80 上运行而无需 root 权限。为此，您需要在 `webserver` 脚本中取消注释 `Require=paperless-webserver.socket`，并配置 `granian` 监听端口 80（设置 `GRANIAN_PORT`）。
 
-    These services rely on redis and optionally the database server, but
-    don't need to be started in any particular order. The example files
-    depend on redis being started. If you use a database server, you
-    should add additional dependencies.
+    这些服务依赖于 Redis 和可选的数据库服务器，但不需要按特定顺序启动。示例文件依赖于 Redis 已启动。如果您使用数据库服务器，则应添加额外的依赖项。
 
     !!! note
 
-        For instructions on using a reverse proxy,
-        [see the wiki](https://github.com/paperless-ngx/paperless-ngx/wiki/Using-a-Reverse-Proxy-with-Paperless-ngx#).
+        有关使用反向代理的说明，请[参阅 wiki](https://github.com/paperless-ngx/paperless-ngx/wiki/Using-a-Reverse-Proxy-with-Paperless-ngx#)。
 
     !!! warning
 
-        If celery won't start (check with
-        `sudo systemctl status paperless-task-queue.service` for
-        paperless-task-queue.service and paperless-scheduler.service
-        ) you need to change the path in the files. Example:
-        `ExecStart=/opt/paperless/.local/bin/celery --app paperless worker --loglevel INFO`
-
-12. Optional: Install a samba server and make the consumption folder
-    available as a network share.
-
-13. Configure ImageMagick to allow processing of PDF documents. Most
-    distributions have this disabled by default, since PDF documents can
-    contain malware. If you don't do this, paperless will fall back to
-    Ghostscript for certain steps such as thumbnail generation.
-
-    Edit `/etc/ImageMagick-6/policy.xml` and adjust
-
-    ```
-    <policy domain="coder" rights="none" pattern="PDF" />
-    ```
-
-    to
-
-    ```
-    <policy domain="coder" rights="read|write" pattern="PDF" />
-    ```
-
-14. Optional: Install the
-    [jbig2enc](https://ocrmypdf.readthedocs.io/en/latest/jbig2.html)
-    encoder. This will reduce the size of generated PDF documents.
-    You'll most likely need to compile this by yourself, because this
-    software has been patented until around 2017 and binary packages are
-    not available for most distributions.
-
-15. Optional: If using the NLTK machine learning processing (see
-    [`PAPERLESS_ENABLE_NLTK`](configuration.md#PAPERLESS_ENABLE_NLTK) for details),
-    download the NLTK data for the Snowball
-    Stemmer, Stopwords and Punkt tokenizer to `/usr/share/nltk_data`. Refer to the [NLTK
-    instructions](https://www.nltk.org/data.html) for details on how to
-    download the data.
-
-# Migrating to Paperless-ngx
-
-Migration is possible both from Paperless-ng or directly from the
-'original' Paperless.
-
-## Migrating from Paperless-ng
-
-Paperless-ngx is meant to be a drop-in replacement for Paperless-ng and
-thus upgrading should be trivial for most users, especially when using
-docker. However, as with any major change, it is recommended to take a
-full backup first. Once you are ready, simply change the docker image to
-point to the new source. E.g. if using Docker Compose, edit
-`docker-compose.yml` and change:
-
-```
-image: jonaswinkler/paperless-ng:latest
-```
-
-to
-
-```
-image: ghcr.io/paperless-ngx/paperless-ngx:latest
-```
-
-and then run `docker compose up -d` which will pull the new image
-recreate the container. That's it!
-
-Users who installed with the bare-metal route should also update their
-Git clone to point to `https://github.com/paperless-ngx/paperless-ngx`,
-e.g. using the command
-`git remote set-url origin https://github.com/paperless-ngx/paperless-ngx`
-and then pull the latest version.
-
-## Migrating from Paperless
-
-At its core, paperless-ngx is still paperless and fully compatible.
-However, some things have changed under the hood, so you need to adapt
-your setup depending on how you installed paperless.
-
-This setup describes how to update an existing paperless Docker
-installation. The important things to keep in mind are as follows:
-
--   Read the [changelog](changelog.md) and
-    take note of breaking changes.
--   You should decide if you want to stick with SQLite or want to
-    migrate your database to PostgreSQL. See [documentation](#sqlite_to_psql)
-    for details on
-    how to move your data from SQLite to PostgreSQL. Both work fine with
-    paperless. However, if you already have a database server running
-    for other services, you might as well use it for paperless as well.
--   The task scheduler of paperless, which is used to execute periodic
-    tasks such as email checking and maintenance, requires a
-    [redis](https://redis.io/) message broker instance. The
-    Docker Compose route takes care of that.
--   The layout of the folder structure for your documents and data
-    remains the same, so you can just plug your old docker volumes into
-    paperless-ngx and expect it to find everything where it should be.
-
-Migration to paperless-ngx is then performed in a few simple steps:
-
-1.  Stop paperless.
-
-    ```bash
-    cd /path/to/current/paperless
-    docker compose down
-    ```
-
-2.  Do a backup for two purposes: If something goes wrong, you still
-    have your data. Second, if you don't like paperless-ngx, you can
-    switch back to paperless.
-
-3.  Download the latest release of paperless-ngx. You can either go with
-    the Docker Compose files from
-    [here](https://github.com/paperless-ngx/paperless-ngx/tree/main/docker/compose)
-    or clone the repository to build the image yourself (see
-    [above](#docker_build)). You can
-    either replace your current paperless folder or put paperless-ngx in
-    a different location.
-
-    !!! warning
-
-        Paperless-ngx includes a `.env` file. This will set the project name
-        for docker compose to `paperless`, which will also define the name
-        of the volumes by paperless-ngx. However, if you experience that
-        paperless-ngx is not using your old paperless volumes, verify the
-        names of your volumes with
-
-        ``` shell-session
-        docker volume ls | grep _data
-        ```
-
-        and adjust the project name in the `.env` file so that it matches
-        the name of the volumes before the `_data` part.
-
-4.  Download the `docker-compose.sqlite.yml` file to
-    `docker-compose.yml`. If you want to switch to PostgreSQL, do that
-    after you migrated your existing SQLite database.
-
-5.  Adjust `docker-compose.yml` and `docker-compose.env` to your needs.
-    See [Docker setup](#docker) details on
-    which edits are advised.
-
-6.  [Update paperless.](administration.md#updating)
-
-7.  In order to find your existing documents with the new search
-    feature, you need to invoke a one-time operation that will create
-    the search index:
-
-    ```shell-session
-    docker compose run --rm webserver document_index reindex
-    ```
-
-    This will migrate your database and create the search index. After
-    that, paperless will take care of maintaining the index by itself.
-
-8.  Start paperless-ngx.
-
-    ```bash
-    docker compose up -d
-    ```
-
-    This will run paperless in the background and automatically start it
-    on system boot.
-
-9.  Paperless installed a permanent redirect to `admin/` in your
-    browser. This redirect is still in place and prevents access to the
-    new UI. Clear your browsing cache in order to fix this.
-
-10. Optionally, follow the instructions below to migrate your existing
-    data to PostgreSQL.
-
-## Migrating from LinuxServer.io Docker Image
-
-As with any upgrades and large changes, it is highly recommended to
-create a backup before starting. This assumes the image was running
-using Docker Compose, but the instructions are translatable to Docker
-commands as well.
-
-1.  Stop and remove the paperless container
-2.  If using an external database, stop the container
-3.  Update Redis configuration
-
-    1. If `REDIS_URL` is already set, change it to [`PAPERLESS_REDIS`](configuration.md#PAPERLESS_REDIS)
-       and continue to step 4.
-
-    1. Otherwise, in the `docker-compose.yml` add a new service for
-       Redis, following [the example compose
-       files](https://github.com/paperless-ngx/paperless-ngx/tree/main/docker/compose)
-
-    1. Set the environment variable [`PAPERLESS_REDIS`](configuration.md#PAPERLESS_REDIS) so it points to
-       the new Redis container
-
-4.  Update user mapping
-
-    1. If set, change the environment variable `PUID` to `USERMAP_UID`
-
-    1. If set, change the environment variable `PGID` to `USERMAP_GID`
-
-5.  Update configuration paths
-
-    1. Set the environment variable [`PAPERLESS_DATA_DIR`](configuration.md#PAPERLESS_DATA_DIR) to `/config`
-
-6.  Update media paths
-
-    1. Set the environment variable [`PAPERLESS_MEDIA_ROOT`](configuration.md#PAPERLESS_MEDIA_ROOT) to
-       `/data/media`
-
-7.  Update timezone
-
-    1. Set the environment variable [`PAPERLESS_TIME_ZONE`](configuration.md#PAPERLESS_TIME_ZONE) to the same
-       value as `TZ`
-
-8.  Modify the `image:` to point to
-    `ghcr.io/paperless-ngx/paperless-ngx:latest` or a specific version
-    if preferred.
-9.  Start the containers as before, using `docker compose`.
-
-## Moving data from SQLite to PostgreSQL or MySQL/MariaDB {#sqlite_to_psql}
-
-The best way to migrate between database types is to perform an [export](administration.md#exporter) and then
-[import](administration.md#importer) into a clean installation of Paperless-ngx.
-
-## Moving back to Paperless
-
-Lets say you migrated to Paperless-ngx and used it for a while, but
-decided that you don't like it and want to move back (If you do, send
-me a mail about what part you didn't like!), you can totally do that
-with a few simple steps.
-
-Paperless-ngx modified the database schema slightly, however, these
-changes can be reverted while keeping your current data, so that your
-current data will be compatible with original Paperless. Thumbnails
-were also changed from PNG to WEBP format and will need to be
-re-generated.
-
-Execute this:
-
-```shell-session
-$ cd /path/to/paperless
-$ docker compose run --rm webserver migrate documents 0023
-```
-
-Or without docker:
-
-```shell-session
-$ cd /path/to/paperless/src
-$ python3 manage.py migrate documents 0023
-```
-
-After regenerating thumbnails, you'll need to clear your cookies
-(Paperless-ngx comes with updated dependencies that do cookie-processing
-differently) and probably your cache as well.
-
-# Considerations for less powerful devices {#less-powerful-devices}
-
-Paperless runs on Raspberry Pi. However, some things are rather slow on
-the Pi and configuring some options in paperless can help improve
-performance immensely:
-
--   Stick with SQLite to save some resources. See [troubleshooting](troubleshooting.md#log-reports-creating-paperlesstask-failed)
-    if you encounter issues with SQLite locking.
--   If you do not need the filesystem-based consumer, consider disabling it
-    entirely by setting [`PAPERLESS_CONSUMER_DISABLE`](configuration.md#PAPERLESS_CONSUMER_DISABLE) to `true`.
--   Consider setting [`PAPERLESS_OCR_PAGES`](configuration.md#PAPERLESS_OCR_PAGES) to 1, so that paperless will
-    only OCR the first page of your documents. In most cases, this page
-    contains enough information to be able to find it.
--   [`PAPERLESS_TASK_WORKERS`](configuration.md#PAPERLESS_TASK_WORKERS) and [`PAPERLESS_THREADS_PER_WORKER`](configuration.md#PAPERLESS_THREADS_PER_WORKER) are
-    configured to use all cores. The Raspberry Pi models 3 and up have 4
-    cores, meaning that paperless will use 2 workers and 2 threads per
-    worker. This may result in sluggish response times during
-    consumption, so you might want to lower these settings (example: 2
-    workers and 1 thread to always have some computing power left for
-    other tasks).
--   Keep [`PAPERLESS_OCR_MODE`](configuration.md#PAPERLESS_OCR_MODE) at its default value `skip` and consider
-    OCR'ing your documents before feeding them into paperless. Some
-    scanners are able to do this!
--   Set [`PAPERLESS_OCR_SKIP_ARCHIVE_FILE`](configuration.md#PAPERLESS_OCR_SKIP_ARCHIVE_FILE) to `with_text` to skip archive
-    file generation for already ocr'ed documents, or `always` to skip it
-    for all documents.
--   If you want to perform OCR on the device, consider using
-    `PAPERLESS_OCR_CLEAN=none`. This will speed up OCR times and use
-    less memory at the expense of slightly worse OCR results.
--   If using docker, consider setting [`PAPERLESS_WEBSERVER_WORKERS`](configuration.md#PAPERLESS_WEBSERVER_WORKERS) to 1. This will save some memory.
--   Consider setting [`PAPERLESS_ENABLE_NLTK`](configuration.md#PAPERLESS_ENABLE_NLTK) to false, to disable the
-    more advanced language processing, which can take more memory and
-    processing time.
-
-For details, refer to [configuration](configuration.md).
-
-!!! note
-
-    Updating the
-    [automatic matching algorithm](advanced_usage.md#automatic-matching) takes quite a bit of time. However, the update mechanism
-    checks if your data has changed before doing the heavy lifting. If you
-    experience the algorithm taking too much cpu time, consider changing the
-    schedule in the admin interface to daily. You can also manually invoke
-    the task by changing the date and time of the next run to today/now.
-
-    The actual matching of the algorithm is fast and works on Raspberry Pi
-    as well as on any other device.
-
-# Using nginx as a reverse proxy {#nginx}
-
-Please see [the wiki](https://github.com/paperless-ngx/paperless-ngx/wiki/Using-a-Reverse-Proxy-with-Paperless-ngx#nginx) for user-maintained documentation of using nginx with Paperless-ngx.
-
-# Enhancing security {#security}
-
-Please see [the wiki](https://github.com/paperless-ngx/paperless-ngx/wiki/Using-Security-Tools-with-Paperless-ngx) for user-maintained documentation of how to configure security tools like Fail2ban with Paperless-ngx.
+        如果 celery 无法启动（使用 `sudo systemctl status paperless-task-queue.service` 检查 paperless-task-queue.service 和 paperless-scheduler.service），您需要更改文件中的路径。示例：
+        `ExecStart=/opt/paperless/.local/bin/celery --app

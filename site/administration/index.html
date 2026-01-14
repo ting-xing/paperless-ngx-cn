@@ -1,0 +1,1471 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../configuration/">
+      
+      
+        <link rel="next" href="../advanced_usage/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>管理 - Paperless-ngx</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Paperless-ngx" class="md-header__button md-logo" aria-label="Paperless-ngx" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Paperless-ngx
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              管理
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/paperless-ngx/paperless-ngx" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    paperless-ngx/paperless-ngx
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../setup/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Setup
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../usage/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Basic Usage
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../configuration/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  配置
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  管理
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../advanced_usage/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  高级主题
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../api/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  REST API
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../development/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  开发
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../faq/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQs
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  故障排除
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Paperless-ngx" class="md-nav__button md-logo" aria-label="Paperless-ngx" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    Paperless-ngx
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/paperless-ngx/paperless-ngx" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    paperless-ngx/paperless-ngx
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Basic Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    管理
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    管理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        创建备份
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="创建备份">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#migrating-restoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        恢复
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        更新 Paperless
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="更新 Paperless">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker-updating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker 方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bare-metal-updating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        裸机方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        数据库升级
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#management-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管理工具
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="管理工具">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exporter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        文档导出器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#importer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        文档导入器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retagger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        文档重标记器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管理自动匹配算法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thumbnails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        文档缩略图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管理文档搜索索引
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        清除数据库读取缓存
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#renamer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管理文件名
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sanity-checker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        完整性检查器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        获取电子邮件
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced_usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    高级主题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    故障排除
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="_1">管理</h1>
+<h2 id="backup">创建备份</h2>
+<p>根据您安装 Paperless 的方式，有多种创建 Paperless 实例备份的选项。</p>
+<p>在创建备份之前，最好确保 Paperless 当时没有正在处理文档。</p>
+<p>适用于任何 Paperless 安装的选项：</p>
+<ul>
+<li>
+<p>使用<a href="#exporter">文档导出器</a>。文档导出器会将您的所有文档、缩略图、元数据和数据库内容导出到特定文件夹。您可以将文档和设置重新导入到新的 Paperless 实例中，或者使用此导出将文档存储到另一个 DMS 中。</p>
+<p>文档导出器还能够更新已存在的导出。因此，使用 <code>rsync</code> 进行增量备份是完全可行的。</p>
+<p>导出器不包含 API 令牌，导入后需要重新生成。</p>
+</li>
+</ul>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>您无法将使用一个 Paperless 版本生成的导出导入到另一个不同版本的 Paperless 中。导出包含数据库的精确镜像，而数据库迁移可能会更改数据库结构。</p>
+</div>
+<p>适用于 Docker 安装的选项：</p>
+<ul>
+<li>
+<p>备份 Docker 卷。这些卷通常位于主机的 <code>/var/lib/docker/volumes</code> 目录下，您需要 root 权限才能访问它们。</p>
+<p>Paperless 使用 4 个卷：</p>
+<ul>
+<li><code>paperless_media</code>：这是存储文档的位置。</li>
+<li><code>paperless_data</code>：这是存储辅助数据的位置。如果您使用 SQLite，此文件夹也包含 SQLite 数据库。</li>
+<li><code>paperless_pgdata</code>：仅在使用 PostgreSQL 时存在，包含数据库。</li>
+<li><code>paperless_dbdata</code>：仅在使用 MariaDB 时存在，包含数据库。</li>
+</ul>
+</li>
+</ul>
+<p>适用于裸机和非 Docker 安装的选项：</p>
+<ul>
+<li>
+<p>备份整个 Paperless 文件夹。这确保了如果您的 Paperless 实例在某个时刻崩溃或磁盘故障，您可以简单地将文件夹复制回原位，它就能正常工作。</p>
+<p>当使用 PostgreSQL 或 MariaDB 时，您还需要备份数据库。</p>
+</li>
+</ul>
+<h3 id="migrating-restoring">恢复</h3>
+<p>如果您使用<a href="#exporter">文档导出器</a>备份了 Paperless-ngx，则可以使用<a href="#importer">文档导入器</a>轻松恢复。</p>
+<p>当然，其他备份策略需要恢复您在上述步骤中创建的任何卷、文件夹和数据库副本。</p>
+<h2 id="updating">更新 Paperless</h2>
+<h3 id="docker-updating">Docker 方式</h3>
+<p>如果有新的 Paperless-ngx 版本可用，升级方式取决于您最初安装 Paperless-ngx 的方式。发布版本可在<a href="https://github.com/paperless-ngx/paperless-ngx/releases">发布页面</a>找到。</p>
+<p>首先，确保没有正在运行的活跃进程（如消费），然后<a href="#backup">创建备份</a>。</p>
+<p>之后，确保 Paperless 已停止：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>/path/to/paperless
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>down
+</code></pre></div>
+<ol>
+<li>
+<p>如果您从 Docker Hub 拉取镜像，您只需要：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="go">docker compose pull</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="go">docker compose up</span>
+</code></pre></div>
+<p>Docker Compose 文件引用 <code>latest</code> 版本，该版本始终是最新的稳定版本。</p>
+</li>
+<li>
+<p>如果您自己构建镜像，请执行以下操作：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="go">git pull</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="go">docker compose build</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="go">docker compose up</span>
+</code></pre></div>
+</li>
+</ol>
+<p>运行 <code>docker compose up</code> 也会应用任何新的数据库迁移。
+如果您看到一切正常，请按一次 CTRL+C 以优雅地停止 Paperless。然后您可以使用 <code>-d</code> 参数启动 Paperless-ngx，使其在后台运行。</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>在版本 0.9.14 中，更新过程发生了变化。在 0.9.13 及更早版本中，Docker Compose 文件指定了确切的版本，<code>pull</code> 不会自动更新到新版本。为了启用如上所述的更新，要么从<a href="https://github.com/paperless-ngx/paperless-ngx/tree/main/docker/compose">此处</a>获取新的 <code>docker-compose.yml</code> 文件，要么编辑 <code>docker-compose.yml</code> 文件，找到以下行：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>image: ghcr.io/paperless-ngx/paperless-ngx:0.9.x
+</code></pre></div>
+<p>并将版本替换为 <code>latest</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>image: ghcr.io/paperless-ngx/paperless-ngx:latest
+</code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>从版本 1.7.1 开始，Docker 镜像现在可以固定到某个发布系列。这通常与自动更新工具（如 Watchtower）结合使用，以允许仅安全地无人值守升级到新的错误修复版本。仍然建议在升级前始终查看发布说明。要将您的安装固定到某个发布系列，请编辑 <code>docker-compose.yml</code>，找到以下行：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>image: ghcr.io/paperless-ngx/paperless-ngx:latest
+</code></pre></div>
+<p>并将版本替换为您想要跟踪的系列，例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>image: ghcr.io/paperless-ngx/paperless-ngx:1.7
+</code></pre></div>
+</div>
+<h3 id="bare-metal-updating">裸机方式</h3>
+<p>获取新版本并解压内容后，执行以下操作：</p>
+<ol>
+<li>
+<p>更新依赖项。新的 Paperless 版本可能需要额外的依赖项。所需的依赖项列在<a href="../setup/#bare_metal">裸机安装</a>部分。</p>
+</li>
+<li>
+<p>更新 Python 依赖项。请记住，如果您使用虚拟环境，请在此之前激活它。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="go">pip install -r requirements.txt</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>有时，某些依赖项会从 requirements.txt 中移除。比较版本并移除不再需要的依赖项将保持您的系统或虚拟环境清洁，并防止可能的冲突。</p>
+</div>
+</li>
+<li>
+<p>迁移数据库。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="go">cd src</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="go">python3 manage.py migrate # (1)</span>
+</code></pre></div>
+<ol>
+<li>可能需要包含 <code>sudo -Hu &lt;paperless_user&gt;</code></li>
+</ol>
+<p>这可能实际上不会执行任何操作。并非每个新的 Paperless 版本都附带新的数据库迁移。</p>
+</li>
+</ol>
+<h3 id="_2">数据库升级</h3>
+<p>Paperless-ngx 与 Django 支持的 PostgreSQL 和 MariaDB 版本兼容，通常可以安全地将它们更新到新版本。但是，您应该始终进行备份，并按照数据库文档中的说明进行主要版本之间的升级。</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>从 Paperless-ngx v2.18 开始，PostgreSQL 的最低支持版本是 14。</p>
+</div>
+<p>对于 PostgreSQL，请参考<a href="https://www.postgresql.org/docs/current/upgrading.html">升级 PostgreSQL 集群</a>。</p>
+<p>对于 MariaDB，请参考<a href="https://mariadb.com/kb/en/upgrading/">升级 MariaDB</a>。</p>
+<p>您也可以在创建了更新版本的 PostgreSQL 或 MariaDB 数据库后，使用带有 <code>--data-only</code> 标志的导出器和导入器。</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>执行此操作时，不应更改任何设置，尤其是路径，否则存在数据丢失的风险。</p>
+</div>
+<h2 id="management-commands">管理工具</h2>
+<p>Paperless 附带一些管理命令，用于在您的 Paperless 实例上执行各种维护任务。您可以通过以下方式调用这些命令：</p>
+<p>使用 Docker Compose，在 Paperless 运行时：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>/path/to/paperless
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>webserver<span class="w"> </span>&lt;command&gt;<span class="w"> </span>&lt;arguments&gt;
+</code></pre></div>
+<p>使用 Docker，在 Paperless 运行时：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="gp">$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;container-name&gt;<span class="w"> </span>&lt;command&gt;<span class="w"> </span>&lt;arguments&gt;
+</code></pre></div>
+<p>裸机：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>/path/to/paperless/src
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="gp">$ </span>python3<span class="w"> </span>manage.py<span class="w"> </span>&lt;command&gt;<span class="w"> </span>&lt;arguments&gt;<span class="w"> </span><span class="c1"># (1)</span>
+</code></pre></div>
+<ol>
+<li>可能需要包含 <code>sudo -Hu &lt;paperless_user&gt;</code></li>
+</ol>
+<p>所有命令都有内置帮助，可以通过使用 <code>--help</code> 参数执行它们来访问。</p>
+<h3 id="exporter">文档导出器</h3>
+<p>文档导出器将您的所有数据（包括设置和数据库内容）从 Paperless 导出到一个文件夹中，用于备份或迁移到另一个 DMS。</p>
+<p>如果您在 cronjob 中使用文档导出器来备份数据，可以在 exec 后面使用 <code>-T</code> 标志来抑制 "The input device is not a TTY" 错误。例如：<code>docker compose exec -T webserver document_exporter ../export</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>document_exporter target [-c] [-d] [-f] [-na] [-nt] [-p] [-sm] [-z]
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>可选参数：
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>-c,  --compare-checksums
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>-cj, --compare-json
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>-d,  --delete
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>-f,  --use-filename-format
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>-na, --no-archive
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>-nt, --no-thumbnail
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>-p,  --use-folder-prefix
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>-sm, --split-manifest
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>-z,  --zip
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>-zn, --zip-name
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>--data-only
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>--no-progress-bar
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>--passphrase
+</code></pre></div>
+<p><code>target</code> 是数据写入的文件夹。这包括文档、缩略图和一个 <code>manifest.json</code> 文件。清单包含数据库中的所有元数据（通信者、标签等）。</p>
+<p>当您使用提供的 Docker Compose 脚本时，请指定 <code>../export</code> 作为目标。容器内的此路径会自动挂载到您主机上的 <code>export</code> 文件夹。</p>
+<p>如果目标目录已存在并包含文件，Paperless 将假定导出目录的内容是之前的导出，并尝试更新先前的导出。Paperless 只会导出已更改和新增的文件。Paperless 通过检查文件属性"修改日期/时间"和"大小"来确定文件是否已更改。如果这对您不起作用，请指定 <code>-c</code> 或 <code>--compare-checksums</code>，Paperless 将尝试比较文件校验和。这速度较慢。清单和元数据 JSON 文件总是会更新，除非指定了 <code>cj</code> 或 <code>--compare-json</code>。</p>
+<p>Paperless 不会删除导出目录中的任何现有文件。如果您希望 Paperless 也删除不属于当前导出的文件（例如已删除文档的文件），请指定 <code>-d</code> 或 <code>--delete</code>。将 Paperless 指向已包含其他文件的目录时要小心。</p>
+<p>此命令生成的文件名遵循格式 <code>[创建日期] [通信者] [标题].[扩展名]</code>。如果您希望 Paperless 使用 <a href="../configuration/#PAPERLESS_FILENAME_FORMAT"><code>PAPERLESS_FILENAME_FORMAT</code></a> 作为导出的文件名，请指定 <code>-f</code> 或 <code>--use-filename-format</code>。</p>
+<p>如果提供了 <code>-na</code> 或 <code>--no-archive</code>，则不会导出归档文件，只导出原始文件。</p>
+<p>如果提供了 <code>-nt</code> 或 <code>--no-thumbnail</code>，则不会导出缩略图文件。</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>当使用 <code>-na</code>/<code>--no-archive</code> 或 <code>-nt</code>/<code>--no-thumbnail</code> 选项时，导出器将不会输出这些文件进行备份。导入后，<a href="#sanity-checker">完整性检查器</a> 会警告缺少缩略图和归档文件，直到使用 <code>document_thumbnails</code> 或 <a href="#archiver"><code>document_archiver</code></a> 重新生成它们。从备份中省略这些文件可能是有意义的，因为它们的内容和校验和可能会更改（新的归档算法），并可能导致去重备份中额外的空间使用。</p>
+</div>
+<p>如果提供了 <code>-p</code> 或 <code>--use-folder-prefix</code>，文件将根据其性质导出到专用文件夹：<code>archive</code>、<code>originals</code>、<code>thumbnails</code> 或 <code>json</code>。</p>
+<p>如果提供了 <code>-sm</code> 或 <code>--split-manifest</code>，文档信息将放置在单独的 JSON 文件中，而不是单个 JSON 文件中。主要的 manifest.json 仍将包含应用程序范围的信息（例如标签、通信者、文档类型等）。</p>
+<p>如果提供了 <code>-z</code> 或 <code>--zip</code>，导出将是目标目录中的一个 zip 文件，根据当前本地日期或 <code>-zn</code> 或 <code>--zip-name</code> 中设置的值命名。</p>
+<p>如果提供了 <code>--data-only</code>，则只导出数据库。此选项旨在方便数据库升级，而无需从媒体目录中清理文档和缩略图。</p>
+<p>如果提供了 <code>--no-progress-bar</code>，进度条将被隐藏，使导出器静默运行。此选项对于脚本场景很有用，例如将导出器与 <code>crontab</code> 一起使用时。</p>
+<p>如果提供了 <code>--passphrase</code>，它将用于加密导出中的某些字段。导入时必须提供此值。如果此值丢失，则无法导入导出。</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>如果使用文件名格式导出，可能会由于操作系统的最大路径长度而导致错误。尝试调整导出目标，或者考虑不使用文件名格式。</p>
+</div>
+<h3 id="importer">文档导入器</h3>
+<p>文档导入器接收由<a href="#exporter">文档导出器</a>生成的导出，并将其导入到 Paperless 中。</p>
+<p>导入器的工作方式与导出器类似。您将其指向一个目录或生成的 .zip 文件，脚本会完成其余工作：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>document_importer<span class="w"> </span><span class="nb">source</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>必需</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>source</td>
+<td>是</td>
+<td>N/A</td>
+<td>包含导出的目录</td>
+</tr>
+<tr>
+<td><code>--no-progress-bar</code></td>
+<td>否</td>
+<td>False</td>
+<td>如果提供，进度条将被隐藏</td>
+</tr>
+<tr>
+<td><code>--data-only</code></td>
+<td>否</td>
+<td>False</td>
+<td>如果提供，仅导入数据，不导入文档文件或缩略图</td>
+</tr>
+<tr>
+<td><code>--passphrase</code></td>
+<td>否</td>
+<td>N/A</td>
+<td>如果您的导出使用了密码短语加密，则必须提供</td>
+</tr>
+</tbody>
+</table>
+<p>当您使用提供的 Docker Compose 脚本时，请将导出放在 Paperless 源代码目录的 <code>export</code> 文件夹中。将 <code>source</code> 指定为 <code>../export</code>。</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>从旧版本的 Paperless 导入可能有效，但为了获得最佳效果，建议版本匹配。</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>导入器应针对完全空（数据库和目录）的 Paperless-ngx 安装运行。如果使用仅数据导入，则只有数据库必须为空。</p>
+</div>
+<h3 id="retagger">文档重标记器</h3>
+<p>假设您导入了数百个文档，现在想要引入一个标签或设置一个新的通信者，并将其匹配应用于所有当前已导入的文档。这个问题很常见，因此有相应的工具。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>document_retagger [-h] [-c] [-T] [-t] [-i] [--id-range] [--use-first] [-f]
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>可选参数：
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>-c, --correspondent
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>-T, --tags
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>-t, --document_type
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>-s, --storage_path
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>-i, --inbox-only
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>--id-range
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>--use-first
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>-f, --overwrite
+</code></pre></div>
+<p>在更改或添加匹配规则后运行此命令。它将遍历数据库中的所有文档，并尝试根据新规则匹配文档。</p>
+<p>指定 <code>-c</code>、<code>-T</code>、<code>-t</code> 和 <code>-s</code> 的任何组合，让重标记器执行指定元数据类型的匹配。如果您不指定任何这些选项，文档重标记器将不会执行任何操作。</p>
+<p>指定 <code>-i</code> 让文档重标记器仅处理带有收件箱标签的文档。当您不想弄乱已处理的文档时，这很有用。</p>
+<p>指定 <code>--id-range 1 100</code> 让文档重标记器仅处理特定的文档 ID 范围。如果您有很多文档并且只想在文档子集上测试匹配规则，这可能很有用。</p>
+<p>当多个文档类型或通信者匹配单个文档时，重标记器不会将这些分配给文档。指定 <code>--use-first</code> 来覆盖此行为，仅使用它找到的第一个通信者或类型。此选项不适用于标签，因为任何数量的标签都可以应用于文档。</p>
+<p>最后，<code>-f</code> 指定您希望覆盖已分配的通信者、类型和/或标签。默认行为是不将通信者和类型分配给已分配了此数据的文档。<code>-f</code> 对标签的工作方式不同：默认情况下，只会向文档添加额外的标签，不会删除任何标签。使用 <code>-f</code> 时，不再匹配文档的标签也会被删除。</p>
+<h3 id="_3">管理自动匹配算法</h3>
+<p><em>自动</em> 匹配算法需要一个训练好的神经网络才能工作。每当您的数据发生变化时，都需要更新此网络。Docker 镜像通过任务调度程序自动处理此问题。您可以通过调用以下管理命令手动更新分类器：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>document_create_classifier
+</code></pre></div>
+<p>此命令不带参数。</p>
+<h3 id="thumbnails">文档缩略图</h3>
+<p>使用此命令重新创建文档缩略图。可选地包含 <code>--document {id}</code> 选项以仅为特定文档生成缩略图。</p>
+<p>您还可以指定 <code>--processes</code> 来控制用于生成新缩略图的进程数。默认是使用可用处理器的四分之一。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>document_thumbnails
+</code></pre></div>
+<h3 id="index">管理文档搜索索引</h3>
+<p>文档搜索索引负责为网站提供搜索结果。每当文档被添加到 Paperless、更改或从 Paperless 中删除时，文档索引都会自动更新。但是，如果搜索产生不存在的文档或找不到任何内容，您可能需要手动重新创建索引。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>document_index {reindex,optimize}
+</code></pre></div>
+<p>指定 <code>reindex</code> 以从头开始创建索引。这可能需要一些时间。</p>
+<p>指定 <code>optimize</code> 以优化索引。这会更新索引的某些方面，通常使查询更快，并确保自动补全正常工作。此命令由任务调度程序定期调用。</p>
+<h3 id="_4">清除数据库读取缓存</h3>
+<p>如果启用了数据库读取缓存，<strong>在应用程序上下文之外对数据库进行任何更改后，您必须运行此命令</strong>。这包括诸如恢复数据库备份或执行 SQL 语句（如 UPDATE、INSERT、DELETE、ALTER、CREATE 或 DROP）等操作。</p>
+<p>在此类修改后未能使缓存失效，可能导致从缓存提供过时数据，并<strong>可能导致数据损坏</strong>或应用程序行为不一致。</p>
+<p>使用以下管理命令清除缓存：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>python3 manage.py invalidate_cachalot
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+</div>
+<p>数据库读取缓存基于 Django-Cachalot。您可以参考其<a href="https://django-cachalot.readthedocs.io/en/latest/quickstart.html#manage-py-command">文档</a>。</p>
+<h3 id="renamer">管理文件名</h3>
+<p>如果您使用 Paperless 的功能为文档<a href="../advanced_usage/#file-name-handling">分配自定义文件名</a>，您可以使用此命令在更改命名方案后移动所有文件。</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>由于此命令会移动您的文档，建议事先进行备份。重命名逻辑是健壮的，永远不会覆盖或删除文件，但再怎么小心也不为过。</p>
+</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>document_renamer
+</code></pre></div>
+<p>该命令不带参数，一次性处理所有文档。</p>
+<p>了解如何使用<a href="#management-commands">管理工具</a>。</p>
+<h3 id="sanity-checker">完整性检查器</h3>
+<p>Paperless 有一个内置的完整性检查器，用于检查您的文档集合是否存在问题。</p>
+<p>完整性检查器检测到的问题如下：</p>
+<ul>
+<li>缺少原始文件。</li>
+<li>缺少归档文件。</li>
+<li>由于权限不当导致无法访问原始文件。</li>
+<li>由于权限不当导致无法访问归档文件。</li>
+<li>通过将其校验和与数据库中存储的内容进行比较，检查原始文档是否损坏。</li>
+<li>通过将其校验和与数据库中存储的内容进行比较，检查归档文档是否损坏。</li>
+<li>缺少缩略图。</li>
+<li>由于权限不当导致无法访问缩略图。</li>
+<li>没有任何内容的文档（警告）。</li>
+<li>媒体目录中的孤立文件（警告）。这些是 Paperless 中任何文档都未引用的文件。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>document_sanity_checker
+</code></pre></div>
+<p>该命令不带参数。根据您的文档存档大小，这可能需要一些时间。</p>
+<h3 id="_5">获取电子邮件</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2016 - 2023 Daniel Quinn, Jonas Winkler, and the Paperless-ngx team
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/paperless-ngx/paperless-ngx" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://hub.docker.com/r/paperlessngx/paperless-ngx" target="_blank" rel="noopener" title="hub.docker.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M349.9 236.3h-66.1v-59.4h66.1zm0-204.3h-66.1v60.7h66.1zm78.2 144.8H362v59.4h66.1zm-156.3-72.1h-66.1v60.1h66.1zm78.1 0h-66.1v60.1h66.1zm276.8 100c-14.4-9.7-47.6-13.2-73.1-8.4-3.3-24-16.7-44.9-41.1-63.7l-14-9.3-9.3 14c-18.4 27.8-23.4 73.6-3.7 103.8-8.7 4.7-25.8 11.1-48.4 10.7H2.4c-8.7 50.8 5.8 116.8 44 162.1 37.1 43.9 92.7 66.2 165.4 66.2 157.4 0 273.9-72.5 328.4-204.2 21.4.4 67.6.1 91.3-45.2 1.5-2.5 6.6-13.2 8.5-17.1zm-511.1-27.9h-66v59.4h66.1v-59.4zm78.1 0h-66.1v59.4h66.1zm78.1 0h-66.1v59.4h66.1zm-78.1-72.1h-66.1v60.1h66.1z"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://matrix.to/#/#paperless:matrix.org" target="_blank" rel="noopener" title="matrix.to" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c5.5 0 10 3.58 10 8s-4.5 8-10 8c-1.24 0-2.43-.18-3.53-.5C5.55 21 2 21 2 21c2.33-2.33 2.7-3.9 2.75-4.5C3.05 15.07 2 13.13 2 11c0-4.42 4.5-8 10-8"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.top", "toc.integrate", "content.code.annotate"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

@@ -1,93 +1,65 @@
-# Troubleshooting
+# 故障排除
 
-## No files are added by the consumer
+## 消费者未添加任何文件
 
-Check for the following issues:
+检查以下问题：
 
--   Ensure that the directory you're putting your documents in is the
-    folder paperless is watching. With docker, this setting is performed
-    in the `docker-compose.yml` file. Without Docker, look at the
-    `CONSUMPTION_DIR` setting. Don't adjust this setting if you're
-    using docker.
+-   确保您放置文档的目录是 Paperless 正在监视的文件夹。使用 Docker 时，此设置在 `docker-compose.yml` 文件中配置。不使用 Docker 时，请查看 `CONSUMPTION_DIR` 设置。如果使用 Docker，请不要调整此设置。
 
--   Ensure that redis is up and running. Paperless does its task
-    processing asynchronously, and for documents to arrive at the task
-    processor, it needs redis to run.
+-   确保 Redis 已启动并正在运行。Paperless 异步处理其任务，文档需要 Redis 运行才能到达任务处理器。
 
--   Ensure that the task processor is running. Docker does this
-    automatically. Manually invoke the task processor by executing
+-   确保任务处理器正在运行。Docker 会自动执行此操作。手动执行以下命令来调用任务处理器：
 
     ```shell-session
     celery --app paperless worker
     ```
 
--   Look at the output of paperless and inspect it for any errors.
+-   查看 Paperless 的输出并检查是否有任何错误。
 
--   Go to the admin interface, and check if there are failed tasks. If
-    so, the tasks will contain an error message.
+-   转到管理界面，检查是否有失败的任务。如果有，任务将包含错误信息。
 
-## Consumer warns `OCR for XX failed`
+## 消费者警告 `XX 的 OCR 失败`
 
-If you find the OCR accuracy to be too low, and/or the document consumer
-warns that
-`OCR for XX failed, but we're going to stick with what we've got since FORGIVING_OCR is enabled`,
-then you might need to install the [Tesseract language
-files](https://packages.ubuntu.com/search?keywords=tesseract-ocr)
-matching your document's languages.
+如果您发现 OCR 准确率太低，和/或文档消费者警告
+`XX 的 OCR 失败，但由于启用了 FORGIVING_OCR，我们将坚持使用已获得的结果`，
+那么您可能需要安装与文档语言匹配的 [Tesseract 语言文件](https://packages.ubuntu.com/search?keywords=tesseract-ocr)。
 
-As an example, if you are running Paperless-ngx from any Ubuntu or
-Debian box, and your documents are written in Spanish you may need to
-run:
+例如，如果您在任何 Ubuntu 或 Debian 机器上运行 Paperless-ngx，并且您的文档是用西班牙语编写的，您可能需要运行：
 
     apt-get install -y tesseract-ocr-spa
 
-## Consumer fails to pickup any new files
+## 消费者无法获取任何新文件
 
-If you notice that the consumer will only pickup files in the
-consumption directory at startup, but won't find any other files added
-later, you will need to enable filesystem polling with the configuration
-option [`PAPERLESS_CONSUMER_POLLING`](configuration.md#PAPERLESS_CONSUMER_POLLING).
+如果您注意到消费者仅在启动时获取消费目录中的文件，但不会找到之后添加的任何其他文件，您需要通过配置选项 [`PAPERLESS_CONSUMER_POLLING`](configuration.md#PAPERLESS_CONSUMER_POLLING) 启用文件系统轮询。
 
-This will disable listening to filesystem changes with inotify and
-paperless will manually check the consumption directory for changes
-instead.
+这将禁用使用 inotify 监听文件系统更改，Paperless 将改为手动检查消费目录的更改。
 
-## Paperless always redirects to /admin
+## Paperless 总是重定向到 /admin
 
-You probably had the old paperless installed at some point. Paperless
-installed a permanent redirect to /admin in your browser, and you need
-to clear your browsing data / cache to fix that.
+您可能曾经安装过旧版本的 Paperless。Paperless 在您的浏览器中安装了到 /admin 的永久重定向，您需要清除浏览数据/缓存来解决此问题。
 
-## Operation not permitted
+## 操作不允许
 
-You might see errors such as:
+您可能会看到如下错误：
 
 ```shell-session
 chown: changing ownership of '../export': Operation not permitted
 ```
 
-The container tries to set file ownership on the listed directories.
-This is required so that the user running paperless inside docker has
-write permissions to these folders. This happens when pointing these
-directories to NFS shares, for example.
+容器尝试设置列出目录的文件所有权。这是必需的，以便在 Docker 内运行 Paperless 的用户对这些文件夹具有写入权限。例如，当将这些目录指向 NFS 共享时会发生这种情况。
 
-Ensure that `chown` is possible on these directories.
+确保可以在这些目录上执行 `chown`。
 
-## Classifier error: No training data available
+## 分类器错误：无可用训练数据
 
-This indicates that the Auto matching algorithm found no documents to
-learn from. This may have two reasons:
+这表明自动匹配算法未找到可供学习的文档。这可能有两个原因：
 
--   You don't use the Auto matching algorithm: The error can be safely
-    ignored in this case.
--   You are using the Auto matching algorithm: The classifier explicitly
-    excludes documents with Inbox tags. Verify that there are documents
-    in your archive without inbox tags. The algorithm will only learn
-    from documents not in your inbox.
+-   您不使用自动匹配算法：在这种情况下可以安全地忽略此错误。
+-   您正在使用自动匹配算法：分类器明确排除带有“收件箱”标签的文档。请验证您的存档中是否有不带收件箱标签的文档。该算法只会从不在收件箱中的文档中学习。
 
-## UserWarning in sklearn on every single document
+## 每个文档都出现 sklearn 中的 UserWarning
 
-You may encounter warnings like this:
+您可能会遇到如下警告：
 
 ```
 /usr/local/lib/python3.7/site-packages/sklearn/base.py:315:
@@ -95,37 +67,24 @@ UserWarning: Trying to unpickle estimator CountVectorizer from version 0.23.2 wh
 This might lead to breaking code or invalid results. Use at your own risk.
 ```
 
-This happens when certain dependencies of paperless that are responsible
-for the auto matching algorithm are updated. After updating these, your
-current training data _might_ not be compatible anymore. This can be
-ignored in most cases. This warning will disappear automatically when
-paperless updates the training data.
+当负责自动匹配算法的 Paperless 某些依赖项更新时会发生这种情况。更新这些依赖项后，您当前的训练数据*可能*不再兼容。在大多数情况下可以忽略此警告。当 Paperless 更新训练数据时，此警告会自动消失。
 
-If you want to get rid of the warning or actually experience issues with
-automatic matching, delete the file `classification_model.pickle` in the
-data directory and let paperless recreate it.
+如果您想消除警告或确实遇到自动匹配问题，请删除数据目录中的 `classification_model.pickle` 文件，并让 Paperless 重新创建它。
 
-## 504 Server Error: Gateway Timeout when adding Office documents
+## 添加 Office 文档时出现 504 服务器错误：网关超时
 
-You may experience these errors when using the optional TIKA
-integration:
+使用可选的 TIKA 集成时，您可能会遇到这些错误：
 
 ```
 requests.exceptions.HTTPError: 504 Server Error: Gateway Timeout for url: http://gotenberg:3000/forms/libreoffice/convert
 ```
 
-Gotenberg is a server that converts Office documents into PDF documents
-and has a default timeout of 30 seconds. When conversion takes longer,
-Gotenberg raises this error.
+Gotenberg 是一个将 Office 文档转换为 PDF 文档的服务器，默认超时时间为 30 秒。当转换时间较长时，Gotenberg 会引发此错误。
 
-You can increase the timeout by configuring a command flag for Gotenberg
-(see also [here](https://gotenberg.dev/docs/modules/api#properties)). If
-using Docker Compose, this is achieved by the following configuration
-change in the `docker-compose.yml` file:
+您可以通过为 Gotenberg 配置命令标志来增加超时时间（另请参见[此处](https://gotenberg.dev/docs/modules/api#properties)）。如果使用 Docker Compose，可以通过在 `docker-compose.yml` 文件中进行以下配置更改来实现：
 
 ```yaml
-# The gotenberg chromium route is used to convert .eml files. We do not
-# want to allow external content like tracking pixels or even javascript.
+# gotenberg chromium 路由用于转换 .eml 文件。我们不希望允许外部内容，如跟踪像素甚至 javascript。
 command:
     - 'gotenberg'
     - '--chromium-disable-javascript=true'
@@ -133,25 +92,21 @@ command:
     - '--api-timeout=60s'
 ```
 
-## Permission denied errors in the consumption directory
+## 消费目录中出现权限被拒绝错误
 
-You might encounter errors such as:
+您可能会遇到如下错误：
 
 ```shell-session
-The following error occurred while consuming document.pdf: [Errno 13] Permission denied: '/usr/src/paperless/src/../consume/document.pdf'
+消费 document.pdf 时发生以下错误：[Errno 13] Permission denied: '/usr/src/paperless/src/../consume/document.pdf'
 ```
 
-This happens when paperless does not have permission to delete files
-inside the consumption directory. Ensure that `USERMAP_UID` and
-`USERMAP_GID` are set to the user id and group id you use on the host
-operating system, if these are different from `1000`. See [Docker setup](setup.md#docker).
+当 Paperless 没有权限删除消费目录中的文件时会发生这种情况。如果 `USERMAP_UID` 和 `USERMAP_GID` 与 `1000` 不同，请确保将它们设置为主机操作系统上使用的用户 ID 和组 ID。请参阅 [Docker 设置](setup.md#docker)。
 
-Also ensure that you are able to read and write to the consumption
-directory on the host.
+同时确保您能够在主机上读取和写入消费目录。
 
-## OSError: \[Errno 19\] No such device when consuming files
+## 消费文件时出现 OSError: \[Errno 19\] No such device
 
-If you experience errors such as:
+如果您遇到如下错误：
 
 ```shell-session
 File "/usr/local/lib/python3.7/site-packages/whoosh/codec/base.py", line 570, in open_compound_file
@@ -171,46 +126,31 @@ File "/usr/src/paperless/src/documents/consumer.py", line 271, in try_consume_fi
 raise ConsumerError(e)
 ```
 
-Paperless uses a search index to provide better and faster full text
-searching. This search index is stored inside the `data` folder. The
-search index uses memory-mapped files (mmap). The above error indicates
-that paperless was unable to create and open these files.
+Paperless 使用搜索索引来提供更好更快的全文搜索。此搜索索引存储在 `data` 文件夹内。搜索索引使用内存映射文件 (mmap)。上述错误表明 Paperless 无法创建和打开这些文件。
 
-This happens when you're trying to store the data directory on certain
-file systems (mostly network shares) that don't support memory-mapped
-files.
+当您尝试将数据目录存储在特定不支持内存映射文件的文件系统（主要是网络共享）上时会发生这种情况。
 
-## Web-UI stuck at "Loading\..."
+## Web 界面卡在“正在加载...”
 
-This might have multiple reasons.
+这可能有多重原因。
 
-1.  If you built the docker image yourself or deployed using the bare
-    metal route, make sure that there are files in
-    `<paperless-root>/static/frontend/<lang-code>/`. If there are no
-    files, make sure that you executed `collectstatic` successfully,
-    either manually or as part of the docker image build.
+1.  如果您自己构建了 Docker 镜像或使用裸机部署，请确保 `<paperless-root>/static/frontend/<lang-code>/` 目录中有文件。如果没有文件，请确保您已成功执行 `collectstatic`，无论是手动执行还是作为 Docker 镜像构建的一部分。
 
-    If the front end is still missing, make sure that the front end is
-    compiled (files present in `src/documents/static/frontend`). If it
-    is not, you need to compile the front end yourself or download the
-    release archive instead of cloning the repository.
+    如果前端仍然缺失，请确保前端已编译（`src/documents/static/frontend` 中存在文件）。如果未编译，您需要自己编译前端，或者下载发布压缩包而不是克隆仓库。
 
-## Error while reading metadata
+## 读取元数据时出错
 
-You might find messages like these in your log files:
+您可能会在日志文件中找到如下消息：
 
 ```
 [WARNING] [paperless.parsing.tesseract] Error while reading metadata
 ```
 
-This indicates that paperless failed to read PDF metadata from one of
-your documents. This happens when you open the affected documents in
-paperless for editing. Paperless will continue to work, and will simply
-not show the invalid metadata.
+这表明 Paperless 未能从您的某个文档中读取 PDF 元数据。当您在 Paperless 中打开受影响的文档进行编辑时会发生这种情况。Paperless 将继续工作，只是不会显示无效的元数据。
 
-## Consumer fails with a FileNotFoundError
+## 消费者因 FileNotFoundError 而失败
 
-You might find messages like these in your log files:
+您可能会在日志文件中找到如下消息：
 
 ```
 [ERROR] [paperless.consumer] Error while consuming document SCN_0001.pdf: FileNotFoundError: [Errno 2] No such file or directory: '/tmp/ocrmypdf.io.yhk3zbv0/origin.pdf'
@@ -232,83 +172,57 @@ Traceback (most recent call last):
 FileNotFoundError: [Errno 2] No such file or directory: '/tmp/ocrmypdf.io.yhk3zbv0/origin.pdf'
 ```
 
-This probably indicates paperless tried to consume the same file twice.
-This can happen for a number of reasons, depending on how documents are
-placed into the consume folder. If paperless is using inotify (the
-default) to check for documents, try adjusting the
-[inotify configuration](configuration.md#inotify). If polling is enabled, try adjusting the
-[polling configuration](configuration.md#polling).
+这可能表明 Paperless 尝试消费同一个文件两次。根据文档放入消费文件夹的方式，这可能由于多种原因发生。如果 Paperless 使用 inotify（默认）检查文档，请尝试调整 [inotify 配置](configuration.md#inotify)。如果启用了轮询，请尝试调整[轮询配置](configuration.md#polling)。
 
-## Consumer fails waiting for file to remain unmodified.
+## 消费者等待文件保持未修改状态时失败。
 
-You might find messages like these in your log files:
+您可能会在日志文件中找到如下消息：
 
 ```
 [ERROR] [paperless.management.consumer] Timeout while waiting on file /usr/src/paperless/src/../consume/SCN_0001.pdf to remain unmodified.
 ```
 
-This indicates paperless timed out while waiting for the file to be
-completely written to the consume folder. Adjusting
-[polling configuration](configuration.md#polling) values should resolve the issue.
+这表明 Paperless 在等待文件完全写入消费文件夹时超时。调整[轮询配置](configuration.md#polling)值应能解决此问题。
 
 !!! note
 
-    The user will need to manually move the file out of the consume folder
-    and back in, for the initial failing file to be consumed.
+    用户需要手动将文件移出消费文件夹再移回，以便消费最初失败的文件。
 
-## Consumer fails reporting "OS reports file as busy still".
+## 消费者报告“操作系统报告文件仍忙”而失败。
 
-You might find messages like these in your log files:
+您可能会在日志文件中找到如下消息：
 
 ```
 [WARNING] [paperless.management.consumer] Not consuming file /usr/src/paperless/src/../consume/SCN_0001.pdf: OS reports file as busy still
 ```
 
-This indicates paperless was unable to open the file, as the OS reported
-the file as still being in use. To prevent a crash, paperless did not
-try to consume the file. If paperless is using inotify (the default) to
-check for documents, try adjusting the
-[inotify configuration](configuration.md#inotify). If polling is enabled, try adjusting the
-[polling configuration](configuration.md#polling).
+这表明 Paperless 无法打开该文件，因为操作系统报告该文件仍在使用中。为防止崩溃，Paperless 未尝试消费该文件。如果 Paperless 使用 inotify（默认）检查文档，请尝试调整 [inotify 配置](configuration.md#inotify)。如果启用了轮询，请尝试调整[轮询配置](configuration.md#polling)。
 
 !!! note
 
-    The user will need to manually move the file out of the consume folder
-    and back in, for the initial failing file to be consumed.
+    用户需要手动将文件移出消费文件夹再移回，以便消费最初失败的文件。
 
-## Log reports "Creating PaperlessTask failed".
+## 日志报告“创建 PaperlessTask 失败”。
 
-You might find messages like these in your log files:
+您可能会在日志文件中找到如下消息：
 
 ```
 [ERROR] [paperless.management.consumer] Creating PaperlessTask failed: db locked
 ```
 
-You are likely using an sqlite based installation, with an increased
-number of workers and are running into sqlite's concurrency
-limitations. Uploading or consuming multiple files at once results in
-many workers attempting to access the database simultaneously.
+您可能正在使用基于 sqlite 的安装，增加了工作进程数量，并且遇到了 sqlite 的并发限制。同时上传或消费多个文件会导致许多工作进程尝试同时访问数据库。
 
-Consider changing to the PostgreSQL database if you will be processing
-many documents at once often. Otherwise, try tweaking the
-[`PAPERLESS_DB_TIMEOUT`](configuration.md#PAPERLESS_DB_TIMEOUT) setting to allow more time for the database to
-unlock. Additionally, you can change your SQLite database to use ["Write-Ahead Logging"](https://sqlite.org/wal.html).
-These changes may have minor performance implications but can help
-prevent database locking issues.
+如果您经常需要同时处理许多文档，请考虑更改为 PostgreSQL 数据库。否则，请尝试调整 [`PAPERLESS_DB_TIMEOUT`](configuration.md#PAPERLESS_DB_TIMEOUT) 设置，以允许数据库有更多时间解锁。此外，您可以将 SQLite 数据库更改为使用[“预写日志 (WAL)”](https://sqlite.org/wal.html)。这些更改可能会对性能产生轻微影响，但有助于防止数据库锁定问题。
 
-## granian fails to start with "is not a valid port number"
+## granian 启动失败，提示“不是有效的端口号”
 
-You are likely running using Kubernetes, which automatically creates an
-environment variable named `${serviceName}_PORT`. This is
-the same environment variable which is used by Paperless to optionally
-change the port granian listens on.
+您可能正在使用 Kubernetes 运行，它会自动创建一个名为 `${serviceName}_PORT` 的环境变量。Paperless 使用相同的环境变量来可选地更改 granian 监听的端口。
 
-To fix this, set [`PAPERLESS_PORT`](configuration.md#PAPERLESS_PORT) again to your desired port, or the
-default of 8000.
+要解决此问题，请将 [`PAPERLESS_PORT`](configuration.md#PAPERLESS_PORT) 重新设置为您所需的端口，或默认的 8000。
 
-## Database Warns about unique constraint "documents_tag_name_uniq
+## 数据库警告唯一约束“documents_tag_name_uniq”
 
-You may see database log lines like:
+您可能会看到如下数据库日志行：
 
 ```
 ERROR:  duplicate key value violates unique constraint "documents_tag_name_uniq"
@@ -316,31 +230,28 @@ DETAIL:  Key (name)=(NameF) already exists.
 STATEMENT:  INSERT INTO "documents_tag" ("owner_id", "name", "match", "matching_algorithm", "is_insensitive", "color", "is_inbox_tag") VALUES (NULL, 'NameF', '', 1, true, '#a6cee3', false) RETURNING "documents_tag"."id"
 ```
 
-This can happen during heavy consumption when using polling. Paperless will handle it correctly and the file
-will still be consumed
+在使用轮询进行大量消费时可能会发生这种情况。Paperless 将正确处理，文件仍将被消费。
 
-## Consumption fails with "Ghostscript PDF/A rendering failed"
+## 消费失败，提示“Ghostscript PDF/A 渲染失败”
 
-Newer versions of OCRmyPDF will fail if it encounters errors during processing.
-This is intentional as the output archive file may differ in unexpected or undesired
-ways from the original. As the logs indicate, if you encounter this error you can set
-`PAPERLESS_OCR_USER_ARGS: '{"continue_on_soft_render_error": true}'` to try to 'force'
-processing documents with this issue.
+新版本的 OCRmyPDF 在处理过程中遇到错误时会失败。
+这是有意为之的，因为输出的归档文件可能与原始文件存在意外或不希望的差异。
+如日志所示，如果遇到此错误，您可以设置 `PAPERLESS_OCR_USER_ARGS: '{"continue_on_soft_render_error": true}'` 来尝试“强制”处理存在此问题的文档。
 
-## Logs show "possible incompatible database column" when deleting documents {#convert-uuid-field}
+## 删除文档时日志显示“可能存在不兼容的数据库列” {#convert-uuid-field}
 
-You may see errors when deleting documents like:
+删除文档时您可能会看到如下错误：
 
 ```
 Data too long for column 'transaction_id' at row 1
 ```
 
-This error can occur in installations which have upgraded from a version of Paperless-ngx that used Django 4 (Paperless-ngx versions prior to v2.13.0) with a MariaDB/MySQL database. Due to the backwards-incompatible change in Django 5, the column "documents_document.transaction_id" will need to be re-created, which can be done with a one-time run of the following management command:
+此错误可能发生在从使用 Django 4 的 Paperless-ngx 版本（Paperless-ngx v2.13.0 之前版本）升级并使用 MariaDB/MySQL 数据库的安装中。由于 Django 5 中的向后不兼容更改，需要重新创建列 "documents_document.transaction_id"，这可以通过一次性运行以下管理命令来完成：
 
 ```shell-session
 $ python3 manage.py convert_mariadb_uuid
 ```
 
-## Platform-Specific Deployment Troubleshooting
+## 平台特定部署故障排除
 
-A user-maintained wiki page is available to help troubleshoot issues that may arise when trying to deploy Paperless-ngx on specific platforms, for example SELinux. Please see [the wiki](https://github.com/paperless-ngx/paperless-ngx/wiki/Platform%E2%80%90Specific-Troubleshooting).
+有一个用户维护的 Wiki 页面可用于帮助解决在特定平台（例如 SELinux）上部署 Paperless-ngx 时可能出现的问题。请参阅 [Wiki](https://github.com/paperless-ngx/paperless-ngx/wiki/Platform%E2%80%90Specific-Troubleshooting)。

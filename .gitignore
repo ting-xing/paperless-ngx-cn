@@ -54,7 +54,7 @@ junit.xml
 *.log
 
 # MkDocs documentation
-site/
+# site/
 
 # PyBuilder
 target/
